@@ -27,6 +27,7 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
     batches,
     alerts,
     currentCashSession,
+    settings,
   } = usePharmacy();
 
   const todaySales = sales.filter((s) => s.branchId === currentBranch.id);
@@ -106,7 +107,7 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
           </div>
           <div className="mt-3">
             <div className="text-2xl font-black text-slate-900 font-mono">
-              ${totalSalesAmount.toFixed(2)}
+              {settings.currencySymbol} {totalSalesAmount.toFixed(2)}
             </div>
             <div className="flex items-center gap-1 text-[11px] text-emerald-700 mt-1 font-semibold">
               <TrendingUp className="w-3.5 h-3.5" />
@@ -125,7 +126,7 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
           </div>
           <div className="mt-3">
             <div className="text-2xl font-black text-emerald-700 font-mono">
-              ${totalProfitAmount.toFixed(2)}
+              {settings.currencySymbol} {totalProfitAmount.toFixed(2)}
             </div>
             <div className="text-[11px] text-slate-500 mt-1 font-medium">
               Rentabilidad: {totalSalesAmount > 0 ? ((totalProfitAmount / totalSalesAmount) * 100).toFixed(1) : '0'}%
@@ -212,7 +213,7 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
                   </div>
                   <div className="text-right">
                     <div className="font-black text-emerald-700 font-mono text-sm">
-                      ${sale.totalAmount.toFixed(2)}
+                      {settings.currencySymbol} {sale.totalAmount.toFixed(2)}
                     </div>
                     <div className="text-[10px] text-slate-400 uppercase font-semibold">{sale.paymentMethod}</div>
                   </div>

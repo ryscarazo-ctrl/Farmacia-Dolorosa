@@ -286,7 +286,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                     <div className="mt-3 pt-2.5 border-t border-slate-100">
                       <div className="flex items-baseline justify-between">
                         <span className="text-sm font-black text-slate-900 font-mono">
-                          ${product.salePrice.toFixed(2)}
+                          {settings.currencySymbol} {product.salePrice.toFixed(2)}
                         </span>
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
@@ -408,10 +408,10 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                   {/* Subtotal */}
                   <div className="text-right">
                     <div className="text-xs font-black text-emerald-700 font-mono">
-                      ${item.total.toFixed(2)}
+                      {settings.currencySymbol} {item.total.toFixed(2)}
                     </div>
                     <div className="text-[10px] text-slate-400 font-mono">
-                      ${item.unitPrice.toFixed(2)} c/u
+                      {settings.currencySymbol} {item.unitPrice.toFixed(2)} c/u
                     </div>
                   </div>
                 </div>
@@ -425,21 +425,21 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
           <div className="space-y-1 text-xs">
             <div className="flex justify-between text-slate-500">
               <span>Subtotal:</span>
-              <span className="font-mono text-slate-900">${totals.subtotal.toFixed(2)}</span>
+              <span className="font-mono text-slate-900">{settings.currencySymbol} {totals.subtotal.toFixed(2)}</span>
             </div>
             {totals.discount > 0 && (
               <div className="flex justify-between text-emerald-600 font-semibold">
                 <span>Descuento:</span>
-                <span className="font-mono">-${totals.discount.toFixed(2)}</span>
+                <span className="font-mono">-{settings.currencySymbol} {totals.discount.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-slate-500">
               <span>Impuesto (0% exento):</span>
-              <span className="font-mono text-slate-900">$0.00</span>
+              <span className="font-mono text-slate-900">{settings.currencySymbol} 0.00</span>
             </div>
             <div className="flex justify-between text-base font-black text-slate-900 pt-1 border-t border-slate-100">
               <span>Total a Pagar:</span>
-              <span className="text-emerald-700 text-xl font-mono font-black">${totals.total.toFixed(2)}</span>
+              <span className="text-emerald-700 text-xl font-mono font-black">{settings.currencySymbol} {totals.total.toFixed(2)}</span>
             </div>
           </div>
 
@@ -453,7 +453,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
             }`}
           >
             <Banknote className="w-4 h-4" />
-            <span>COBRAR (${totals.total.toFixed(2)})</span>
+            <span>COBRAR ({settings.currencySymbol} {totals.total.toFixed(2)})</span>
           </button>
         </div>
       </div>
@@ -476,7 +476,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
             <div className="bg-emerald-50 p-4 rounded-2xl text-center border border-emerald-100">
               <span className="text-xs text-emerald-800 uppercase tracking-wider font-bold">Total a Pagar</span>
               <div className="text-3xl font-black text-emerald-700 font-mono mt-0.5">
-                ${totals.total.toFixed(2)}
+                {settings.currencySymbol} {totals.total.toFixed(2)}
               </div>
             </div>
 
@@ -527,7 +527,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
             {paymentMethod === 'Cash' && (
               <div className="space-y-3 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700">Monto Entregado por Cliente</label>
+                  <label className="text-xs font-bold text-slate-700">Monto Entregado por Cliente (C$)</label>
                   <input
                     type="number"
                     step="0.01"
@@ -538,21 +538,21 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                   />
                 </div>
 
-                <div className="flex gap-1.5">
-                  {[5, 10, 20, 50, 100].map((val) => (
+                <div className="flex gap-1.5 flex-wrap">
+                  {[20, 50, 100, 200, 500, 1000].map((val) => (
                     <button
                       key={val}
                       type="button"
                       onClick={() => setAmountPaid(val.toString())}
-                      className="flex-1 py-1.5 bg-white hover:bg-slate-100 rounded-lg text-xs font-mono font-bold text-slate-700 border border-slate-200 shadow-sm"
+                      className="flex-1 min-w-[50px] py-1.5 bg-white hover:bg-slate-100 rounded-lg text-xs font-mono font-bold text-slate-700 border border-slate-200 shadow-sm"
                     >
-                      ${val}
+                      C$ {val}
                     </button>
                   ))}
                   <button
                     type="button"
                     onClick={() => setAmountPaid(totals.total.toFixed(2))}
-                    className="flex-1 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg text-[11px] font-bold"
+                    className="flex-1 min-w-[60px] py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-lg text-[11px] font-bold"
                   >
                     Exacto
                   </button>
@@ -561,7 +561,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                 <div className="flex justify-between items-center pt-2 border-t border-slate-200">
                   <span className="text-xs text-slate-600 font-bold">Cambio / Vuelto:</span>
                   <span className="text-xl font-black text-emerald-700 font-mono">
-                    ${change.toFixed(2)}
+                    {settings.currencySymbol} {change.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -606,10 +606,10 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                 <div key={idx} className="flex flex-col">
                   <div className="flex justify-between font-bold">
                     <span className="truncate">{it.productName}</span>
-                    <span>${it.total.toFixed(2)}</span>
+                    <span>{settings.currencySymbol} {it.total.toFixed(2)}</span>
                   </div>
                   <div className="text-[10px] text-gray-600 flex justify-between">
-                    <span>{it.quantity} x ${it.unitPrice.toFixed(2)} (Lote: {it.batchNumber})</span>
+                    <span>{it.quantity} x {settings.currencySymbol} {it.unitPrice.toFixed(2)} (Lote: {it.batchNumber})</span>
                     <span>Vence: {it.expirationDate}</span>
                   </div>
                 </div>
@@ -620,11 +620,11 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
             <div className="space-y-1 text-right text-xs pt-1 border-b border-dashed border-gray-400 pb-2">
               <div className="flex justify-between">
                 <span>SUBTOTAL:</span>
-                <span>${lastSale.subtotal.toFixed(2)}</span>
+                <span>{settings.currencySymbol} {lastSale.subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-black text-sm text-emerald-900">
                 <span>TOTAL A PAGAR:</span>
-                <span>${lastSale.totalAmount.toFixed(2)}</span>
+                <span>{settings.currencySymbol} {lastSale.totalAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-[11px]">
                 <span>FORMA DE PAGO:</span>
@@ -634,11 +634,11 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                 <>
                   <div className="flex justify-between text-[11px]">
                     <span>RECIBIDO:</span>
-                    <span>${lastSale.amountPaid.toFixed(2)}</span>
+                    <span>{settings.currencySymbol} {lastSale.amountPaid.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-[11px] font-bold">
                     <span>CAMBIO:</span>
-                    <span>${lastSale.changeAmount.toFixed(2)}</span>
+                    <span>{settings.currencySymbol} {lastSale.changeAmount.toFixed(2)}</span>
                   </div>
                 </>
               )}

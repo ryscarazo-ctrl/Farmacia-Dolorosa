@@ -9,7 +9,7 @@ import {
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
 export const ReportsView: React.FC = () => {
-  const { sales, products, batches, currentBranch } = usePharmacy();
+  const { sales, products, batches, currentBranch, settings } = usePharmacy();
 
   const branchSales = sales.filter((s) => s.branchId === currentBranch.id);
   const totalSales = branchSales.reduce((sum, s) => sum + s.totalAmount, 0);
@@ -51,26 +51,26 @@ export const ReportsView: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
           <span className="text-xs text-slate-500 font-semibold">Total Ventas Facturadas</span>
-          <div className="text-2xl font-black text-slate-900 font-mono mt-1">${totalSales.toFixed(2)}</div>
+          <div className="text-2xl font-black text-slate-900 font-mono mt-1">{settings.currencySymbol} {totalSales.toFixed(2)}</div>
           <div className="text-[11px] text-slate-400 mt-1">{branchSales.length} comprobantes emitidos</div>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
           <span className="text-xs text-slate-500 font-semibold">Costo Total de Ventas</span>
-          <div className="text-2xl font-black text-slate-600 font-mono mt-1">${totalCost.toFixed(2)}</div>
+          <div className="text-2xl font-black text-slate-600 font-mono mt-1">{settings.currencySymbol} {totalCost.toFixed(2)}</div>
           <div className="text-[11px] text-slate-400 mt-1">Costo real asignado por FEFO</div>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
           <span className="text-xs text-emerald-700 font-semibold">Margen Bruto Real</span>
-          <div className="text-2xl font-black text-emerald-700 font-mono mt-1">${grossProfit.toFixed(2)}</div>
+          <div className="text-2xl font-black text-emerald-700 font-mono mt-1">{settings.currencySymbol} {grossProfit.toFixed(2)}</div>
           <div className="text-[11px] text-emerald-600 mt-1 font-bold">Rentabilidad bruta: {profitMargin}%</div>
         </div>
 
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
           <span className="text-xs text-blue-700 font-semibold">Valorización Inventario (Costo)</span>
-          <div className="text-2xl font-black text-blue-700 font-mono mt-1">${inventoryValuationCost.toFixed(2)}</div>
-          <div className="text-[11px] text-slate-400 mt-1">Proyección venta: ${inventoryValuationSale.toFixed(2)}</div>
+          <div className="text-2xl font-black text-blue-700 font-mono mt-1">{settings.currencySymbol} {inventoryValuationCost.toFixed(2)}</div>
+          <div className="text-[11px] text-slate-400 mt-1">Proyección venta: {settings.currencySymbol} {inventoryValuationSale.toFixed(2)}</div>
         </div>
       </div>
 
@@ -104,9 +104,9 @@ export const ReportsView: React.FC = () => {
                       {new Date(sale.createdAt).toLocaleString('es-SV')}
                     </td>
                     <td className="p-3 text-slate-700 font-medium">{sale.customerName}</td>
-                    <td className="p-3 text-right font-mono font-bold text-slate-900">${sale.totalAmount.toFixed(2)}</td>
-                    <td className="p-3 text-right font-mono text-slate-500">${sale.costAmount.toFixed(2)}</td>
-                    <td className="p-3 text-right font-mono font-black text-emerald-700">${sale.profitAmount.toFixed(2)}</td>
+                    <td className="p-3 text-right font-mono font-bold text-slate-900">{settings.currencySymbol} {sale.totalAmount.toFixed(2)}</td>
+                    <td className="p-3 text-right font-mono text-slate-500">{settings.currencySymbol} {sale.costAmount.toFixed(2)}</td>
+                    <td className="p-3 text-right font-mono font-black text-emerald-700">{settings.currencySymbol} {sale.profitAmount.toFixed(2)}</td>
                     <td className="p-3 text-center font-mono font-bold text-emerald-800">{margin}%</td>
                   </tr>
                 );

@@ -17,7 +17,7 @@ import { usePharmacy } from '../../contexts/PharmacyContext';
 import { ProductBatch } from '../../types/pharmacy';
 
 export const BatchesView: React.FC<{ filterOnlyExpirations?: boolean }> = ({ filterOnlyExpirations }) => {
-  const { batches, products, addBatch, currentBranch } = usePharmacy();
+  const { batches, products, addBatch, currentBranch, settings } = usePharmacy();
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
@@ -172,7 +172,7 @@ export const BatchesView: React.FC<{ filterOnlyExpirations?: boolean }> = ({ fil
                     {batch.expirationDate}
                   </td>
                   <td className="p-3 text-right font-mono text-slate-500">
-                    ${batch.unitCost.toFixed(2)}
+                    {settings.currencySymbol} {batch.unitCost.toFixed(2)}
                   </td>
                   <td className="p-3 text-center font-mono text-slate-400">
                     {batch.initialQuantity}
@@ -200,17 +200,17 @@ export const BatchesView: React.FC<{ filterOnlyExpirations?: boolean }> = ({ fil
                       ) : isCrit ? (
                         <>
                           <AlertTriangle className="w-3 h-3 text-amber-600" />
-                          <span>VENCE &lt; 30 DÍAS</span>
+                          <span>CRÍTICO (&lt;30d)</span>
                         </>
                       ) : isWarn ? (
                         <>
-                          <Calendar className="w-3 h-3 text-yellow-600" />
-                          <span>VENCE &lt; 90 DÍAS</span>
+                          <AlertTriangle className="w-3 h-3 text-yellow-600" />
+                          <span>ATENCIÓN (&lt;90d)</span>
                         </>
                       ) : (
                         <>
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                          <span>VIGENTE</span>
+                          <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                          <span>ÓPTIMO</span>
                         </>
                       )}
                     </span>
@@ -226,15 +226,7 @@ export const BatchesView: React.FC<{ filterOnlyExpirations?: boolean }> = ({ fil
       {modalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-4 text-slate-800">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
-                <Layers className="w-4 h-4 text-emerald-600" />
-                <span>Registrar Nuevo Lote</span>
-              </h3>
-              <button onClick={() => setModalOpen(false)} className="text-slate-400 hover:text-slate-600">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+            <h3 className="font-bold text-sm text-slate-900">Ingreso Manual de Lote y Vencimiento</h3>
 
             <form onSubmit={handleSaveBatch} className="space-y-3 text-xs">
               <div>
@@ -287,7 +279,7 @@ export const BatchesView: React.FC<{ filterOnlyExpirations?: boolean }> = ({ fil
                   />
                 </div>
                 <div>
-                  <label className="text-slate-700 font-bold block mb-1">Costo Unitario ($)</label>
+                  <label className="text-slate-700 font-bold block mb-1">Costo Unitario ({settings.currencySymbol})</label>
                   <input
                     type="number"
                     step="0.01"

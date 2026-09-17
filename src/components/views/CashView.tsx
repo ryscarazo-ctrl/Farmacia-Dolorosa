@@ -21,13 +21,14 @@ export const CashView: React.FC = () => {
     closeCashSession,
     addCashMovement,
     currentBranch,
+    settings,
   } = usePharmacy();
 
   const [openModal, setOpenModal] = useState(false);
   const [closeModal, setCloseModal] = useState(false);
   const [movementModal, setMovementModal] = useState(false);
 
-  const [openingBalance, setOpeningBalance] = useState('150.00');
+  const [openingBalance, setOpeningBalance] = useState('500.00');
   const [actualBalance, setActualBalance] = useState('');
   const [movementType, setMovementType] = useState<'IN' | 'OUT'>('OUT');
   const [movementAmount, setMovementAmount] = useState('');
@@ -118,7 +119,7 @@ export const CashView: React.FC = () => {
             <div className="text-right">
               <span className="text-xs text-slate-500 font-semibold">Saldo Esperado en Caja</span>
               <div className="text-3xl font-black text-emerald-700 font-mono">
-                ${currentCashSession.expectedBalance.toFixed(2)}
+                {settings.currencySymbol} {currentCashSession.expectedBalance.toFixed(2)}
               </div>
             </div>
           </div>
@@ -128,37 +129,37 @@ export const CashView: React.FC = () => {
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-center">
               <span className="text-[10px] text-slate-500 uppercase font-bold">Saldo Inicial</span>
               <div className="text-sm font-black text-slate-800 font-mono mt-0.5">
-                ${currentCashSession.openingBalance.toFixed(2)}
+                {settings.currencySymbol} {currentCashSession.openingBalance.toFixed(2)}
               </div>
             </div>
             <div className="bg-emerald-50/60 p-3.5 rounded-2xl border border-emerald-100 text-center">
               <span className="text-[10px] text-emerald-800 uppercase font-bold">Ventas Efectivo</span>
               <div className="text-sm font-black text-emerald-700 font-mono mt-0.5">
-                ${currentCashSession.cashSales.toFixed(2)}
+                {settings.currencySymbol} {currentCashSession.cashSales.toFixed(2)}
               </div>
             </div>
             <div className="bg-blue-50/60 p-3.5 rounded-2xl border border-blue-100 text-center">
               <span className="text-[10px] text-blue-800 uppercase font-bold">Ventas Tarjeta</span>
               <div className="text-sm font-black text-blue-700 font-mono mt-0.5">
-                ${currentCashSession.cardSales.toFixed(2)}
+                {settings.currencySymbol} {currentCashSession.cardSales.toFixed(2)}
               </div>
             </div>
             <div className="bg-purple-50/60 p-3.5 rounded-2xl border border-purple-100 text-center">
               <span className="text-[10px] text-purple-800 uppercase font-bold">Transferencias</span>
               <div className="text-sm font-black text-purple-700 font-mono mt-0.5">
-                ${currentCashSession.transferSales.toFixed(2)}
+                {settings.currencySymbol} {currentCashSession.transferSales.toFixed(2)}
               </div>
             </div>
             <div className="bg-emerald-50/60 p-3.5 rounded-2xl border border-emerald-100 text-center">
               <span className="text-[10px] text-emerald-800 uppercase font-bold">Ingresos Extra</span>
               <div className="text-sm font-black text-emerald-700 font-mono mt-0.5">
-                +${currentCashSession.cashIn.toFixed(2)}
+                +{settings.currencySymbol} {currentCashSession.cashIn.toFixed(2)}
               </div>
             </div>
             <div className="bg-red-50/60 p-3.5 rounded-2xl border border-red-100 text-center">
               <span className="text-[10px] text-red-800 uppercase font-bold">Retiros Extra</span>
               <div className="text-sm font-black text-red-700 font-mono mt-0.5">
-                -${currentCashSession.cashOut.toFixed(2)}
+                -{settings.currencySymbol} {currentCashSession.cashOut.toFixed(2)}
               </div>
             </div>
           </div>
@@ -212,16 +213,16 @@ export const CashView: React.FC = () => {
                     {cs.closedAt ? new Date(cs.closedAt).toLocaleString('es-SV') : 'En curso...'}
                   </td>
                   <td className="p-3 font-bold text-slate-900">{cs.userName}</td>
-                  <td className="p-3 text-right font-mono text-slate-600">${cs.openingBalance.toFixed(2)}</td>
-                  <td className="p-3 text-right font-mono text-emerald-700 font-bold">${cs.cashSales.toFixed(2)}</td>
-                  <td className="p-3 text-right font-mono text-slate-800 font-medium">${cs.expectedBalance.toFixed(2)}</td>
+                  <td className="p-3 text-right font-mono text-slate-600">{settings.currencySymbol} {cs.openingBalance.toFixed(2)}</td>
+                  <td className="p-3 text-right font-mono text-emerald-700 font-bold">{settings.currencySymbol} {cs.cashSales.toFixed(2)}</td>
+                  <td className="p-3 text-right font-mono text-slate-800 font-medium">{settings.currencySymbol} {cs.expectedBalance.toFixed(2)}</td>
                   <td className="p-3 text-right font-mono text-slate-900 font-bold">
-                    {cs.actualBalance !== undefined ? `$${cs.actualBalance.toFixed(2)}` : '-'}
+                    {cs.actualBalance !== undefined ? `${settings.currencySymbol} ${cs.actualBalance.toFixed(2)}` : '-'}
                   </td>
                   <td className="p-3 text-center font-mono font-bold">
                     {cs.difference !== undefined ? (
                       <span className={cs.difference === 0 ? 'text-emerald-700' : 'text-red-600'}>
-                        ${cs.difference.toFixed(2)}
+                        {settings.currencySymbol} {cs.difference.toFixed(2)}
                       </span>
                     ) : (
                       '-'
@@ -252,7 +253,7 @@ export const CashView: React.FC = () => {
             <h3 className="font-bold text-sm text-slate-900">Apertura de Turno de Caja</h3>
             <form onSubmit={handleOpen} className="space-y-3 text-xs">
               <div>
-                <label className="text-slate-700 font-bold block mb-1">Saldo Inicial en Efectivo ($)</label>
+                <label className="text-slate-700 font-bold block mb-1">Saldo Inicial en Efectivo ({settings.currencySymbol})</label>
                 <input
                   type="number"
                   step="0.01"
@@ -294,21 +295,21 @@ export const CashView: React.FC = () => {
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs space-y-1">
               <div className="flex justify-between text-slate-600">
                 <span>Saldo Inicial:</span>
-                <span className="font-mono font-bold text-slate-900">${currentCashSession.openingBalance.toFixed(2)}</span>
+                <span className="font-mono font-bold text-slate-900">{settings.currencySymbol} {currentCashSession.openingBalance.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-slate-600">
                 <span>Ventas Efectivo:</span>
-                <span className="font-mono font-bold text-emerald-700">+${currentCashSession.cashSales.toFixed(2)}</span>
+                <span className="font-mono font-bold text-emerald-700">+{settings.currencySymbol} {currentCashSession.cashSales.toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-black text-slate-900 pt-1 border-t border-slate-200">
                 <span>Saldo Esperado en Gaveta:</span>
-                <span className="font-mono text-emerald-700">${currentCashSession.expectedBalance.toFixed(2)}</span>
+                <span className="font-mono text-emerald-700">{settings.currencySymbol} {currentCashSession.expectedBalance.toFixed(2)}</span>
               </div>
             </div>
 
             <form onSubmit={handleClose} className="space-y-3 text-xs">
               <div>
-                <label className="text-slate-700 font-bold block mb-1">Monto Físico Contado en Caja ($) *</label>
+                <label className="text-slate-700 font-bold block mb-1">Monto Físico Contado en Caja ({settings.currencySymbol}) *</label>
                 <input
                   type="number"
                   step="0.01"
@@ -330,7 +331,7 @@ export const CashView: React.FC = () => {
                         : 'text-red-600'
                     }`}
                   >
-                    ${(parseFloat(actualBalance) - currentCashSession.expectedBalance).toFixed(2)}
+                    {settings.currencySymbol} {(parseFloat(actualBalance) - currentCashSession.expectedBalance).toFixed(2)}
                   </span>
                 </div>
               )}
@@ -387,7 +388,7 @@ export const CashView: React.FC = () => {
               </div>
 
               <div>
-                <label className="text-slate-700 font-bold block mb-1">Monto ($)</label>
+                <label className="text-slate-700 font-bold block mb-1">Monto ({settings.currencySymbol})</label>
                 <input
                   type="number"
                   step="0.01"

@@ -80,7 +80,7 @@ export const SalesHistoryView: React.FC<{
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
           <div className="text-[11px] font-bold text-slate-400 uppercase">Facturación Total</div>
           <div className="text-2xl font-mono font-black text-slate-900 mt-1">
-            ${totalSalesAmount.toFixed(2)}
+            {settings.currencySymbol} {totalSalesAmount.toFixed(2)}
           </div>
           <div className="text-[10px] text-emerald-600 font-semibold mt-0.5">
             {filteredSales.length} transacciones registradas
@@ -90,7 +90,7 @@ export const SalesHistoryView: React.FC<{
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
           <div className="text-[11px] font-bold text-slate-400 uppercase">Margen Bruto Total</div>
           <div className="text-2xl font-mono font-black text-emerald-700 mt-1">
-            ${totalProfitAmount.toFixed(2)}
+            {settings.currencySymbol} {totalProfitAmount.toFixed(2)}
           </div>
           <div className="text-[10px] text-slate-500 font-semibold mt-0.5">
             Rentabilidad sobre ventas
@@ -100,7 +100,7 @@ export const SalesHistoryView: React.FC<{
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
           <div className="text-[11px] font-bold text-slate-400 uppercase">Ventas en Efectivo</div>
           <div className="text-2xl font-mono font-black text-slate-800 mt-1">
-            ${cashSalesAmount.toFixed(2)}
+            {settings.currencySymbol} {cashSalesAmount.toFixed(2)}
           </div>
           <div className="text-[10px] text-slate-400 mt-0.5">Ingresado a caja física</div>
         </div>
@@ -108,7 +108,7 @@ export const SalesHistoryView: React.FC<{
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
           <div className="text-[11px] font-bold text-slate-400 uppercase">Ventas en Tarjeta</div>
           <div className="text-2xl font-mono font-black text-slate-800 mt-1">
-            ${cardSalesAmount.toFixed(2)}
+            {settings.currencySymbol} {cardSalesAmount.toFixed(2)}
           </div>
           <div className="text-[10px] text-slate-400 mt-0.5">Cobro electrónico POS</div>
         </div>
@@ -196,7 +196,7 @@ export const SalesHistoryView: React.FC<{
                     </td>
 
                     <td className="p-3.5 text-right font-mono font-black text-slate-900 text-sm">
-                      ${sale.totalAmount.toFixed(2)}
+                      {settings.currencySymbol} {sale.totalAmount.toFixed(2)}
                     </td>
 
                     <td className="p-3.5 text-center">
@@ -278,11 +278,11 @@ export const SalesHistoryView: React.FC<{
                   <div>
                     <div className="font-bold text-slate-800">{it.productName}</div>
                     <div className="text-[10px] text-slate-500">
-                      {it.quantity} x ${it.unitPrice.toFixed(2)} • Lote: {it.batchNumber}
+                      {it.quantity} x {settings.currencySymbol} {it.unitPrice.toFixed(2)} • Lote: {it.batchNumber}
                     </div>
                   </div>
                   <div className="font-bold text-slate-900">
-                    ${it.total.toFixed(2)}
+                    {settings.currencySymbol} {it.total.toFixed(2)}
                   </div>
                 </div>
               ))}
@@ -292,23 +292,23 @@ export const SalesHistoryView: React.FC<{
             <div className="border-t border-dashed border-slate-300 pt-3 space-y-1 font-mono text-xs">
               <div className="flex justify-between text-slate-500">
                 <span>Subtotal:</span>
-                <span>${selectedSale.subtotal.toFixed(2)}</span>
+                <span>{settings.currencySymbol} {selectedSale.subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-slate-500">
                 <span>Descuentos:</span>
-                <span>-${selectedSale.discountAmount.toFixed(2)}</span>
+                <span>-{settings.currencySymbol} {selectedSale.discountAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-base font-bold text-slate-900 pt-1 border-t border-slate-100">
                 <span>TOTAL A PAGAR:</span>
-                <span className="text-emerald-700">${selectedSale.totalAmount.toFixed(2)}</span>
+                <span className="text-emerald-700">{settings.currencySymbol} {selectedSale.totalAmount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-[11px] text-slate-500 pt-1">
                 <span>Efectivo recibido:</span>
-                <span>${selectedSale.amountPaid.toFixed(2)}</span>
+                <span>{settings.currencySymbol} {selectedSale.amountPaid.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-[11px] text-slate-500">
                 <span>Cambio entregado:</span>
-                <span>${selectedSale.changeAmount.toFixed(2)}</span>
+                <span>{settings.currencySymbol} {selectedSale.changeAmount.toFixed(2)}</span>
               </div>
             </div>
 

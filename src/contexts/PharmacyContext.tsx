@@ -228,7 +228,13 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [transfers, setTransfers] = useState<StockTransfer[]>(() => loadStorage('transfers', []));
   const [alerts, setAlerts] = useState<Alert[]>(() => loadStorage('alerts', []));
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => loadStorage('auditLogs', []));
-  const [settings, setSettings] = useState<Settings>(() => loadStorage('settings', initialSettings));
+  const [settings, setSettings] = useState<Settings>(() => {
+    const loaded = loadStorage('settings', initialSettings);
+    if (!loaded.currencySymbol || loaded.currencySymbol === '$') {
+      return { ...loaded, primaryCurrency: 'NIO', currencySymbol: 'C$' };
+    }
+    return loaded;
+  });
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => loadStorage('auth_logged_in', false));
 
@@ -800,7 +806,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       'Punto de Venta',
       'Sale',
       saleId,
-      `Venta ${invoiceNum} por $${totals.total.toFixed(2)} (${params.paymentMethod})`
+      `Venta ${invoiceNum} por ${settings.currencySymbol} ${totals.total.toFixed(2)} (${params.paymentMethod})`
     );
 
     clearCart();
@@ -949,13 +955,13 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       'Devoluciones',
       'SaleReturn',
       newReturn.id,
-      `Devolución ${returnNumber} aprobada por $${totalRefund.toFixed(2)} sobre ticket ${sale.invoiceNumber}`
+      `Devolución ${returnNumber} aprobada por ${settings.currencySymbol} ${totalRefund.toFixed(2)} sobre ticket ${sale.invoiceNumber}`
     );
 
     return {
       success: true,
       returnRecord: newReturn,
-      message: `Devolución ${returnNumber} procesada exitosamente. Total devuelto: $${totalRefund.toFixed(2)}`,
+      message: `Devolución ${returnNumber} procesada exitosamente. Total devuelto: ${settings.currencySymbol} ${totalRefund.toFixed(2)}`,
     };
   };
 
@@ -1099,7 +1105,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return {
       success: true,
       returnRecord: newRecord,
-      message: `Devolución ${returnNumber} procesada con éxito. Reembolso: $${totalRefund.toFixed(2)}. ${
+      message: `Devolución ${returnNumber} procesada con éxito. Reembolso: ${settings.currencySymbol} ${totalRefund.toFixed(2)}. ${
         params.destination === 'EXPIRED_QUARANTINE'
           ? 'Medicamento enviado al Área Especial de Medicamentos Vencidos.'
           : 'Medicamento reingresado al inventario activo.'

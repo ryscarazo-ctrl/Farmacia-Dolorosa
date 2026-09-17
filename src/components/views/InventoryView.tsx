@@ -27,6 +27,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
     getAvailableStock,
     getProductBatches,
     currentBranch,
+    settings,
   } = usePharmacy();
 
   const [search, setSearch] = useState('');
@@ -186,11 +187,11 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
                     </td>
 
                     <td className="p-3 text-right font-mono text-slate-500 font-medium">
-                      ${prod.purchasePrice.toFixed(2)}
+                      {settings.currencySymbol} {prod.purchasePrice.toFixed(2)}
                     </td>
 
                     <td className="p-3 text-right font-mono font-black text-emerald-700 text-sm">
-                      ${prod.salePrice.toFixed(2)}
+                      {settings.currencySymbol} {prod.salePrice.toFixed(2)}
                     </td>
 
                     <td className="p-3 text-center">
@@ -335,7 +336,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="text-slate-700 font-bold block mb-1">Precio Compra ($)</label>
+                  <label className="text-slate-700 font-bold block mb-1">Precio Compra ({settings.currencySymbol})</label>
                   <input
                     type="number"
                     step="0.01"
@@ -347,7 +348,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
                   />
                 </div>
                 <div>
-                  <label className="text-slate-700 font-bold block mb-1">Precio Venta ($) *</label>
+                  <label className="text-slate-700 font-bold block mb-1">Precio Venta ({settings.currencySymbol}) *</label>
                   <input
                     type="number"
                     step="0.01"

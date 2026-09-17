@@ -20,7 +20,7 @@ import {
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
 export const InventoryValuationView: React.FC = () => {
-  const { batches, products, suppliers, currentBranch } = usePharmacy();
+  const { batches, products, suppliers, currentBranch, settings } = usePharmacy();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [supplierFilter, setSupplierFilter] = useState('ALL');
@@ -157,7 +157,7 @@ export const InventoryValuationView: React.FC = () => {
             </span>
           </div>
           <div className="text-3xl font-black font-mono text-slate-900">
-            ${totalCostValuation.toFixed(2)}
+            {settings.currencySymbol} {totalCostValuation.toFixed(2)}
           </div>
           <div className="text-[11px] text-emerald-700 font-semibold">
             Inversión física inmovilizada en estantería
@@ -175,10 +175,10 @@ export const InventoryValuationView: React.FC = () => {
             </span>
           </div>
           <div className="text-3xl font-black font-mono text-blue-900">
-            ${totalSaleValuation.toFixed(2)}
+            {settings.currencySymbol} {totalSaleValuation.toFixed(2)}
           </div>
           <div className="text-[11px] text-blue-700 font-semibold">
-            Utilidad proyectada: +${totalProjectedProfit.toFixed(2)}
+            Utilidad proyectada: +{settings.currencySymbol} {totalProjectedProfit.toFixed(2)}
           </div>
         </div>
 
@@ -211,7 +211,7 @@ export const InventoryValuationView: React.FC = () => {
             </span>
           </div>
           <div className="text-3xl font-black font-mono text-rose-700">
-            ${capitalAtRisk.toFixed(2)}
+            {settings.currencySymbol} {capitalAtRisk.toFixed(2)}
           </div>
           <div className="text-[11px] text-rose-600 font-bold">
             Prioridad de rotación y ofertas FEFO
@@ -248,7 +248,7 @@ export const InventoryValuationView: React.FC = () => {
                 </span>
               </div>
               <div className="text-xl font-black font-mono text-slate-900">
-                ${s.totalCost.toFixed(2)}
+                {settings.currencySymbol} {s.totalCost.toFixed(2)}
               </div>
               <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
                 <div
@@ -319,9 +319,9 @@ export const InventoryValuationView: React.FC = () => {
                 <th className="py-3 px-3">Vencimiento</th>
                 <th className="py-3 px-3 text-center">Stock Físico</th>
                 <th className="py-3 px-3 text-right">Costo Unit.</th>
-                <th className="py-3 px-3 text-right">Costo Total ($)</th>
+                <th className="py-3 px-3 text-right">Costo Total ({settings.currencySymbol})</th>
                 <th className="py-3 px-3 text-right">Precio Venta</th>
-                <th className="py-3 px-4 text-right">Venta Proyectada ($)</th>
+                <th className="py-3 px-4 text-right">Venta Proyectada ({settings.currencySymbol})</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -357,16 +357,16 @@ export const InventoryValuationView: React.FC = () => {
                     </span>
                   </td>
                   <td className="py-3 px-3 text-right font-mono text-slate-600">
-                    ${batch.unitCost.toFixed(2)}
+                    {settings.currencySymbol} {batch.unitCost.toFixed(2)}
                   </td>
                   <td className="py-3 px-3 text-right font-mono font-black text-slate-900">
-                    ${batch.totalCostValue.toFixed(2)}
+                    {settings.currencySymbol} {batch.totalCostValue.toFixed(2)}
                   </td>
                   <td className="py-3 px-3 text-right font-mono text-slate-500">
-                    ${batch.unitSalePrice.toFixed(2)}
+                    {settings.currencySymbol} {batch.unitSalePrice.toFixed(2)}
                   </td>
                   <td className="py-3 px-4 text-right font-mono font-black text-emerald-700">
-                    ${batch.totalSaleValue.toFixed(2)}
+                    {settings.currencySymbol} {batch.totalSaleValue.toFixed(2)}
                   </td>
                 </tr>
               ))}

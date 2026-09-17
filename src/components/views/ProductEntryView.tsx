@@ -30,6 +30,7 @@ export const ProductEntryView: React.FC<ProductEntryViewProps> = ({ onNavigateTo
     suppliers,
     currentBranch,
     addProduct,
+    settings,
   } = usePharmacy();
 
   // Estados del Formulario de Medicamento
@@ -373,10 +374,10 @@ export const ProductEntryView: React.FC<ProductEntryViewProps> = ({ onNavigateTo
             <div className="space-y-3 text-xs">
               <div>
                 <label className="text-slate-700 font-bold block mb-1">
-                  Precio de Compra (Costo por Unidad) <span className="text-red-500">*</span>
+                  Precio de Compra (Costo por Unidad en {settings.currencySymbol}) <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-mono font-bold">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-mono font-bold">{settings.currencySymbol}</span>
                   <input
                     type="number"
                     step="0.0001"
@@ -384,7 +385,7 @@ export const ProductEntryView: React.FC<ProductEntryViewProps> = ({ onNavigateTo
                     value={purchasePrice}
                     onChange={(e) => handlePurchasePriceChange(e.target.value)}
                     placeholder="0.00"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-7 pr-3 p-2.5 text-slate-900 font-mono text-sm font-bold focus:bg-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 p-2.5 text-slate-900 font-mono text-sm font-bold focus:bg-white focus:outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -420,10 +421,10 @@ export const ProductEntryView: React.FC<ProductEntryViewProps> = ({ onNavigateTo
 
               <div>
                 <label className="text-slate-700 font-bold block mb-1">
-                  Precio de Venta al Público ($) <span className="text-red-500">*</span>
+                  Precio de Venta al Público ({settings.currencySymbol}) <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-700 font-mono font-bold">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-700 font-mono font-bold">{settings.currencySymbol}</span>
                   <input
                     type="number"
                     step="0.01"
@@ -431,7 +432,7 @@ export const ProductEntryView: React.FC<ProductEntryViewProps> = ({ onNavigateTo
                     value={salePrice}
                     onChange={(e) => setSalePrice(e.target.value)}
                     placeholder="0.00"
-                    className="w-full bg-emerald-50/50 border border-emerald-300 rounded-xl pl-7 pr-3 p-2.5 text-emerald-900 font-mono text-base font-black focus:bg-white focus:outline-none focus:border-emerald-600 shadow-inner"
+                    className="w-full bg-emerald-50/50 border border-emerald-300 rounded-xl pl-9 pr-3 p-2.5 text-emerald-900 font-mono text-base font-black focus:bg-white focus:outline-none focus:border-emerald-600 shadow-inner"
                   />
                 </div>
               </div>
@@ -441,7 +442,7 @@ export const ProductEntryView: React.FC<ProductEntryViewProps> = ({ onNavigateTo
                 <div>
                   <span className="text-[10px] text-emerald-800 font-bold uppercase block">Ganancia Bruta x Unidad</span>
                   <span className="text-base font-black text-emerald-800 font-mono">
-                    +${Math.max(0, (parseFloat(salePrice) || 0) - (parseFloat(purchasePrice) || 0)).toFixed(2)}
+                    +{settings.currencySymbol} {Math.max(0, (parseFloat(salePrice) || 0) - (parseFloat(purchasePrice) || 0)).toFixed(2)}
                   </span>
                 </div>
                 <div className="text-right">
@@ -586,7 +587,7 @@ export const ProductEntryView: React.FC<ProductEntryViewProps> = ({ onNavigateTo
                 <p className="text-[10px] text-slate-500 truncate">{p.categoryName}</p>
               </div>
               <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-slate-200">
-                <span className="font-black text-xs text-emerald-700 font-mono">${p.salePrice.toFixed(2)}</span>
+                <span className="font-black text-xs text-emerald-700 font-mono">{settings.currencySymbol} {p.salePrice.toFixed(2)}</span>
                 <span className="text-[10px] text-slate-400">Min: {p.minStock}</span>
               </div>
             </div>

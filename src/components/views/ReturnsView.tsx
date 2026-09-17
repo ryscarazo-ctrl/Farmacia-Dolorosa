@@ -312,7 +312,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                       <div className="text-right">
                         <div className="text-[10px] uppercase font-bold text-slate-400">Precio Unitario</div>
                         <div className="text-lg font-mono font-black text-emerald-800">
-                          ${detectedProduct.salePrice.toFixed(2)}
+                          {settings.currencySymbol} {detectedProduct.salePrice.toFixed(2)}
                         </div>
                       </div>
                     </div>
@@ -496,7 +496,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                         Monto a Reembolsar al Cliente
                       </div>
                       <div className="text-2xl font-mono font-black text-emerald-900">
-                        ${((parseInt(quantity) || 1) * detectedProduct.salePrice).toFixed(2)}
+                        {settings.currencySymbol} {((parseInt(quantity) || 1) * detectedProduct.salePrice).toFixed(2)}
                       </div>
                       <div className="text-[10px] text-emerald-700 font-semibold">
                         Destino: {destination === 'EXPIRED_QUARANTINE' ? '🚫 Área Vencidos' : '🟢 Re-Stock Estante'} • {refundMethod}
@@ -552,7 +552,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                 </span>
               </div>
               <p className="text-xs text-red-700">
-                Pérdida retenida en medicamentos vencidos devueltos: <strong className="font-mono">${totalLossInExpired.toFixed(2)}</strong>.
+                Pérdida retenida en medicamentos vencidos devueltos: <strong className="font-mono">{settings.currencySymbol} {totalLossInExpired.toFixed(2)}</strong>.
               </p>
               <button
                 type="button"
@@ -588,7 +588,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
               <div className="bg-white p-3 rounded-2xl border border-red-200 text-right">
                 <div className="text-[10px] font-bold text-slate-400 uppercase">Pérdida Acumulada</div>
                 <div className="text-xl font-mono font-black text-red-700">
-                  ${totalLossInExpired.toFixed(2)}
+                  {settings.currencySymbol} {totalLossInExpired.toFixed(2)}
                 </div>
               </div>
 
@@ -649,7 +649,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                           {item.quantityReturned}
                         </td>
                         <td className="p-3.5 text-right font-mono font-black text-slate-900">
-                          ${item.totalRefundAmount.toFixed(2)}
+                          {settings.currencySymbol} {item.totalRefundAmount.toFixed(2)}
                         </td>
                         <td className="p-3.5 max-w-xs">
                           <div className="text-[11px] text-slate-700 italic bg-amber-50/80 p-2 rounded-lg border border-amber-200">
@@ -731,7 +731,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                       {item.quantityReturned}
                     </td>
                     <td className="p-3.5 text-right font-mono font-black text-slate-900">
-                      ${item.totalRefundAmount.toFixed(2)}
+                      {settings.currencySymbol} {item.totalRefundAmount.toFixed(2)}
                     </td>
                     <td className="p-3.5 max-w-xs">
                       <div className="text-[11px] text-slate-700 italic">
@@ -830,7 +830,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
             <div className="border-t border-dashed border-slate-300 pt-3 flex justify-between items-center text-sm font-bold">
               <span className="text-slate-800">TOTAL REEMBOLSADO:</span>
               <span className="text-xl font-mono font-black text-emerald-700">
-                ${viewingRecord.totalRefundAmount.toFixed(2)}
+                {settings.currencySymbol} {viewingRecord.totalRefundAmount.toFixed(2)}
               </span>
             </div>
 

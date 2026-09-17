@@ -25,7 +25,7 @@ export const PurchasesView: React.FC<{
   onNavigateToSuppliers?: () => void;
   onNavigateToSupplierPortal?: () => void;
 }> = ({ onNavigateToSuppliers, onNavigateToSupplierPortal }) => {
-  const { purchases, suppliers, products, currentBranch, addPurchase, supplierOrders } = usePharmacy();
+  const { purchases, suppliers, products, currentBranch, addPurchase, supplierOrders, settings } = usePharmacy();
 
   const [activeTab, setActiveTab] = useState<'list' | 'new'>('list');
   const [search, setSearch] = useState('');
@@ -210,7 +210,7 @@ export const PurchasesView: React.FC<{
         <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-1">
           <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Compras Acumuladas</div>
           <div className="text-2xl font-mono font-black text-slate-900">
-            ${totalSpent.toFixed(2)}
+            {settings.currencySymbol} {totalSpent.toFixed(2)}
           </div>
           <div className="text-[10px] text-emerald-600 font-bold">
             {purchases.length} facturas ingresadas
@@ -220,7 +220,7 @@ export const PurchasesView: React.FC<{
         <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-1">
           <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cuentas por Pagar (Crédito)</div>
           <div className="text-2xl font-mono font-black text-amber-700">
-            ${pendingDebt.toFixed(2)}
+            {settings.currencySymbol} {pendingDebt.toFixed(2)}
           </div>
           <div className="text-[10px] text-amber-600 font-bold">
             Facturas pendientes a 30/45 días
@@ -334,7 +334,7 @@ export const PurchasesView: React.FC<{
                           </span>
                         </td>
                         <td className="p-3.5 text-right font-mono font-black text-slate-900 text-sm">
-                          ${pur.totalAmount.toFixed(2)}
+                          {settings.currencySymbol} {pur.totalAmount.toFixed(2)}
                         </td>
                         <td className="p-3.5 text-center">
                           <button
@@ -484,7 +484,7 @@ export const PurchasesView: React.FC<{
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-bold text-slate-600 block mb-0.5">Costo Unitario ($)</label>
+                      <label className="text-[10px] font-bold text-slate-600 block mb-0.5">Costo Unitario ({settings.currencySymbol})</label>
                       <input
                         type="number"
                         step="0.01"
@@ -497,7 +497,7 @@ export const PurchasesView: React.FC<{
                     <div className="text-right">
                       <span className="text-[10px] text-slate-400 block">Subtotal</span>
                       <span className="font-mono font-black text-emerald-800 text-sm">
-                        ${item.subtotal.toFixed(2)}
+                        {settings.currencySymbol} {item.subtotal.toFixed(2)}
                       </span>
                     </div>
 
@@ -524,7 +524,7 @@ export const PurchasesView: React.FC<{
                 Total Factura de Compra
               </span>
               <span className="text-2xl font-mono font-black text-emerald-950">
-                ${totalCalculated.toFixed(2)}
+                {settings.currencySymbol} {totalCalculated.toFixed(2)}
               </span>
             </div>
 
@@ -579,7 +579,7 @@ export const PurchasesView: React.FC<{
                     </div>
                   </div>
                   <div className="font-bold text-slate-900">
-                    ${it.subtotal.toFixed(2)}
+                    {settings.currencySymbol} {it.subtotal.toFixed(2)}
                   </div>
                 </div>
               ))}
@@ -588,7 +588,7 @@ export const PurchasesView: React.FC<{
             <div className="border-t border-dashed border-slate-300 pt-3 flex justify-between items-center text-sm font-bold">
               <span>TOTAL COMPRA:</span>
               <span className="text-xl font-mono font-black text-emerald-700">
-                ${selectedInvoice.totalAmount.toFixed(2)}
+                {settings.currencySymbol} {selectedInvoice.totalAmount.toFixed(2)}
               </span>
             </div>
 

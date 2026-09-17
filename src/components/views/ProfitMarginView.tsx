@@ -20,14 +20,14 @@ import {
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
 export const ProfitMarginView: React.FC = () => {
-  const { sales, products, batches, categories, currentBranch } = usePharmacy();
+  const { sales, products, batches, categories, currentBranch, settings } = usePharmacy();
 
   const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Simulador de Margen
-  const [simCost, setSimCost] = useState('3.50');
-  const [simPrice, setSimPrice] = useState('5.50');
+  const [simCost, setSimCost] = useState('35.00');
+  const [simPrice, setSimPrice] = useState('55.00');
 
   // Cálculo de Margen por Producto
   const productMargins = useMemo(() => {
@@ -157,10 +157,10 @@ export const ProfitMarginView: React.FC = () => {
             </span>
           </div>
           <div className="text-3xl font-black font-mono text-slate-900">
-            ${totalSalesProfit.toFixed(2)}
+            {settings.currencySymbol} {totalSalesProfit.toFixed(2)}
           </div>
           <div className="text-[11px] text-slate-500">
-            Sobre ventas de ${totalSalesRevenue.toFixed(2)}
+            Sobre ventas de {settings.currencySymbol} {totalSalesRevenue.toFixed(2)}
           </div>
         </div>
 
@@ -174,7 +174,7 @@ export const ProfitMarginView: React.FC = () => {
             </span>
           </div>
           <div className="text-3xl font-black font-mono text-slate-700">
-            ${totalSalesCost.toFixed(2)}
+            {settings.currencySymbol} {totalSalesCost.toFixed(2)}
           </div>
           <div className="text-[11px] text-slate-500">
             Costo directo de reposición FEFO
@@ -210,7 +210,7 @@ export const ProfitMarginView: React.FC = () => {
                 Medicamentos con Mayor Margen Porcentual
               </h3>
               <p className="text-[11px] text-slate-500">
-                Productos que generan mayor ganancia neta por cada dólar vendido
+                Productos que generan mayor ganancia neta en córdobas
               </p>
             </div>
           </div>
@@ -228,7 +228,7 @@ export const ProfitMarginView: React.FC = () => {
                   <div>
                     <h4 className="font-extrabold text-xs text-slate-900">{prod.name}</h4>
                     <p className="text-[11px] text-slate-500">
-                      Costo: ${prod.cost.toFixed(2)} ➔ Venta: ${prod.price.toFixed(2)}
+                      Costo: {settings.currencySymbol} {prod.cost.toFixed(2)} ➔ Venta: {settings.currencySymbol} {prod.price.toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -238,7 +238,7 @@ export const ProfitMarginView: React.FC = () => {
                     +{prod.marginPercent.toFixed(1)}%
                   </span>
                   <span className="block text-[10px] font-mono text-slate-500 mt-0.5">
-                    Utilidad: +${prod.profitUnit.toFixed(2)}/u
+                    Utilidad: +{settings.currencySymbol} {prod.profitUnit.toFixed(2)}/u
                   </span>
                 </div>
               </div>
@@ -255,14 +255,14 @@ export const ProfitMarginView: React.FC = () => {
               </span>
               <h3 className="text-sm font-black text-white flex items-center gap-1.5">
                 <Calculator className="w-4 h-4 text-emerald-400" />
-                Simulador de Margen & Markup
+                Simulador de Margen & Markup ({settings.currencySymbol})
               </h3>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Costo de Compra ($)</label>
+              <label className="block text-slate-300 font-bold mb-1">Costo de Compra ({settings.currencySymbol})</label>
               <input
                 type="number"
                 step="0.05"
@@ -272,7 +272,7 @@ export const ProfitMarginView: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-slate-300 font-bold mb-1">Precio de Venta ($)</label>
+              <label className="block text-slate-300 font-bold mb-1">Precio de Venta ({settings.currencySymbol})</label>
               <input
                 type="number"
                 step="0.05"
@@ -287,7 +287,7 @@ export const ProfitMarginView: React.FC = () => {
             <div className="flex justify-between items-center">
               <span className="text-slate-300">Ganancia Neta por Unidad:</span>
               <span className="font-mono font-black text-emerald-300 text-base">
-                +${simProfit.toFixed(2)}
+                +{settings.currencySymbol} {simProfit.toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between items-center">
@@ -372,13 +372,13 @@ export const ProfitMarginView: React.FC = () => {
                     {prod.barcode}
                   </td>
                   <td className="py-3 px-3 text-right font-mono text-slate-600">
-                    ${prod.cost.toFixed(2)}
+                    {settings.currencySymbol} {prod.cost.toFixed(2)}
                   </td>
                   <td className="py-3 px-3 text-right font-mono font-bold text-slate-900">
-                    ${prod.price.toFixed(2)}
+                    {settings.currencySymbol} {prod.price.toFixed(2)}
                   </td>
                   <td className="py-3 px-3 text-right font-mono font-black text-emerald-700">
-                    +${prod.profitUnit.toFixed(2)}
+                    +{settings.currencySymbol} {prod.profitUnit.toFixed(2)}
                   </td>
                   <td className="py-3 px-3 text-center font-mono font-bold text-emerald-800">
                     {prod.marginPercent.toFixed(1)}%

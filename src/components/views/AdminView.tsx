@@ -378,14 +378,14 @@ export const AdminView: React.FC<{ initialTab?: 'branches' | 'users' | 'settings
                     type="text"
                     value={primaryCurrency}
                     onChange={(e) => setPrimaryCurrency(e.target.value)}
-                    placeholder="USD"
+                    placeholder="NIO"
                     className="w-2/3 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                   <input
                     type="text"
                     value={currencySymbol}
                     onChange={(e) => setCurrencySymbol(e.target.value)}
-                    placeholder="$"
+                    placeholder="C$"
                     className="w-1/3 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-bold text-center focus:outline-none focus:border-emerald-500 focus:bg-white"
                   />
                 </div>

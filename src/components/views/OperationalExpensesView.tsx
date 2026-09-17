@@ -37,6 +37,7 @@ export const OperationalExpensesView: React.FC = () => {
     sales,
     currentBranch,
     currentUser,
+    settings,
   } = usePharmacy();
 
   // Estados de filtros
@@ -296,7 +297,7 @@ export const OperationalExpensesView: React.FC = () => {
             </span>
           </div>
           <div className="text-2xl font-black font-mono text-slate-900">
-            ${financialMetrics.monthlyNetProfit.toFixed(2)}
+            {settings.currencySymbol} {financialMetrics.monthlyNetProfit.toFixed(2)}
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-emerald-100">
             <span className="text-slate-500">Margen Neto Real:</span>
@@ -317,12 +318,12 @@ export const OperationalExpensesView: React.FC = () => {
             </span>
           </div>
           <div className="text-2xl font-black font-mono text-blue-900">
-            ${financialMetrics.weeklyNetProfit.toFixed(2)}
+            {settings.currencySymbol} {financialMetrics.weeklyNetProfit.toFixed(2)}
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
             <span className="text-slate-500">Ventas 7 días:</span>
             <span className="font-bold text-slate-700">
-              ${financialMetrics.weeklyGrossSales.toFixed(2)}
+              {settings.currencySymbol} {financialMetrics.weeklyGrossSales.toFixed(2)}
             </span>
           </div>
         </div>
@@ -338,12 +339,12 @@ export const OperationalExpensesView: React.FC = () => {
             </span>
           </div>
           <div className="text-2xl font-black font-mono text-slate-900">
-            ${inventoryValuation.totalCost.toFixed(2)}
+            {settings.currencySymbol} {inventoryValuation.totalCost.toFixed(2)}
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
             <span className="text-slate-500">Venta Proyectada:</span>
             <span className="font-bold text-emerald-700">
-              ${inventoryValuation.totalSaleValue.toFixed(2)}
+              {settings.currencySymbol} {inventoryValuation.totalSaleValue.toFixed(2)}
             </span>
           </div>
         </div>
@@ -359,12 +360,12 @@ export const OperationalExpensesView: React.FC = () => {
             </span>
           </div>
           <div className="text-2xl font-black font-mono text-rose-700">
-            ${financialMetrics.monthlyTotalExpenses.toFixed(2)}
+            {settings.currencySymbol} {financialMetrics.monthlyTotalExpenses.toFixed(2)}
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
             <span className="text-slate-500">Gastos Semana:</span>
             <span className="font-bold text-slate-700">
-              ${financialMetrics.weeklyTotalExpenses.toFixed(2)}
+              {settings.currencySymbol} {financialMetrics.weeklyTotalExpenses.toFixed(2)}
             </span>
           </div>
         </div>
@@ -392,7 +393,7 @@ export const OperationalExpensesView: React.FC = () => {
                 <span className="w-2 h-2 rounded-full bg-emerald-500" /> (+) Ventas Totales Facturadas:
               </span>
               <span className="font-mono font-black text-slate-900 text-sm">
-                ${financialMetrics.monthlyGrossSales.toFixed(2)}
+                {settings.currencySymbol} {financialMetrics.monthlyGrossSales.toFixed(2)}
               </span>
             </div>
 
@@ -401,14 +402,14 @@ export const OperationalExpensesView: React.FC = () => {
                 (-) Costo de Mercadería Vendida (COGS):
               </span>
               <span className="font-mono font-bold text-slate-600">
-                ${financialMetrics.monthlyCogs.toFixed(2)}
+                {settings.currencySymbol} {financialMetrics.monthlyCogs.toFixed(2)}
               </span>
             </div>
 
             <div className="flex justify-between items-center py-1 bg-slate-50 p-2.5 rounded-xl font-bold">
               <span className="text-slate-800">(=) Utilidad Bruta de Farmacia:</span>
               <span className="font-mono font-black text-emerald-800 text-sm">
-                ${financialMetrics.monthlyGrossProfit.toFixed(2)}
+                {settings.currencySymbol} {financialMetrics.monthlyGrossProfit.toFixed(2)}
               </span>
             </div>
 
@@ -417,7 +418,7 @@ export const OperationalExpensesView: React.FC = () => {
                 (-) Gastos Operativos de Operación (OPEX):
               </span>
               <span className="font-mono font-bold text-rose-700">
-                -${financialMetrics.monthlyTotalExpenses.toFixed(2)}
+                -{settings.currencySymbol} {financialMetrics.monthlyTotalExpenses.toFixed(2)}
               </span>
             </div>
 
@@ -427,7 +428,7 @@ export const OperationalExpensesView: React.FC = () => {
                 <p className="text-[10px] text-emerald-700">Utilidad líquida disponible en caja</p>
               </div>
               <span className="font-mono font-black text-xl text-emerald-800">
-                ${financialMetrics.monthlyNetProfit.toFixed(2)}
+                {settings.currencySymbol} {financialMetrics.monthlyNetProfit.toFixed(2)}
               </span>
             </div>
           </div>
@@ -441,7 +442,7 @@ export const OperationalExpensesView: React.FC = () => {
                 Distribución de Gastos Operativos
               </h3>
               <p className="text-[11px] text-slate-500">
-                Total acumulado en el mes: <strong>${categoryBreakdown.total.toFixed(2)}</strong>
+                Total acumulado en el mes: <strong>{settings.currencySymbol} {categoryBreakdown.total.toFixed(2)}</strong>
               </p>
             </div>
             <PiggyBank className="w-5 h-5 text-emerald-600" />
@@ -460,7 +461,7 @@ export const OperationalExpensesView: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="font-mono font-black text-slate-900">
-                        ${item.amount.toFixed(2)}
+                        {settings.currencySymbol} {item.amount.toFixed(2)}
                       </span>
                       <span className="text-[10px] font-bold text-slate-400 w-10 text-right">
                         {item.percentage.toFixed(0)}%
@@ -598,7 +599,7 @@ export const OperationalExpensesView: React.FC = () => {
                     </td>
                     <td className="py-3 px-3 text-slate-600">{exp.createdBy}</td>
                     <td className="py-3 px-4 text-right font-mono font-black text-rose-700 text-sm">
-                      ${exp.amount.toFixed(2)}
+                      {settings.currencySymbol} {exp.amount.toFixed(2)}
                     </td>
                   </tr>
                 ))
@@ -650,7 +651,7 @@ export const OperationalExpensesView: React.FC = () => {
 
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">
-                    Monto en Dólares ($) <span className="text-rose-500">*</span>
+                    Monto en Córdobas ({settings.currencySymbol}) <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="number"
