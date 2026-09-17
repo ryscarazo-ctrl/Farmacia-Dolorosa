@@ -15,6 +15,7 @@ import {
   Receipt,
   Boxes,
   PackagePlus,
+  BookOpen,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
@@ -84,11 +85,11 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
             <span>Abrir POS</span>
           </button>
           <button
-            onClick={() => onNavigate('batches')}
-            className="px-4 py-2.5 bg-emerald-800/60 hover:bg-emerald-800/80 text-white rounded-xl font-bold text-xs flex items-center gap-2 border border-emerald-400/40 transition-all"
+            onClick={() => onNavigate('manual')}
+            className="px-4 py-2.5 bg-emerald-950/80 hover:bg-black text-emerald-200 hover:text-white rounded-xl font-bold text-xs flex items-center gap-2 border border-emerald-400/30 transition-all cursor-pointer shadow-sm"
           >
-            <Layers className="w-4 h-4 text-emerald-200" />
-            <span>Control de Lotes</span>
+            <BookOpen className="w-4 h-4 text-emerald-300" />
+            <span>📖 Ver Manual</span>
           </button>
         </div>
       </div>

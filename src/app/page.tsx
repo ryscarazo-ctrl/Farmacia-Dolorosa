@@ -16,7 +16,6 @@ import { AdminView } from '../components/views/AdminView';
 import { ProductEntryView } from '../components/views/ProductEntryView';
 import { ReturnsView } from '../components/views/ReturnsView';
 import { SalesHistoryView } from '../components/views/SalesHistoryView';
-
 import { PurchasesView } from '../components/views/PurchasesView';
 import { SuppliersView } from '../components/views/SuppliersView';
 import { CustomersView } from '../components/views/CustomersView';
@@ -25,6 +24,7 @@ import { OperationalExpensesView } from '../components/views/OperationalExpenses
 import { ProfitMarginView } from '../components/views/ProfitMarginView';
 import { InventoryValuationView } from '../components/views/InventoryValuationView';
 import { BankReconciliationView } from '../components/views/BankReconciliationView';
+import { ManualView } from '../components/views/ManualView';
 import { usePharmacy } from '../contexts/PharmacyContext';
 import { LoginView } from '../components/auth/LoginView';
 
@@ -82,6 +82,8 @@ export default function Home() {
         return <AdminView initialTab="backup" />;
       case 'admin-settings':
         return <AdminView initialTab="settings" />;
+      case 'manual':
+        return <ManualView onNavigate={(view) => navigateTo(view)} />;
       case 'sales':
         return <SalesHistoryView onNavigateToReturns={() => navigateTo('returns')} />;
       case 'returns':
@@ -118,6 +120,7 @@ export default function Home() {
       <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden">
         <TopNavbar
           onNavigateToCash={() => navigateTo('cash')}
+          onNavigateToManual={() => navigateTo('manual')}
           onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         />
         <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-50">

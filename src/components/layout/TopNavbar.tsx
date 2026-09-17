@@ -13,15 +13,21 @@ import {
   Lock,
   Menu,
   LogOut,
+  BookOpen,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
 interface TopNavbarProps {
   onNavigateToCash?: () => void;
+  onNavigateToManual?: () => void;
   onToggleMobileMenu?: () => void;
 }
 
-export const TopNavbar: React.FC<TopNavbarProps> = ({ onNavigateToCash, onToggleMobileMenu }) => {
+export const TopNavbar: React.FC<TopNavbarProps> = ({
+  onNavigateToCash,
+  onNavigateToManual,
+  onToggleMobileMenu,
+}) => {
   const {
     branches,
     currentBranch,
@@ -115,8 +121,20 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onNavigateToCash, onToggle
         </div>
       </div>
 
-      {/* Estado de Caja, Alertas y Perfil con Cerrar Sesión */}
+      {/* Acceso a Manual, Estado de Caja, Alertas y Perfil */}
       <div className="flex items-center gap-2 sm:gap-3">
+        {/* Botón Estratégico: MANUAL DE USUARIO */}
+        <button
+          type="button"
+          onClick={onNavigateToManual}
+          className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 text-emerald-900 border border-emerald-300 font-extrabold text-[11px] sm:text-xs cursor-pointer shadow-xs transition-all active:scale-95"
+          title="Ver Manual de Usuario y Guía de Uso"
+        >
+          <BookOpen className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+          <span className="hidden sm:inline">📖 Manual</span>
+          <span className="sm:hidden font-bold">Manual</span>
+        </button>
+
         {/* Estado de Caja */}
         <button
           onClick={onNavigateToCash}

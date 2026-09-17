@@ -43,6 +43,10 @@ export const AdminView: React.FC<{ initialTab?: 'branches' | 'users' | 'settings
   const [activeTab, setActiveTab] = useState<'branches' | 'users' | 'settings' | 'backup'>(initialTab);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  React.useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
+
   // Settings form state
   const [pharmacyName, setPharmacyName] = useState(settings.pharmacyName);
   const [address, setAddress] = useState(settings.address);
