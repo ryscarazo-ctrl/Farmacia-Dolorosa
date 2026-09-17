@@ -171,9 +171,11 @@ interface PharmacyContextType {
   autoReconcileBank: (bankAccountId: string) => { matchedCount: number; message: string };
   addBankStatementItem: (item: Omit<BankStatementItem, 'id' | 'isReconciled'>) => void;
 
-  // Administración de Producción & Limpieza de Datos
+  // Administración de Producción, Copia de Seguridad & Limpieza de Datos
   clearAllDemoData: () => void;
   restoreDemoData: () => void;
+  exportBackupData: () => { success: boolean; filename: string };
+  importBackupData: (jsonData: any) => { success: boolean; message: string };
 
   // Autenticación y Seguridad Privada
   isAuthenticated: boolean;
@@ -295,6 +297,103 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setTransfers(initialTransfers);
     setAlerts(initialAlerts);
     setAuditLogs(initialAuditLogs);
+  };
+
+  const exportBackupData = (): { success: boolean; filename: string } => {
+    try {
+      const backup = {
+        version: '1.2',
+        system: 'Farmacia Espíritu Santo — Sistema Integral de Gestión',
+        pharmacyName: settings.pharmacyName,
+        exportDate: new Date().toISOString(),
+        branch: currentBranch.name,
+        data: {
+          products,
+          batches,
+          suppliers,
+          customers,
+          purchases,
+          supplierOrders,
+          operationalExpenses,
+          bankAccounts,
+          bankStatements,
+          cashSessions,
+          sales,
+          returns,
+          barcodeReturns,
+          movements,
+          transfers,
+          alerts,
+          auditLogs,
+          settings,
+        },
+      };
+
+      const jsonStr = JSON.stringify(backup, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const now = new Date();
+      const dateStr = now.toISOString().slice(0, 10);
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
+      const filename = `respaldo_farmacia_espiritusanto_${dateStr}_${timeStr}.json`;
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      return { success: true, filename };
+    } catch (err: any) {
+      return { success: false, filename: err.message || 'error' };
+    }
+  };
+
+  const importBackupData = (jsonData: any): { success: boolean; message: string } => {
+    try {
+      let parsed = jsonData;
+      if (typeof jsonData === 'string') {
+        parsed = JSON.parse(jsonData);
+      }
+
+      const d = parsed?.data || parsed;
+      if (!d || typeof d !== 'object') {
+        return { success: false, message: 'El archivo no contiene un formato de respaldo válido.' };
+      }
+
+      if (Array.isArray(d.products)) setProducts(d.products);
+      if (Array.isArray(d.batches)) setBatches(d.batches);
+      if (Array.isArray(d.suppliers)) setSuppliers(d.suppliers);
+      if (Array.isArray(d.customers)) setCustomers(d.customers);
+      if (Array.isArray(d.purchases)) setPurchases(d.purchases);
+      if (Array.isArray(d.supplierOrders)) setSupplierOrders(d.supplierOrders);
+      if (Array.isArray(d.operationalExpenses)) setOperationalExpenses(d.operationalExpenses);
+      if (Array.isArray(d.bankAccounts)) setBankAccounts(d.bankAccounts);
+      if (Array.isArray(d.bankStatements)) setBankStatements(d.bankStatements);
+      if (Array.isArray(d.cashSessions)) setCashSessions(d.cashSessions);
+      if (Array.isArray(d.sales)) setSales(d.sales);
+      if (Array.isArray(d.returns)) setReturns(d.returns);
+      if (Array.isArray(d.barcodeReturns)) setBarcodeReturns(d.barcodeReturns);
+      if (Array.isArray(d.movements)) setMovements(d.movements);
+      if (Array.isArray(d.transfers)) setTransfers(d.transfers);
+      if (Array.isArray(d.alerts)) setAlerts(d.alerts);
+      if (Array.isArray(d.auditLogs)) setAuditLogs(d.auditLogs);
+      if (d.settings && typeof d.settings === 'object') setSettings(d.settings);
+
+      // Force instant storage save
+      Object.entries(d).forEach(([key, val]) => {
+        saveStorage(key, val);
+      });
+
+      return {
+        success: true,
+        message: `¡Copia de seguridad restaurada con éxito! Se cargaron ${d.products?.length || 0} medicamentos y ${d.sales?.length || 0} ventas.`,
+      };
+    } catch (err: any) {
+      return { success: false, message: `Error al restaurar: ${err.message || 'Formato inválido'}` };
+    }
   };
 
   const login = (username: string, password: string): { success: boolean; message?: string } => {
@@ -1569,6 +1668,8 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         markAlertAsRead,
         clearAllDemoData,
         restoreDemoData,
+        exportBackupData,
+        importBackupData,
         isAuthenticated,
         login,
         logout,

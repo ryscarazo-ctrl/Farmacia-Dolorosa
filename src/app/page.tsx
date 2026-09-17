@@ -78,6 +78,8 @@ export default function Home() {
         return <AdminView initialTab="branches" />;
       case 'admin-users':
         return <AdminView initialTab="users" />;
+      case 'admin-backup':
+        return <AdminView initialTab="backup" />;
       case 'admin-settings':
         return <AdminView initialTab="settings" />;
       case 'sales':

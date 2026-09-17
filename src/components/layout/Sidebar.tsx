@@ -26,6 +26,7 @@ import {
   X,
   LogOut,
   Power,
+  HardDrive,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
@@ -55,7 +56,8 @@ export type NavSection =
   | 'reports-audit'
   | 'admin-users'
   | 'admin-branches'
-  | 'admin-settings';
+  | 'admin-settings'
+  | 'admin-backup';
 
 interface SidebarProps {
   currentView: NavSection;
@@ -138,7 +140,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       category: 'ADMINISTRACIÓN',
       items: [
         { id: 'admin-branches', label: 'Sucursales', icon: Building2 },
-        { id: 'admin-users', label: 'Usuarios y Roles', icon: UserCog },
+        { id: 'admin-users', label: 'Personal y Roles', icon: UserCog },
+        { id: 'admin-backup', label: 'Copia de Seguridad (Backup)', icon: HardDrive },
         { id: 'admin-settings', label: 'Configuración', icon: SettingsIcon },
       ],
     },
