@@ -8,6 +8,8 @@ import {
   KeyRound,
   ArrowRight,
   AlertCircle,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
@@ -15,6 +17,7 @@ export const LoginView: React.FC = () => {
   const { login, settings, currentBranch } = usePharmacy();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -85,7 +88,7 @@ export const LoginView: React.FC = () => {
               autoFocus
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Ingresa tu nombre de usuario"
+              placeholder="Ingresa tu usuario (ej: maria o fatima)"
               className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl px-3.5 py-2.5 text-sm text-slate-800 font-medium transition-all outline-none"
             />
           </div>
@@ -95,14 +98,28 @@ export const LoginView: React.FC = () => {
               <KeyRound className="w-3.5 h-3.5 text-emerald-600" />
               <span>Contraseña</span>
             </label>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl px-3.5 py-2.5 text-sm text-slate-800 font-mono transition-all outline-none"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Ingresa tu contraseña"
+                className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl pl-3.5 pr-11 py-2.5 text-sm text-slate-800 font-mono transition-all outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-emerald-700 p-1.5 rounded-lg transition-colors cursor-pointer"
+                title={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
+              >
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4 text-emerald-700" />
+                ) : (
+                  <Eye className="w-4 h-4 text-slate-500" />
+                )}
+              </button>
+            </div>
           </div>
 
           <button
