@@ -874,14 +874,39 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       if (item.destination === 'RESTOCK') {
         // Reingreso a inventario disponible
-        setBatches((prev) =>
-          prev.map((b) => {
-            if (b.id === originalSaleItem.batchId || (b.productId === originalSaleItem.productId && b.batchNumber === originalSaleItem.batchNumber)) {
-              return { ...b, currentQuantity: b.currentQuantity + item.quantity };
+        setBatches((prev) => {
+          let updated = false;
+          const nextBatches = prev.map((b) => {
+            if (
+              b.id === originalSaleItem.batchId ||
+              (b.productId === originalSaleItem.productId && b.batchNumber === originalSaleItem.batchNumber)
+            ) {
+              updated = true;
+              return {
+                ...b,
+                currentQuantity: b.currentQuantity + item.quantity,
+                status: 'Available' as const,
+              };
             }
             return b;
-          })
-        );
+          });
+
+          if (!updated) {
+            const fallbackBatch: ProductBatch = {
+              id: originalSaleItem.batchId || `batch-${Date.now()}`,
+              productId: originalSaleItem.productId,
+              branchId: currentBranch.id,
+              batchNumber: originalSaleItem.batchNumber || `LOTE-${new Date().getFullYear()}`,
+              expirationDate: '2026-12-31',
+              initialQuantity: item.quantity,
+              currentQuantity: item.quantity,
+              unitCost: originalSaleItem.unitCost,
+              status: 'Available',
+            };
+            return [fallbackBatch, ...nextBatches];
+          }
+          return nextBatches;
+        });
 
         newMovements.push({
           id: `mov-${Date.now()}-${item.productId}`,
@@ -1011,11 +1036,29 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const totalRefund = qty * unitPrice;
 
     if (params.destination === 'RESTOCK') {
-      // Reingreso al stock general vendible
+      // Reingreso al stock general vendible y reactivación de lote
+      const prevQty = matchedBatch ? matchedBatch.currentQuantity : 0;
       if (matchedBatch) {
         setBatches((prev) =>
-          prev.map((b) => (b.id === matchedBatch.id ? { ...b, currentQuantity: b.currentQuantity + qty } : b))
+          prev.map((b) =>
+            b.id === matchedBatch.id
+              ? { ...b, currentQuantity: b.currentQuantity + qty, status: 'Available' as const }
+              : b
+          )
         );
+      } else {
+        const newBatch: ProductBatch = {
+          id: `batch-${Date.now()}`,
+          productId: product.id,
+          branchId: currentBranch.id,
+          batchNumber: batchNum,
+          expirationDate: expDate,
+          initialQuantity: qty,
+          currentQuantity: qty,
+          unitCost: product.purchasePrice,
+          status: 'Available',
+        };
+        setBatches((prev) => [newBatch, ...prev]);
       }
 
       const mov: InventoryMovement = {
@@ -1028,10 +1071,10 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         branchId: currentBranch.id,
         branchName: currentBranch.name,
         quantity: qty,
-        previousStock: 0,
-        newStock: qty,
+        previousStock: prevQty,
+        newStock: prevQty + qty,
         unitCost: product.purchasePrice,
-        notes: `Devolución por escaneo de código de barras. Re-stock en estantería. Vendedor: ${currentUser.username}. Justificación: ${params.sellerJustification}`,
+        notes: `Devolución por escaneo de código de barras. Re-stock en inventario activo. Vendedor: ${currentUser.username}. Justificación: ${params.sellerJustification}`,
         userName: currentUser.username,
         createdAt: new Date().toISOString(),
       };

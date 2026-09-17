@@ -326,15 +326,22 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                         <select
                           value={selectedBatchNumber}
                           onChange={(e) => {
-                            setSelectedBatchNumber(e.target.value);
+                            const newBatchNum = e.target.value;
+                            setSelectedBatchNumber(newBatchNum);
                             const b = batches.find(
                               (x) =>
                                 x.productId === detectedProduct.id &&
-                                x.batchNumber === e.target.value
+                                x.batchNumber === newBatchNum &&
+                                x.branchId === currentBranch.id
                             );
                             if (b && new Date(b.expirationDate) <= new Date()) {
                               setDestination('EXPIRED_QUARANTINE');
                               setReason('Medicamento Vencido / No Conforme');
+                            } else {
+                              if (reason === 'Medicamento Vencido / No Conforme') {
+                                setReason('Error de despacho en mostrador');
+                              }
+                              setDestination('RESTOCK');
                             }
                           }}
                           className="w-full bg-white border border-slate-300 rounded-xl p-2 font-mono text-slate-800 font-bold focus:outline-none focus:border-emerald-500"
@@ -343,7 +350,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                             .filter((b) => b.productId === detectedProduct.id)
                             .map((b) => (
                               <option key={b.id} value={b.batchNumber}>
-                                {b.batchNumber} (Vence: {b.expirationDate})
+                                {b.batchNumber} (Vence: {b.expirationDate}) - Stock: {b.currentQuantity}
                               </option>
                             ))}
                         </select>
@@ -371,7 +378,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                         <div>
                           <span>¡ALERTA SANITARIA! Este medicamento tiene fecha de caducidad vencida ({selectedBatchObj?.expirationDate}).</span>
                           <p className="text-[11px] font-normal text-red-800 mt-0.5">
-                            Por ley no puede volver al estante. Debe enviarse al Área de Medicamentos Vencidos.
+                            Por ley no puede volver al inventario vendible. Se deriva al Área de Medicamentos Vencidos.
                           </p>
                         </div>
                       </div>
@@ -379,36 +386,44 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                   </div>
 
                   {/* DESTINO DEL MEDICAMENTO: RE-STOCK vs ESPACIO DE VENCIDOS */}
-                  <div>
-                    <label className="text-xs font-bold text-slate-800 block mb-1.5">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-slate-800 block mb-1">
                       Destino del Medicamento Devuelto:
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <button
                         type="button"
-                        onClick={() => setDestination('RESTOCK')}
+                        onClick={() => {
+                          setDestination('RESTOCK');
+                          if (reason === 'Medicamento Vencido / No Conforme') {
+                            setReason('Error de despacho en mostrador');
+                          }
+                        }}
                         disabled={isSelectedBatchExpired}
                         className={`p-3 rounded-2xl border-2 text-left transition-all cursor-pointer ${
                           destination === 'RESTOCK'
-                            ? 'border-emerald-600 bg-emerald-50/80 shadow-sm'
+                            ? 'border-emerald-600 bg-emerald-50/90 shadow-sm ring-2 ring-emerald-400/20'
                             : 'border-slate-200 bg-white hover:bg-slate-50 opacity-80'
                         } ${isSelectedBatchExpired ? 'cursor-not-allowed opacity-40' : ''}`}
                       >
                         <div className="flex items-center gap-2 font-bold text-xs text-emerald-800">
                           <PackageCheck className="w-4 h-4 text-emerald-600" />
-                          <span>Re-Stock (Estantería Vendible)</span>
+                          <span>Re-Stock (Vuelve al Inventario Activo)</span>
                         </div>
                         <p className="text-[10px] text-slate-500 mt-1">
-                          Caja sellada, intacta y vigente. Se suma de nuevo al inventario para venta.
+                          Caja sellada o devolución no por vencimiento. Se reintegra inmediatamente al stock disponible.
                         </p>
                       </button>
 
                       <button
                         type="button"
-                        onClick={() => setDestination('EXPIRED_QUARANTINE')}
+                        onClick={() => {
+                          setDestination('EXPIRED_QUARANTINE');
+                          setReason('Medicamento Vencido / No Conforme');
+                        }}
                         className={`p-3 rounded-2xl border-2 text-left transition-all cursor-pointer ${
                           destination === 'EXPIRED_QUARANTINE'
-                            ? 'border-red-600 bg-red-50/80 shadow-sm'
+                            ? 'border-red-600 bg-red-50/90 shadow-sm ring-2 ring-red-400/20'
                             : 'border-slate-200 bg-white hover:bg-slate-50'
                         }`}
                       >
@@ -417,10 +432,33 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                           <span>Área de Medicamentos Vencidos / Merma</span>
                         </div>
                         <p className="text-[10px] text-slate-500 mt-1">
-                          Medicamento vencido, alterado o abierto. Se aparta en el área de cuarentena sanitaria.
+                          Medicamento vencido o alterado. Se aparta en cuarentena sanitaria y NO vuelve al stock.
                         </p>
                       </button>
                     </div>
+
+                    {/* Explicación de Destino según la Selección */}
+                    {destination === 'RESTOCK' ? (
+                      <div className="p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl text-emerald-900 text-xs flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <div>
+                          <span className="font-bold">🟢 Reingreso Automático al Inventario:</span>
+                          <span className="text-[11px] text-emerald-800 ml-1">
+                            Al no marcarse como vencido, las {quantity || 1} unidades volverán automáticamente al inventario del lote <strong>{selectedBatchNumber}</strong> en la sucursal <strong>{currentBranch.name}</strong> para estar disponibles en ventas.
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-3 bg-red-50/80 border border-red-200 rounded-xl text-red-900 text-xs flex items-start gap-2.5">
+                        <AlertTriangle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                        <div>
+                          <span className="font-bold">🚫 Retenido en Cuarentena de Vencidos:</span>
+                          <span className="text-[11px] text-red-800 ml-1">
+                            El medicamento devuelto NO se agregará al inventario comercial. Queda bajo resguardo especial de bajas sanitarias.
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* JUSTIFICACIÓN OBLIGATORIA DEL VENDEDOR */}
@@ -442,15 +480,23 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                         </label>
                         <select
                           value={reason}
-                          onChange={(e) => setReason(e.target.value)}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setReason(val);
+                            if (val === 'Medicamento Vencido / No Conforme') {
+                              setDestination('EXPIRED_QUARANTINE');
+                            } else {
+                              setDestination('RESTOCK');
+                            }
+                          }}
                           className="w-full bg-white border border-slate-300 rounded-xl p-2 font-medium text-slate-800 focus:outline-none focus:border-amber-500"
                         >
-                          <option value="Medicamento Vencido / No Conforme">Medicamento Vencido / Caducado</option>
                           <option value="Error de despacho en mostrador">Error del despachador al entregar producto</option>
-                          <option value="Empaque abierto o dañado por el cliente">Empaque abierto o dañado por el cliente</option>
                           <option value="Cambio de receta médica o dosis">Cambio de receta médica o dosis</option>
-                          <option value="Reacción alérgica del paciente">Reacción alérgica del paciente</option>
                           <option value="Desistimiento justificado del cliente">Desistimiento del cliente</option>
+                          <option value="Reacción alérgica del paciente">Reacción alérgica del paciente</option>
+                          <option value="Empaque abierto o dañado por el cliente">Empaque abierto o dañado por el cliente</option>
+                          <option value="Medicamento Vencido / No Conforme">Medicamento Vencido / Caducado</option>
                         </select>
                       </div>
 
