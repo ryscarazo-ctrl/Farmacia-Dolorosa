@@ -55,6 +55,17 @@ export const initialBranches: Branch[] = [
 
 export const initialUsers: User[] = [
   {
+    id: 'usr-master',
+    username: 'jonathan',
+    email: 'jonathan.rojas@farmaciaespiritusanto.com',
+    firstName: 'Jonathan',
+    lastName: 'Rojas',
+    phone: '+503 7000-0001',
+    role: 'Super Administrador (Creador)',
+    defaultBranchId: 'br-01',
+    isActive: true,
+  },
+  {
     id: 'usr-01',
     username: 'maria',
     email: 'maria@farmaciaespiritusanto.com',
@@ -72,7 +83,7 @@ export const initialUsers: User[] = [
     firstName: 'Fátima',
     lastName: 'Gómez',
     phone: '+503 7000-2222',
-    role: 'Vendedor',
+    role: 'Cajero / POS',
     defaultBranchId: 'br-01',
     isActive: true,
   },

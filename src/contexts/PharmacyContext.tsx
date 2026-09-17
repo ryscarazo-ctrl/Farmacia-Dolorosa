@@ -400,10 +400,35 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const trimmedUser = username.trim().toLowerCase();
     const trimmedPass = password.trim();
 
-    // 1. Administrador (María)
+    // 1. Super Administrador / Creador del Sistema (Jonathan Rojas)
+    if (
+      trimmedUser === 'jonathan' ||
+      trimmedUser === 'jrojas' ||
+      trimmedUser === 'creador' ||
+      trimmedUser === 'jonathan.rojas@farmaciaespiritusanto.com'
+    ) {
+      if (
+        trimmedPass === 'Jonathan2026*' ||
+        trimmedPass === 'jonathan2026' ||
+        trimmedPass === 'Jonathan2026' ||
+        trimmedPass === 'Rojas2026*'
+      ) {
+        const jonathanUser = initialUsers.find((u) => u.username === 'jonathan') || initialUsers[0];
+        setCurrentUser(jonathanUser);
+        setIsAuthenticated(true);
+        saveStorage('auth_logged_in', true);
+        return { success: true };
+      }
+      return {
+        success: false,
+        message: 'Contraseña incorrecta para Super Administrador (Jonathan Rojas).',
+      };
+    }
+
+    // 2. Administradora (María)
     if (trimmedUser === 'maria' || trimmedUser === 'admin' || trimmedUser === 'maria@farmaciaespiritusanto.com') {
       if (trimmedPass === 'Maria2026*' || trimmedPass === 'maria2026' || trimmedPass === 'Maria2026') {
-        const mariaUser = initialUsers.find((u) => u.username === 'maria') || initialUsers[0];
+        const mariaUser = initialUsers.find((u) => u.username === 'maria') || initialUsers[1] || initialUsers[0];
         setCurrentUser(mariaUser);
         setIsAuthenticated(true);
         saveStorage('auth_logged_in', true);
@@ -415,10 +440,10 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       };
     }
 
-    // 2. Cajera (Fátima)
+    // 3. Cajera (Fátima)
     if (trimmedUser === 'fatima' || trimmedUser === 'cajero' || trimmedUser === 'cajera' || trimmedUser === 'fatima@farmaciaespiritusanto.com') {
       if (trimmedPass === 'Fatima2026*' || trimmedPass === 'fatima2026' || trimmedPass === 'Fatima2026') {
-        const fatimaUser = initialUsers.find((u) => u.username === 'fatima') || initialUsers[1] || initialUsers[0];
+        const fatimaUser = initialUsers.find((u) => u.username === 'fatima') || initialUsers[2] || initialUsers[0];
         setCurrentUser(fatimaUser);
         setIsAuthenticated(true);
         saveStorage('auth_logged_in', true);
