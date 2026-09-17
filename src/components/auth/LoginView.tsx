@@ -8,14 +8,13 @@ import {
   KeyRound,
   ArrowRight,
   AlertCircle,
-  Sparkles,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
 export const LoginView: React.FC = () => {
   const { login, settings, currentBranch } = usePharmacy();
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -27,24 +26,15 @@ export const LoginView: React.FC = () => {
     setTimeout(() => {
       const res = login(username, password);
       if (!res.success) {
-        setError(res.message || 'Credenciales incorrectas');
+        setError(res.message || 'Usuario o contraseña incorrectos');
         setLoading(false);
       }
-    }, 200);
-  };
-
-  const handleQuickLogin = (usr: string, pass: string) => {
-    setUsername(usr);
-    setPassword(pass);
-    const res = login(usr, pass);
-    if (!res.success) {
-      setError(res.message || 'Error al iniciar sesión');
-    }
+    }, 250);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-900 via-emerald-800 to-teal-950 flex flex-col justify-center items-center p-4 select-none relative overflow-hidden">
-      {/* Elementos visuales de fondo */}
+    <div className="min-h-screen bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-950 flex flex-col justify-center items-center p-4 select-none relative overflow-hidden">
+      {/* Elementos visuales decorativos de fondo */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none -ml-20 -mb-20"></div>
 
@@ -71,11 +61,11 @@ export const LoginView: React.FC = () => {
             FARMACIA ESPÍRITU SANTO <span>🕊️</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5 font-medium">
-            {currentBranch.name} • Sistema de Producción
+            {currentBranch.name} • Sistema de Gestión
           </p>
         </div>
 
-        {/* Formulario de Acceso */}
+        {/* Formulario de Acceso Privado */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-2xl flex items-start gap-2.5 text-xs text-red-700 animate-shake">
@@ -87,14 +77,15 @@ export const LoginView: React.FC = () => {
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
               <User className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Usuario del Sistema</span>
+              <span>Usuario</span>
             </label>
             <input
               type="text"
               required
+              autoFocus
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Ej: admin o cajero1"
+              placeholder="Ingresa tu nombre de usuario"
               className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl px-3.5 py-2.5 text-sm text-slate-800 font-medium transition-all outline-none"
             />
           </div>
@@ -102,7 +93,7 @@ export const LoginView: React.FC = () => {
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
               <KeyRound className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Contraseña / Clave</span>
+              <span>Contraseña</span>
             </label>
             <input
               type="password"
@@ -116,38 +107,16 @@ export const LoginView: React.FC = () => {
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full mt-2 py-3 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white rounded-xl font-extrabold text-sm shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all"
+            disabled={loading || !username || !password}
+            className={`w-full mt-2 py-3 rounded-xl font-extrabold text-sm flex items-center justify-center gap-2 transition-all shadow-lg ${
+              loading || !username || !password
+                ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
+                : 'bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white shadow-emerald-600/30 cursor-pointer'
+            }`}
           >
-            <span>{loading ? 'Verificando...' : 'Iniciar Sesión y Entrar al Sistema'}</span>
+            <span>{loading ? 'Verificando...' : 'Iniciar Sesión'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
-
-          {/* Accesos Rápidos para Personal */}
-          <div className="pt-3 border-t border-slate-100">
-            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center mb-2.5">
-              Acceso Rápido por Rol
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('admin', 'admin')}
-                className="px-3 py-2 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-xl text-xs font-bold text-slate-700 transition-all text-left flex items-center justify-between"
-              >
-                <span>Administrador</span>
-                <span className="text-[9px] font-mono text-slate-400">admin</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => handleQuickLogin('cajero1', '1234')}
-                className="px-3 py-2 bg-slate-50 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200 hover:border-emerald-300 rounded-xl text-xs font-bold text-slate-700 transition-all text-left flex items-center justify-between"
-              >
-                <span>Cajero / POS</span>
-                <span className="text-[9px] font-mono text-slate-400">cajero1</span>
-              </button>
-            </div>
-          </div>
         </form>
 
         {/* Footer Seguro */}

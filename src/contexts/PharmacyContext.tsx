@@ -299,18 +299,45 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const login = (username: string, password: string): { success: boolean; message?: string } => {
     const trimmedUser = username.trim().toLowerCase();
+    const trimmedPass = password.trim();
+
+    // 1. Administrador (María)
+    if (trimmedUser === 'maria' || trimmedUser === 'admin' || trimmedUser === 'maria@farmaciaespiritusanto.com') {
+      if (trimmedPass === 'Maria2026*' || trimmedPass === 'maria2026' || trimmedPass === 'Maria2026') {
+        const mariaUser = initialUsers.find((u) => u.username === 'maria') || initialUsers[0];
+        setCurrentUser(mariaUser);
+        setIsAuthenticated(true);
+        saveStorage('auth_logged_in', true);
+        return { success: true };
+      }
+      return {
+        success: false,
+        message: 'Contraseña incorrecta para Administrador (María).',
+      };
+    }
+
+    // 2. Cajera (Fátima)
+    if (trimmedUser === 'fatima' || trimmedUser === 'cajero' || trimmedUser === 'cajera' || trimmedUser === 'fatima@farmaciaespiritusanto.com') {
+      if (trimmedPass === 'Fatima2026*' || trimmedPass === 'fatima2026' || trimmedPass === 'Fatima2026') {
+        const fatimaUser = initialUsers.find((u) => u.username === 'fatima') || initialUsers[1] || initialUsers[0];
+        setCurrentUser(fatimaUser);
+        setIsAuthenticated(true);
+        saveStorage('auth_logged_in', true);
+        return { success: true };
+      }
+      return {
+        success: false,
+        message: 'Contraseña incorrecta para Cajera (Fátima).',
+      };
+    }
+
+    // 3. Otros usuarios registrados
     const userFound = initialUsers.find(
       (u) => u.username.toLowerCase() === trimmedUser || u.email.toLowerCase() === trimmedUser
     );
 
-    if (userFound && (password === 'admin' || password === '1234' || password === userFound.username || password.length >= 4)) {
+    if (userFound && (trimmedPass === `${userFound.username}2026` || trimmedPass === '1234')) {
       setCurrentUser(userFound);
-      setIsAuthenticated(true);
-      saveStorage('auth_logged_in', true);
-      return { success: true };
-    }
-
-    if ((trimmedUser === 'admin' || trimmedUser === 'farmacia') && (password === 'admin' || password === '1234' || password.length >= 4)) {
       setIsAuthenticated(true);
       saveStorage('auth_logged_in', true);
       return { success: true };
@@ -318,7 +345,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     return {
       success: false,
-      message: 'Credenciales inválidas. Puedes ingresar con usuario "admin" y contraseña "admin" (o "1234").',
+      message: 'Usuario o contraseña incorrectos. Verifique sus credenciales.',
     };
   };
 
