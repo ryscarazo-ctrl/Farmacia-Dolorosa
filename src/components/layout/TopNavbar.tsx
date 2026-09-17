@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Lock,
   Menu,
+  LogOut,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
@@ -73,7 +74,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onNavigateToCash, onToggle
         <div className="relative">
           <button
             onClick={() => setShowBranchMenu(!showBranchMenu)}
-            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 text-xs font-bold text-emerald-900 border border-emerald-200 transition-all shadow-sm max-w-[160px] sm:max-w-none truncate"
+            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 text-xs font-bold text-emerald-900 border border-emerald-200 transition-all shadow-sm max-w-[150px] sm:max-w-none truncate"
           >
             <Building className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
             <span className="truncate">{currentBranch.name}</span>
@@ -114,12 +115,12 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onNavigateToCash, onToggle
         </div>
       </div>
 
-      {/* Estado de Caja, Alertas y Perfil */}
+      {/* Estado de Caja, Alertas y Perfil con Cerrar Sesión */}
       <div className="flex items-center gap-2 sm:gap-3">
         {/* Estado de Caja */}
         <button
           onClick={onNavigateToCash}
-          className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-bold border transition-all ${
+          className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-bold border transition-all ${
             currentCashSession
               ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
               : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
@@ -203,26 +204,29 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({ onNavigateToCash, onToggle
           )}
         </div>
 
-        {/* Perfil de Usuario y Bloqueo Privado */}
+        {/* Perfil de Usuario y Botón Cerrar Sesión */}
         <div className="flex items-center gap-1.5 sm:gap-2 pl-1.5 sm:pl-2 border-l border-emerald-100">
           <div className="w-7 h-7 sm:w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">
-            {currentUser.firstName.charAt(0)}
+            {currentUser?.firstName?.charAt(0) || 'U'}
           </div>
           <div className="hidden lg:block text-left">
             <div className="text-xs font-bold text-slate-800 leading-none">
-              {currentUser.firstName} {currentUser.lastName}
+              {currentUser?.firstName} {currentUser?.lastName}
             </div>
             <div className="text-[10px] text-emerald-700 font-semibold leading-tight mt-0.5">
-              {currentUser.role}
+              {currentUser?.role}
             </div>
           </div>
+
+          {/* Botón Directo Cerrar Sesión */}
           <button
             type="button"
             onClick={logout}
-            title="Bloquear Terminal / Cerrar Sesión"
-            className="p-1.5 rounded-xl bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 border border-slate-200 transition-colors cursor-pointer"
+            title="Cerrar Sesión / Finalizar Día"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 hover:border-red-600 transition-all font-bold text-xs cursor-pointer shadow-xs active:scale-95"
           >
-            <Lock className="w-3.5 h-3.5" />
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Cerrar Sesión</span>
           </button>
         </div>
       </div>

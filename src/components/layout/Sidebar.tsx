@@ -24,6 +24,8 @@ import {
   Settings as SettingsIcon,
   DollarSign,
   X,
+  LogOut,
+  Power,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
@@ -68,13 +70,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpenMobile = false,
   onCloseMobile,
 }) => {
-  const { currentBranch, settings } = usePharmacy();
+  const { currentBranch, settings, currentUser, logout } = usePharmacy();
 
   const handleItemClick = (id: NavSection) => {
     onSelectView(id);
     if (onCloseMobile) {
       onCloseMobile();
     }
+  };
+
+  const handleLogoutClick = () => {
+    if (onCloseMobile) {
+      onCloseMobile();
+    }
+    logout();
   };
 
   const navGroups: {
@@ -247,13 +256,35 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ))}
         </nav>
 
-        {/* Footer Sucursal Activa */}
-        <div className="p-2.5 border-t border-emerald-100 bg-emerald-50/40 text-[10px] text-slate-600 flex items-center justify-between">
-          <div className="flex items-center gap-1.5 font-bold text-emerald-900 truncate">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-            <span className="truncate">{currentBranch.name}</span>
+        {/* ESPACIO DESTACADO: USUARIO Y BOTÓN CERRAR SESIÓN / FINALIZAR DÍA */}
+        <div className="p-3 border-t border-slate-200 bg-slate-50/90 space-y-2.5 shrink-0">
+          {/* Info del Usuario y Sucursal */}
+          <div className="flex items-center justify-between px-1">
+            <div className="flex items-center gap-2 truncate">
+              <div className="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shadow-xs shrink-0">
+                {currentUser?.firstName?.charAt(0) || 'U'}
+              </div>
+              <div className="truncate">
+                <div className="text-xs font-bold text-slate-800 truncate">
+                  {currentUser?.firstName} {currentUser?.lastName}
+                </div>
+                <div className="text-[10px] text-emerald-700 font-semibold truncate">
+                  {currentUser?.role} • {currentBranch.name}
+                </div>
+              </div>
+            </div>
           </div>
-          <span className="font-mono text-slate-400 text-[9px] shrink-0">v1.2</span>
+
+          {/* Botón Destacado: Cerrar Sesión (Finalizar Día) */}
+          <button
+            type="button"
+            onClick={handleLogoutClick}
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 hover:border-red-600 rounded-xl text-xs font-extrabold transition-all cursor-pointer shadow-sm active:scale-98 group"
+            title="Cerrar sesión al finalizar el día de trabajo"
+          >
+            <LogOut className="w-4 h-4 text-red-600 group-hover:text-white transition-colors" />
+            <span>Cerrar Sesión (Finalizar Día)</span>
+          </button>
         </div>
       </aside>
     </>
