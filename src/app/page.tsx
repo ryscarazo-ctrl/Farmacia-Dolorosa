@@ -31,21 +31,27 @@ import { LoginView } from '../components/auth/LoginView';
 export default function Home() {
   const { isAuthenticated } = usePharmacy();
   const [currentView, setCurrentView] = useState<NavSection>('dashboard');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   if (!isAuthenticated) {
     return <LoginView />;
   }
 
+  const navigateTo = (view: NavSection) => {
+    setCurrentView(view);
+    setIsMobileMenuOpen(false);
+  };
+
   const renderView = () => {
     switch (currentView) {
       case 'dashboard':
-        return <DashboardView onNavigate={(view) => setCurrentView(view)} />;
+        return <DashboardView onNavigate={(view) => navigateTo(view)} />;
       case 'pos':
-        return <POSView onNavigate={(view) => setCurrentView(view)} />;
+        return <POSView onNavigate={(view) => navigateTo(view)} />;
       case 'new-product':
-        return <ProductEntryView onNavigateToCatalog={() => setCurrentView('products')} />;
+        return <ProductEntryView onNavigateToCatalog={() => navigateTo('products')} />;
       case 'products':
-        return <InventoryView onNavigateToEntry={() => setCurrentView('new-product')} />;
+        return <InventoryView onNavigateToEntry={() => navigateTo('new-product')} />;
       case 'batches':
         return <BatchesView filterOnlyExpirations={false} />;
       case 'expirations':
@@ -75,36 +81,44 @@ export default function Home() {
       case 'admin-settings':
         return <AdminView initialTab="settings" />;
       case 'sales':
-        return <SalesHistoryView onNavigateToReturns={() => setCurrentView('returns')} />;
+        return <SalesHistoryView onNavigateToReturns={() => navigateTo('returns')} />;
       case 'returns':
-        return <ReturnsView onNavigateToSales={() => setCurrentView('sales')} />;
+        return <ReturnsView onNavigateToSales={() => navigateTo('sales')} />;
       case 'customers':
         return <CustomersView />;
       case 'purchases':
         return (
           <PurchasesView
-            onNavigateToSuppliers={() => setCurrentView('suppliers')}
-            onNavigateToSupplierPortal={() => setCurrentView('supplier-portal')}
+            onNavigateToSuppliers={() => navigateTo('suppliers')}
+            onNavigateToSupplierPortal={() => navigateTo('supplier-portal')}
           />
         );
       case 'suppliers':
-        return <SuppliersView onNavigateToPurchases={() => setCurrentView('purchases')} />;
+        return <SuppliersView onNavigateToPurchases={() => navigateTo('purchases')} />;
       case 'supplier-portal':
         return <SupplierPortalView />;
       default:
-        return <DashboardView onNavigate={(view) => setCurrentView(view)} />;
+        return <DashboardView onNavigate={(view) => navigateTo(view)} />;
     }
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-slate-50 text-slate-800">
-      {/* Sidebar de Navegación Blanco y Verde */}
-      <Sidebar currentView={currentView} onSelectView={(view) => setCurrentView(view)} />
+    <div className="flex h-screen w-screen overflow-hidden bg-slate-50 text-slate-800 relative">
+      {/* Sidebar de Navegación Blanco y Verde (Drawer en teléfonos, fijo en PC) */}
+      <Sidebar
+        currentView={currentView}
+        onSelectView={(view) => navigateTo(view)}
+        isOpenMobile={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
+      />
 
       {/* Área Principal de Contenido */}
-      <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <TopNavbar onNavigateToCash={() => setCurrentView('cash')} />
-        <main className="flex-1 flex overflow-hidden bg-slate-50">
+      <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden">
+        <TopNavbar
+          onNavigateToCash={() => navigateTo('cash')}
+          onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        />
+        <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-50">
           {renderView()}
         </main>
       </div>
