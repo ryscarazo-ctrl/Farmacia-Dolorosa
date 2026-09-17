@@ -425,8 +425,15 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       };
     }
 
-    // 2. Administradora (María)
-    if (trimmedUser === 'maria' || trimmedUser === 'admin' || trimmedUser === 'maria@farmaciaespiritusanto.com') {
+    // 2. Propietaria & Administradora (María Tardencilla)
+    if (
+      trimmedUser === 'maria' ||
+      trimmedUser === 'admin' ||
+      trimmedUser === 'mariatardencilla' ||
+      trimmedUser === 'maria.tardencilla' ||
+      trimmedUser === 'maria.tardencilla@farmaciaespiritusanto.com' ||
+      trimmedUser === 'maria@farmaciaespiritusanto.com'
+    ) {
       if (trimmedPass === 'Maria2026*' || trimmedPass === 'maria2026' || trimmedPass === 'Maria2026') {
         const mariaUser = initialUsers.find((u) => u.username === 'maria') || initialUsers[1] || initialUsers[0];
         setCurrentUser(mariaUser);
@@ -436,12 +443,20 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
       return {
         success: false,
-        message: 'Contraseña incorrecta para Administrador (María).',
+        message: 'Contraseña incorrecta para Propietaria y Administradora (María Tardencilla).',
       };
     }
 
-    // 3. Cajera (Fátima)
-    if (trimmedUser === 'fatima' || trimmedUser === 'cajero' || trimmedUser === 'cajera' || trimmedUser === 'fatima@farmaciaespiritusanto.com') {
+    // 3. Vendedora & Cajera (Fátima Selene)
+    if (
+      trimmedUser === 'fatima' ||
+      trimmedUser === 'cajero' ||
+      trimmedUser === 'cajera' ||
+      trimmedUser === 'fatimaselene' ||
+      trimmedUser === 'fatima.selene' ||
+      trimmedUser === 'fatima.selene@farmaciaespiritusanto.com' ||
+      trimmedUser === 'fatima@farmaciaespiritusanto.com'
+    ) {
       if (trimmedPass === 'Fatima2026*' || trimmedPass === 'fatima2026' || trimmedPass === 'Fatima2026') {
         const fatimaUser = initialUsers.find((u) => u.username === 'fatima') || initialUsers[2] || initialUsers[0];
         setCurrentUser(fatimaUser);
@@ -451,7 +466,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
       return {
         success: false,
-        message: 'Contraseña incorrecta para Cajera (Fátima).',
+        message: 'Contraseña incorrecta para Vendedora y Cajera (Fátima Selene).',
       };
     }
 
