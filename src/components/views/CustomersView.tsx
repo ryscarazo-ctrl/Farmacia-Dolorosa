@@ -47,7 +47,7 @@ export const CustomersView: React.FC = () => {
       taxId: taxId.trim() || '00000000-0',
       phone: phone.trim() || '+503 7000-0000',
       email: email.trim() || 'cliente@farmacia.com',
-      address: address.trim() || 'Dolores / Cabañas',
+      address: address.trim() || 'San Salvador, El Salvador',
     });
 
     setName('');
