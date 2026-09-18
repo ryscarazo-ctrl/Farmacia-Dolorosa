@@ -211,23 +211,51 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [categories] = useState<Category[]>(initialCategories);
 
   // Estados Limpios para Producción Real (0 ejemplos, persistente en el navegador)
-  const [products, setProducts] = useState<Product[]>(() => loadStorage('products', []));
-  const [batches, setBatches] = useState<ProductBatch[]>(() => loadStorage('batches', []));
-  const [suppliers, setSuppliers] = useState<Supplier[]>(() => loadStorage('suppliers', []));
-  const [customers, setCustomers] = useState<Customer[]>(() => loadStorage('customers', []));
+    // Carga con persistencia en localStorage o datos de prueba completos por defecto
+  const [products, setProducts] = useState<Product[]>(() => {
+    const loaded = loadStorage('products', initialProducts);
+    return loaded && loaded.length > 0 ? loaded : initialProducts;
+  });
+  const [batches, setBatches] = useState<ProductBatch[]>(() => {
+    const loaded = loadStorage('batches', initialBatches);
+    return loaded && loaded.length > 0 ? loaded : initialBatches;
+  });
+  const [suppliers, setSuppliers] = useState<Supplier[]>(() => {
+    const loaded = loadStorage('suppliers', initialSuppliers);
+    return loaded && loaded.length > 0 ? loaded : initialSuppliers;
+  });
+  const [customers, setCustomers] = useState<Customer[]>(() => {
+    const loaded = loadStorage('customers', initialCustomers);
+    return loaded && loaded.length > 0 ? loaded : initialCustomers;
+  });
   const [purchases, setPurchases] = useState<PurchaseInvoice[]>(() => loadStorage('purchases', []));
   const [supplierOrders, setSupplierOrders] = useState<SupplierOrder[]>(() => loadStorage('supplierOrders', []));
   const [operationalExpenses, setOperationalExpenses] = useState<OperationalExpense[]>(() => loadStorage('operationalExpenses', []));
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>(() => loadStorage('bankAccounts', initialBankAccounts));
   const [bankStatements, setBankStatements] = useState<BankStatementItem[]>(() => loadStorage('bankStatements', []));
-  const [cashSessions, setCashSessions] = useState<CashSession[]>(() => loadStorage('cashSessions', []));
-  const [sales, setSales] = useState<Sale[]>(() => loadStorage('sales', []));
+  const [cashSessions, setCashSessions] = useState<CashSession[]>(() => {
+    const loaded = loadStorage('cashSessions', initialCashSessions);
+    return loaded && loaded.length > 0 ? loaded : initialCashSessions;
+  });
+  const [sales, setSales] = useState<Sale[]>(() => {
+    const loaded = loadStorage('sales', initialSales);
+    return loaded && loaded.length > 0 ? loaded : initialSales;
+  });
   const [returns, setReturns] = useState<SaleReturn[]>(() => loadStorage('returns', []));
   const [barcodeReturns, setBarcodeReturns] = useState<BarcodeReturn[]>(() => loadStorage('barcodeReturns', []));
-  const [movements, setMovements] = useState<InventoryMovement[]>(() => loadStorage('movements', []));
+  const [movements, setMovements] = useState<InventoryMovement[]>(() => {
+    const loaded = loadStorage('movements', initialMovements);
+    return loaded && loaded.length > 0 ? loaded : initialMovements;
+  });
   const [transfers, setTransfers] = useState<StockTransfer[]>(() => loadStorage('transfers', []));
-  const [alerts, setAlerts] = useState<Alert[]>(() => loadStorage('alerts', []));
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => loadStorage('auditLogs', []));
+  const [alerts, setAlerts] = useState<Alert[]>(() => {
+    const loaded = loadStorage('alerts', initialAlerts);
+    return loaded && loaded.length > 0 ? loaded : initialAlerts;
+  });
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
+    const loaded = loadStorage('auditLogs', initialAuditLogs);
+    return loaded && loaded.length > 0 ? loaded : initialAuditLogs;
+  });
   const [settings, setSettings] = useState<Settings>(() => {
     const loaded = loadStorage('settings', initialSettings);
     if (!loaded.currencySymbol || loaded.currencySymbol === '$') {
