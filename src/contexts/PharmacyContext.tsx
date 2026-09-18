@@ -264,6 +264,17 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return loaded;
   });
   const [cart, setCart] = useState<CartItem[]>([]);
+
+  // Auto-siembra de inventario y datos demo si el almacenamiento local está vacío
+  useEffect(() => {
+    if (!products || products.length === 0) setProducts(initialProducts);
+    if (!batches || batches.length === 0) setBatches(initialBatches);
+    if (!customers || customers.length === 0) setCustomers(initialCustomers);
+    if (!suppliers || suppliers.length === 0) setSuppliers(initialSuppliers);
+    if (!sales || sales.length === 0) setSales(initialSales);
+    if (!cashSessions || cashSessions.length === 0) setCashSessions(initialCashSessions);
+    if (!alerts || alerts.length === 0) setAlerts(initialAlerts);
+  }, []);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => loadStorage('auth_logged_in', false));
 
   // Sincronización automática con almacenamiento local permanente

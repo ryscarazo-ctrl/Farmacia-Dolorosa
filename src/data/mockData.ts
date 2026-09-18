@@ -122,7 +122,7 @@ export const initialProducts: Product[] = [
     barcode: '7501001100112',
     name: 'Acetaminofén Vijosa 500mg',
     genericName: 'Paracetamol',
-    description: 'Analgésico y antipirético de rápida acción para dolores y fiebre.',
+    description: 'Analgésico y antipirético de rápida acción para alivio de dolores y fiebre.',
     categoryId: 'cat-01',
     categoryName: 'Analgésicos y Antiinflamatorios',
     laboratoryId: 'lab-01',
@@ -144,12 +144,12 @@ export const initialProducts: Product[] = [
     barcode: '7501002200223',
     name: 'Ibuprofeno MK 400mg',
     genericName: 'Ibuprofeno',
-    description: 'Antiinflamatorio no esteroideo para cefaleas y dolor muscular.',
+    description: 'Antiinflamatorio no esteroideo para cefaleas, dolor muscular e inflamación.',
     categoryId: 'cat-01',
     categoryName: 'Analgésicos y Antiinflamatorios',
     laboratoryId: 'lab-04',
     laboratoryName: 'MK / Tecnoquímicas',
-    presentation: 'Caja con 50 Cápsulas',
+    presentation: 'Caja con 50 Cápsulas Blandas',
     concentration: '400 mg',
     unitMeasure: 'Caja',
     purchasePrice: 25.00,
@@ -210,12 +210,12 @@ export const initialProducts: Product[] = [
     barcode: '7501005500556',
     name: 'Amoxicilina + Ácido Clavulánico 875/125mg',
     genericName: 'Amoxicilina / Ácido Clavulánico',
-    description: 'Antibiótico de amplio espectro para infecciones respiratorias.',
+    description: 'Antibiótico de amplio espectro para infecciones respiratorias y bacterianas.',
     categoryId: 'cat-02',
     categoryName: 'Antibióticos',
     laboratoryId: 'lab-01',
     laboratoryName: 'Laboratorios Vijosa',
-    presentation: 'Caja con 14 Tabletas',
+    presentation: 'Caja con 14 Tabletas Recubiertas',
     concentration: '875/125 mg',
     unitMeasure: 'Caja',
     purchasePrice: 140.00,
@@ -232,7 +232,7 @@ export const initialProducts: Product[] = [
     barcode: '7501006600667',
     name: 'Azitromicina Pfizer 500mg',
     genericName: 'Azitromicina',
-    description: 'Macrólido para infecciones respiratorias y de piel.',
+    description: 'Macrólido para infecciones del tracto respiratorio, piel y tejidos blandos.',
     categoryId: 'cat-02',
     categoryName: 'Antibióticos',
     laboratoryId: 'lab-03',
@@ -254,7 +254,7 @@ export const initialProducts: Product[] = [
     barcode: '7501007700778',
     name: 'Ciprofloxacino Bayer 500mg',
     genericName: 'Ciprofloxacino Clorhidrato',
-    description: 'Fluoroquinolona para infecciones urinarias y gastrointestinales.',
+    description: 'Fluoroquinolona para infecciones urinarias y gastrointestinales severas.',
     categoryId: 'cat-02',
     categoryName: 'Antibióticos',
     laboratoryId: 'lab-02',
@@ -276,7 +276,7 @@ export const initialProducts: Product[] = [
     barcode: '7501008800889',
     name: 'Cefalexina Ramos 500mg',
     genericName: 'Cefalexina Monohidrato',
-    description: 'Cefalosporina de primera generación para infecciones de garganta y piel.',
+    description: 'Cefalosporina de primera generación para infecciones de piel y garganta.',
     categoryId: 'cat-02',
     categoryName: 'Antibióticos',
     laboratoryId: 'lab-05',
@@ -298,7 +298,7 @@ export const initialProducts: Product[] = [
     barcode: '7501009900990',
     name: 'Losartán Potásico Ramos 50mg',
     genericName: 'Losartán Potásico',
-    description: 'Antihipertensivo de primera línea para control de presión arterial.',
+    description: 'Antihipertensivo ARA-II de primera línea para control de presión arterial.',
     categoryId: 'cat-03',
     categoryName: 'Cardiovascular y Presión',
     laboratoryId: 'lab-05',
@@ -320,7 +320,7 @@ export const initialProducts: Product[] = [
     barcode: '7501010001001',
     name: 'Amlodipino MK 5mg',
     genericName: 'Amlodipino Besilato',
-    description: 'Bloqueador de canales de calcio para hipertensión y angina.',
+    description: 'Bloqueador de canales de calcio para hipertensión arterial y angina.',
     categoryId: 'cat-03',
     categoryName: 'Cardiovascular y Presión',
     laboratoryId: 'lab-04',
@@ -342,12 +342,12 @@ export const initialProducts: Product[] = [
     barcode: '7501011101112',
     name: 'Omeprazol MK 20mg Cápsulas',
     genericName: 'Omeprazol',
-    description: 'Inhibidor de bomba de protones para gastritis y reflujo.',
+    description: 'Inhibidor de bomba de protones para gastritis, reflujo y úlceras.',
     categoryId: 'cat-04',
     categoryName: 'Gastrointestinales',
     laboratoryId: 'lab-04',
     laboratoryName: 'MK / Tecnoquímicas',
-    presentation: 'Caja con 30 Cápsulas',
+    presentation: 'Caja con 30 Cápsulas con Gránulos con Capa Entérica',
     concentration: '20 mg',
     unitMeasure: 'Caja',
     purchasePrice: 30.00,
@@ -408,7 +408,7 @@ export const initialProducts: Product[] = [
     barcode: '7501014401445',
     name: 'Loratadina Vijosa 10mg',
     genericName: 'Loratadina',
-    description: 'Antihistamínico no sedante para alergias y rinitis.',
+    description: 'Antihistamínico no sedante para rinitis alérgica, estornudos y picazón.',
     categoryId: 'cat-05',
     categoryName: 'Respiratorios y Antigripales',
     laboratoryId: 'lab-01',
@@ -452,7 +452,7 @@ export const initialProducts: Product[] = [
     barcode: '7501016601667',
     name: 'Neurobión N Inyectable (3 Ampollas)',
     genericName: 'Complejo B (B1, B6, B12)',
-    description: 'Para lumbalgias, ciática y deficiencias vitamínicas severas.',
+    description: 'Para neuropatías, lumbalgia, ciática y deficiencias vitamínicas.',
     categoryId: 'cat-06',
     categoryName: 'Vitaminas y Suplementos',
     laboratoryId: 'lab-08',
@@ -669,7 +669,6 @@ export const initialProducts: Product[] = [
 ];
 
 export const initialBatches: ProductBatch[] = [
-  // Acetaminofén - FEFO demo
   {
     id: 'bat-01',
     productId: 'p-01',
@@ -694,8 +693,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 15.00,
     status: 'Available',
   },
-
-  // Ibuprofeno - Stock Bajo Crítico (< 10)
   {
     id: 'bat-03',
     productId: 'p-02',
@@ -708,8 +705,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 25.00,
     status: 'Available',
   },
-
-  // Diclofenaco
   {
     id: 'bat-04',
     productId: 'p-03',
@@ -722,8 +717,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 20.00,
     status: 'Available',
   },
-
-  // Ketorolaco
   {
     id: 'bat-05',
     productId: 'p-04',
@@ -736,8 +729,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 40.00,
     status: 'Available',
   },
-
-  // Amoxicilina + Clavulánico
   {
     id: 'bat-06',
     productId: 'p-05',
@@ -750,8 +741,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 140.00,
     status: 'Available',
   },
-
-  // Azitromicina
   {
     id: 'bat-07',
     productId: 'p-06',
@@ -764,8 +753,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 110.00,
     status: 'Available',
   },
-
-  // Ciprofloxacino
   {
     id: 'bat-08',
     productId: 'p-07',
@@ -778,8 +765,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 60.00,
     status: 'Available',
   },
-
-  // Cefalexina
   {
     id: 'bat-09',
     productId: 'p-08',
@@ -792,8 +777,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 75.00,
     status: 'Available',
   },
-
-  // Losartán
   {
     id: 'bat-10',
     productId: 'p-09',
@@ -806,8 +789,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 45.00,
     status: 'Available',
   },
-
-  // Amlodipino
   {
     id: 'bat-11',
     productId: 'p-10',
@@ -820,8 +801,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 40.00,
     status: 'Available',
   },
-
-  // Omeprazol - 1 Lote Vencido (Prueba de Bloqueo Sanitario) + 1 Lote Vigente
   {
     id: 'bat-12',
     productId: 'p-11',
@@ -846,8 +825,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 30.00,
     status: 'Available',
   },
-
-  // Lansoprazol
   {
     id: 'bat-14',
     productId: 'p-12',
@@ -860,8 +837,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 55.00,
     status: 'Available',
   },
-
-  // Sal de Andrews
   {
     id: 'bat-15',
     productId: 'p-13',
@@ -874,8 +849,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 30.00,
     status: 'Available',
   },
-
-  // Loratadina
   {
     id: 'bat-16',
     productId: 'p-14',
@@ -888,8 +861,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 20.00,
     status: 'Available',
   },
-
-  // VapoRub
   {
     id: 'bat-17',
     productId: 'p-15',
@@ -902,8 +873,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 55.00,
     status: 'Available',
   },
-
-  // Neurobión
   {
     id: 'bat-18',
     productId: 'p-16',
@@ -916,8 +885,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 180.00,
     status: 'Available',
   },
-
-  // Redoxon Vitamina C
   {
     id: 'bat-19',
     productId: 'p-17',
@@ -930,8 +897,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 80.00,
     status: 'Available',
   },
-
-  // Complejo B Jarabe
   {
     id: 'bat-20',
     productId: 'p-18',
@@ -944,8 +909,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 65.00,
     status: 'Available',
   },
-
-  // Metformina
   {
     id: 'bat-21',
     productId: 'p-19',
@@ -958,8 +921,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 35.00,
     status: 'Available',
   },
-
-  // Glibenclamida
   {
     id: 'bat-22',
     productId: 'p-20',
@@ -972,8 +933,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 25.00,
     status: 'Available',
   },
-
-  // Alcohol Antiséptico 70%
   {
     id: 'bat-23',
     productId: 'p-21',
@@ -986,8 +945,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 35.00,
     status: 'Available',
   },
-
-  // Clotrimazol
   {
     id: 'bat-24',
     productId: 'p-22',
@@ -1000,8 +957,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 40.00,
     status: 'Available',
   },
-
-  // Pedialyte Electrolit
   {
     id: 'bat-25',
     productId: 'p-23',
@@ -1014,8 +969,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 38.00,
     status: 'Available',
   },
-
-  // Acetaminofén Gotas
   {
     id: 'bat-26',
     productId: 'p-24',
@@ -1028,8 +981,6 @@ export const initialBatches: ProductBatch[] = [
     unitCost: 30.00,
     status: 'Available',
   },
-
-  // Alprazolam (Controlado)
   {
     id: 'bat-27',
     productId: 'p-25',
@@ -1047,96 +998,82 @@ export const initialBatches: ProductBatch[] = [
 export const initialSuppliers: Supplier[] = [
   {
     id: 'sup-01',
-    name: 'Distribuidora Farmacéutica Nicaragüense (DISFARMA)',
-    contactName: 'Lic. Roberto Morales',
+    name: 'DISFARMA Nicaragua',
+    businessName: 'Distribuidora Farmacéutica Nicaragüense S.A.',
+    taxId: 'J031000088991',
     phone: '+505 2277-3300',
     email: 'pedidos@disfarmanic.com',
-    address: 'Carretera Norte Km 5.5, Managua, Nicaragua',
-    taxId: 'J031000088991',
-    paymentTerms: 'Crédito 30 Días',
-    deliveryDays: ['Lunes', 'Miércoles', 'Viernes'],
-    isActive: true,
+    contactName: 'Lic. Roberto Morales',
+    creditDays: 30,
   },
   {
     id: 'sup-02',
-    name: 'Droguería Médica Universal S.A.',
-    contactName: 'Ing. Sandra Castillo',
+    name: 'Droguería Médica Universal',
+    businessName: 'Droguería Médica Universal S.A.',
+    taxId: 'J031000077882',
     phone: '+505 2268-4455',
     email: 'ventas@medicau.com.ni',
-    address: 'Semáforos Linda Vista 1c Sur, Managua',
-    taxId: 'J031000077882',
-    paymentTerms: 'Crédito 15 Días',
-    deliveryDays: ['Martes', 'Jueves'],
-    isActive: true,
+    contactName: 'Ing. Sandra Castillo',
+    creditDays: 15,
   },
   {
     id: 'sup-03',
-    name: 'Laboratorios Ramos S.A.',
-    contactName: 'Dra. Carmen Mendoza',
+    name: 'Laboratorios Ramos',
+    businessName: 'Laboratorios Ramos S.A.',
+    taxId: 'J031000055443',
     phone: '+505 2249-1100',
     email: 'institucional@labramos.com.ni',
-    address: 'Km 7.5 Carretera Sur, Managua, Nicaragua',
-    taxId: 'J031000055443',
-    paymentTerms: 'Contado / 5% Descuento',
-    deliveryDays: ['Lunes a Viernes'],
-    isActive: true,
+    contactName: 'Dra. Carmen Mendoza',
+    creditDays: 0,
   },
 ];
 
 export const initialCustomers: Customer[] = [
   {
     id: 'cust-01',
-    fullName: 'Doña Elena Martínez Sánchez',
+    name: 'Doña Elena Martínez Sánchez',
+    taxId: '001-150458-0021L',
     phone: '+505 8811-2233',
     email: 'elena.martinez@gmail.com',
     address: 'Barrio 19 de Julio, de la iglesia 2c al lago',
-    taxId: '001-150458-0021L',
-    isFrequent: true,
-    discountPercent: 10,
-    notes: 'Paciente hipertensa y diabética. Retira Losartán y Metformina mensualmente.',
-    loyaltyPoints: 180,
   },
   {
     id: 'cust-02',
-    fullName: 'Don Carlos Alberto Ruiz',
+    name: 'Don Carlos Alberto Ruiz (Jubilado)',
+    taxId: '001-200965-0014B',
     phone: '+505 8922-3344',
     email: 'carlos.ruiz@hotmail.com',
     address: 'Colonia Máximo Jerez Casa #45',
-    taxId: '001-200965-0014B',
-    isFrequent: true,
-    discountPercent: 15,
-    notes: 'Jubilado / Descuento Tercera Edad aplicado por política.',
-    loyaltyPoints: 240,
   },
   {
     id: 'cust-03',
-    fullName: 'Clínica Médica Santa Fe (Convenio)',
+    name: 'Clínica Médica Santa Fe (Convenio)',
+    taxId: 'J031000099112',
     phone: '+505 2250-9900',
     email: 'administracion@clinicasantafe.com.ni',
     address: 'Plaza España 1c al Este',
-    taxId: 'J031000099112',
-    isFrequent: true,
-    discountPercent: 8,
-    notes: 'Convenio corporativo de insumos y primeros auxilios.',
-    loyaltyPoints: 520,
   },
 ];
 
 export const initialCashSessions: CashSession[] = [
   {
     id: 'cs-01',
+    cashRegisterId: 'REG-01',
+    cashRegisterName: 'Caja Principal Mostrador',
     branchId: 'br-01',
     userId: 'usr-02',
+    userName: 'Fátima Selene',
     openedAt: '2026-09-18T08:00:00.000Z',
     openingBalance: 1500.00,
-    expectedBalance: 4680.00,
-    actualBalance: 4680.00,
-    status: 'Open',
-    salesTotal: 3180.00,
-    returnsTotal: 0,
+    cashSales: 3180.00,
+    cardSales: 0,
+    transferSales: 0,
     cashIn: 0,
     cashOut: 0,
+    expectedBalance: 4680.00,
+    actualBalance: 4680.00,
     difference: 0,
+    status: 'Open',
   },
 ];
 
@@ -1186,12 +1123,9 @@ export const initialSales: Sale[] = [
     profitAmount: 155.00,
     paymentMethod: 'Cash',
     amountPaid: 500.00,
-    changeGiven: 185.00,
+    changeAmount: 185.00,
     status: 'Completed',
     createdAt: '2026-09-18T09:30:00.000Z',
-    customerPrescriptionRequired: true,
-    doctorName: 'Dr. Alejandro Gutiérrez',
-    doctorLicense: 'MINSA-MED-84920',
   },
 ];
 
@@ -1209,10 +1143,6 @@ export const initialMovements: InventoryMovement[] = [
     previousStock: 0,
     newStock: 100,
     unitCost: 15.00,
-    totalCost: 1500.00,
-    referenceId: 'APERTURA-INV',
-    reason: 'Carga inicial de inventario',
-    userId: 'usr-master',
     userName: 'Jonathan Rojas',
     createdAt: '2026-09-01T08:00:00.000Z',
   },
@@ -1223,36 +1153,30 @@ export const initialTransfers: StockTransfer[] = [];
 export const initialAlerts: Alert[] = [
   {
     id: 'alt-01',
-    type: 'EXPIRATION',
-    priority: 'HIGH',
+    type: 'ExpiringSoon',
+    severity: 'Warning',
     title: '⚠️ Lote Próximo a Vencer (FEFO)',
     message: 'Acetaminofén 500mg (Lote: LOTE-ACT-2026A) vence el 15/10/2026. Priorizar en dispensación.',
-    productId: 'p-01',
-    batchId: 'bat-01',
     branchId: 'br-01',
     isRead: false,
     createdAt: '2026-09-18T07:00:00.000Z',
   },
   {
     id: 'alt-02',
-    type: 'STOCK_MIN',
-    priority: 'HIGH',
+    type: 'LowStock',
+    severity: 'Warning',
     title: '🔴 Stock Crítico de Reabasto',
     message: 'Ibuprofeno MK 400mg cuenta con solo 7 unidades (Mínimo requerido: 20).',
-    productId: 'p-02',
-    batchId: 'bat-03',
     branchId: 'br-01',
     isRead: false,
     createdAt: '2026-09-18T07:30:00.000Z',
   },
   {
     id: 'alt-03',
-    type: 'EXPIRATION',
-    priority: 'CRITICAL',
+    type: 'Expired',
+    severity: 'Critical',
     title: '🛑 Medicamento Vencido Bloqueado',
     message: 'Omeprazol MK 20mg (Lote: LOTE-OMP-VENCIDO) venció el 01/08/2026. Trasladado a Área de Cuarentena.',
-    productId: 'p-11',
-    batchId: 'bat-12',
     branchId: 'br-01',
     isRead: false,
     createdAt: '2026-09-18T08:00:00.000Z',
@@ -1262,32 +1186,32 @@ export const initialAlerts: Alert[] = [
 export const initialAuditLogs: AuditLog[] = [
   {
     id: 'log-01',
-    userId: 'usr-master',
     userName: 'Jonathan Rojas',
     action: 'LOGIN',
-    entity: 'AUTH',
+    module: 'AUTH',
+    entityName: 'Usuario',
     entityId: 'usr-master',
     details: 'Inicio de sesión exitoso en Sucursal 19 de Julio',
     ipAddress: '192.168.1.105',
-    timestamp: '2026-09-18T08:00:00.000Z',
+    createdAt: '2026-09-18T08:00:00.000Z',
   },
 ];
 
 export const initialSettings: Settings = {
   pharmacyName: 'Farmacia Espíritu Santo',
-  slogan: 'Salud y Bienestar Familiar',
+  logoUrl: '/logo.jpg',
+  taxNumber: 'J0310000123456',
+  phone: '+505 2255-8899',
+  email: 'contacto@farmaciaespiritusanto.com',
+  address: 'Sucursal 19 de Julio - Managua, Nicaragua',
   primaryCurrency: 'NIO',
   currencySymbol: 'C$',
   taxRate: 15,
-  applyTaxByDefault: false,
-  prescriptionGracePeriodDays: 30,
-  expirationAlertDays: 45,
-  minStockAlertGlobal: 15,
-  requirePrescriptionForControlled: true,
-  allowNegativeStock: false,
-  ticketFooterMessage: '¡Gracias por su preferencia! Conserve su comprobante para cualquier consulta.',
-  enableAuditLog: true,
-  backupAutoFrequencyDays: 7,
+  invoicePrefix: 'FAC-',
+  ticketFooter: '¡Gracias por su preferencia! Conserve su comprobante para cualquier consulta.',
+  expiringAlertDays1: 60,
+  expiringAlertDays2: 30,
+  expiringAlertDays3: 15,
 };
 
 export const initialReturns: SaleReturn[] = [];
@@ -1300,16 +1224,22 @@ export const initialBankAccounts: BankAccount[] = [
     id: 'ba-01',
     bankName: 'Banco BAC Credomatic Nicaragua',
     accountNumber: '365-8942-01',
-    accountType: 'Cuenta Corriente C$',
+    accountType: 'Corriente',
+    currency: 'C$',
+    initialBalance: 45200.00,
     currentBalance: 45200.00,
+    branchId: 'br-01',
     isActive: true,
   },
   {
     id: 'ba-02',
     bankName: 'Banco Lafise Bancentro',
     accountNumber: '102-4589-99',
-    accountType: 'Cuenta de Ahorros C$',
+    accountType: 'Ahorros',
+    currency: 'C$',
+    initialBalance: 28500.00,
     currentBalance: 28500.00,
+    branchId: 'br-01',
     isActive: true,
   },
 ];
