@@ -47,7 +47,7 @@ export const LoginView: React.FC = () => {
         <div className="p-6 bg-gradient-to-r from-emerald-50 via-teal-50/50 to-white border-b border-emerald-100 flex flex-col items-center text-center">
           <div className="relative mb-3">
             <img
-              src={settings.logoUrl}
+              src={settings.logoUrl || '/logo.jpg'}
               alt="Logo Farmacia Espíritu Santo"
               className="w-16 h-16 object-contain rounded-2xl bg-white p-1 border-2 border-emerald-500 shadow-md"
             />

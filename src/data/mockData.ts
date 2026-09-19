@@ -171,7 +171,7 @@ export const initialBankStatements: BankStatementItem[] = [];
 
 export const initialSettings: Settings = {
   pharmacyName: 'Farmacia Espíritu Santo',
-  logoUrl: '',
+  logoUrl: '/logo.jpg',
   taxNumber: 'J0310000123456',
   phone: '+505 2255-8899',
   email: 'contacto@farmaciaespiritusanto.com',

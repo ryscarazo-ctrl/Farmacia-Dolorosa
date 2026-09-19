@@ -173,7 +173,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="p-3 border-b border-emerald-100 flex items-center justify-between bg-gradient-to-r from-emerald-50/70 to-white gap-2">
           <div className="flex items-center gap-2.5">
             <img
-              src={settings.logoUrl}
+              src={settings.logoUrl || '/logo.jpg'}
               alt="Logo Farmacia Espíritu Santo"
               className="w-10 h-10 object-contain rounded-xl bg-white p-0.5 border border-emerald-400 shadow-xs"
             />

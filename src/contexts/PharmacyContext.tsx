@@ -232,6 +232,9 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => loadStorage('auditLogs', initialAuditLogs));
   const [settings, setSettings] = useState<Settings>(() => {
     const loaded = loadStorage('settings', initialSettings);
+    if (!loaded.logoUrl) {
+      loaded.logoUrl = '/logo.jpg';
+    }
     if (!loaded.currencySymbol || loaded.currencySymbol === '$') {
       return { ...loaded, primaryCurrency: 'NIO', currencySymbol: 'C$' };
     }
