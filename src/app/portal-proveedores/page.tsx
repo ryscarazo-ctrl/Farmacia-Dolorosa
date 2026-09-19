@@ -186,7 +186,7 @@ function PublicSupplierPortalContent() {
             <img
               src={settings.logoUrl || '/logo.jpg'}
               alt="Logo Farmacia Espíritu Santo"
-              className="w-12 h-12 object-contain rounded-xl bg-white p-1 border border-emerald-300 shadow-sm"
+              className="w-24 h-24 object-contain rounded-3xl bg-white p-2 border-2 border-emerald-500 shadow-lg"
             />
             <div>
               <div className="flex items-center gap-2">

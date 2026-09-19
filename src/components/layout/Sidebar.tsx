@@ -176,7 +176,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <img
                 src={settings.logoUrl || '/logo.jpg'}
                 alt="Logo Farmacia Espíritu Santo"
-                className="w-11 h-11 object-contain rounded-xl bg-white p-1 border-2 border-emerald-500 shadow-sm"
+                className="w-14 h-14 object-contain rounded-2xl bg-white p-1 border-2 border-emerald-500 shadow-md"
               />
               <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-600 rounded-full border-2 border-white flex items-center justify-center text-[8px] text-white">✓</span>
             </div>

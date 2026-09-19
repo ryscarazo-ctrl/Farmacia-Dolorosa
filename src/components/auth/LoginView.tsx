@@ -49,10 +49,10 @@ export const LoginView: React.FC = () => {
             <img
               src={settings.logoUrl || '/logo.jpg'}
               alt="Logo Farmacia Espíritu Santo"
-              className="w-16 h-16 object-contain rounded-2xl bg-white p-1 border-2 border-emerald-500 shadow-md"
+              className="w-28 h-28 sm:w-32 sm:h-32 object-contain rounded-3xl bg-white p-2 border-3 border-emerald-500 shadow-xl"
             />
-            <div className="absolute -bottom-1 -right-1 bg-emerald-600 text-white p-1 rounded-full shadow-xs">
-              <ShieldCheck className="w-3.5 h-3.5" />
+            <div className="absolute -bottom-1.5 -right-1.5 bg-emerald-600 text-white p-1.5 rounded-full shadow-md border-2 border-white">
+              <ShieldCheck className="w-4 h-4" />
             </div>
           </div>
 
@@ -61,7 +61,7 @@ export const LoginView: React.FC = () => {
           </span>
 
           <h1 className="text-xl font-black text-slate-900 tracking-tight flex items-center gap-1.5">
-            FARMACIA ESPÍRITU SANTO <span>🕊️</span>
+            FARMACIA ESPÍRITU SANTO 🕊️
           </h1>
           <p className="text-xs text-slate-500 mt-0.5 font-medium">
             {currentBranch.name} • Sistema de Gestión
