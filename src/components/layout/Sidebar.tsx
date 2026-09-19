@@ -169,31 +169,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
           ${isOpenMobile ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
         `}
       >
-        {/* Header Institucional */}
-        <div className="p-3 border-b border-emerald-100 flex items-center justify-between bg-gradient-to-r from-emerald-50/70 to-white gap-2">
-          <div className="flex items-center gap-2.5">
-            <img
-              src={settings.logoUrl || '/logo.jpg'}
-              alt="Logo Farmacia Espíritu Santo"
-              className="w-10 h-10 object-contain rounded-xl bg-white p-0.5 border border-emerald-400 shadow-xs"
-            />
-            <div>
-              <h1 className="font-extrabold text-xs text-emerald-900 tracking-tight leading-tight flex items-center gap-1">
-                ESPÍRITU SANTO <span>🕊️</span>
+        {/* Header Institucional con Logotipo */}
+        <div className="p-3.5 border-b border-emerald-100 flex items-center justify-between bg-gradient-to-r from-emerald-50/80 to-white gap-2">
+          <div className="flex items-center gap-3">
+            <div className="relative shrink-0">
+              <img
+                src={settings.logoUrl || '/logo.jpg'}
+                alt="Logo Farmacia Espíritu Santo"
+                className="w-11 h-11 object-contain rounded-xl bg-white p-1 border-2 border-emerald-500 shadow-sm"
+              />
+              <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-600 rounded-full border-2 border-white flex items-center justify-center text-[8px] text-white">✓</span>
+            </div>
+            <div className="min-w-0">
+              <h1 className="font-black text-xs text-emerald-950 tracking-tight leading-tight truncate">
+                ESPÍRITU SANTO
               </h1>
-              <p className="text-[10px] text-slate-500 font-medium">Farmacia & Salud</p>
+              <p className="text-[10px] text-emerald-700 font-bold uppercase tracking-wider">Farmacia & Salud</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-md border border-emerald-300 uppercase">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-[10px] font-mono font-black text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-300 uppercase">
               {currentBranch.code}
             </span>
 
             {/* Botón cerrar para vista móvil */}
             <button
               onClick={onCloseMobile}
-              className="md:hidden p-1.5 text-slate-500 hover:text-slate-800 hover:bg-emerald-100 rounded-lg transition-colors"
+              className="md:hidden p-1.5 text-slate-500 hover:text-slate-800 hover:bg-emerald-100 rounded-lg transition-colors cursor-pointer"
               title="Cerrar menú"
             >
               <X className="w-5 h-5 text-emerald-900" />
@@ -201,7 +204,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        {/* Navegación 100% Vertical con todos los módulos visibles */}
         <nav className="flex-1 overflow-y-auto px-2.5 py-2.5 space-y-4 text-xs font-semibold scrollbar-thin">
           {/* Dashboard Principal */}
           <div>
