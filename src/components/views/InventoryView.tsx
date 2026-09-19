@@ -106,7 +106,15 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
           const rowName = row['Nombre_Comercial'] || row['Nombre'] || row['Medicamento'] || row['Producto'];
           if (!rowName) return;
 
-          const rowBarcode = String(row['Codigo_Barra'] || row['Codigo'] || row['Barcode'] || `750${Date.now().toString().slice(-7)}${idx}`);
+          let rawBarcode = row['Codigo_Barra'] || row['Codigo'] || row['Barcode'];
+          let rowBarcode = '';
+          if (typeof rawBarcode === 'number') {
+            rowBarcode = BigInt(Math.floor(rawBarcode)).toString();
+          } else if (rawBarcode) {
+            rowBarcode = String(rawBarcode).trim();
+          } else {
+            rowBarcode = `750${Date.now().toString().slice(-7)}${idx}`;
+          }
           const rowGeneric = row['Nombre_Generico'] || row['Generico'] || '';
           const rowCatName = row['Categoria'] || '';
           const foundCat = categories.find(c => c.name.toLowerCase().includes(String(rowCatName).toLowerCase())) || categories[0];
