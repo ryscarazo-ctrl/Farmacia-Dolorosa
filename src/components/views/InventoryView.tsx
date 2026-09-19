@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import {
   Package,
+  Trash2,
   PackagePlus,
   Search,
   Filter,
@@ -30,6 +31,8 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
     products,
     categories,
     updateProduct,
+    deleteProduct,
+    clearAllProducts,
     addProduct,
     getAvailableStock,
     getProductBatches,
@@ -40,6 +43,8 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [modalOpen, setModalOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [importStatus, setImportStatus] = useState<{ count: number; message: string; type: 'success' | 'error' } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -238,6 +243,18 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
             <span>Subir Excel / CSV</span>
           </button>
 
+          {products.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowClearConfirm(true)}
+              className="px-3 py-2 bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 hover:border-red-600 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-xs cursor-pointer transition-all active:scale-95"
+              title="Quitar / Eliminar todos los medicamentos del catálogo para comenzar desde cero"
+            >
+              <Trash2 className="w-4 h-4" />
+              <span>Vaciar Catálogo</span>
+            </button>
+          )}
+
           {onNavigateToEntry && (
             <button
               onClick={onNavigateToEntry}
@@ -394,6 +411,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
                       </td>
 
                       <td className="p-3 text-center">
+                        <div className="flex items-center justify-center gap-1">
                         <button
                           onClick={() => {
                             setEditingProduct(prod);
@@ -416,6 +434,15 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
+
+                        <button
+                          onClick={() => setProductToDelete(prod)}
+                          className="p-1.5 text-slate-400 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+                          title="Quitar / Eliminar este Medicamento del Sistema"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                       </td>
                     </tr>
                   );

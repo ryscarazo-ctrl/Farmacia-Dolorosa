@@ -124,6 +124,8 @@ interface PharmacyContextType {
   // Gestión de Lotes e Inventario
   addProduct: (product: Omit<Product, 'id'>, initialBatch?: { batchNumber: string; expirationDate: string; quantity: number; unitCost: number }) => void;
   updateProduct: (product: Product) => void;
+  deleteProduct: (productId: string) => void;
+  clearAllProducts: () => void;
   addBatch: (batch: Omit<ProductBatch, 'id'>) => void;
   getProductBatches: (productId: string, branchId?: string) => ProductBatch[];
   getAvailableStock: (productId: string, branchId?: string) => number;
@@ -1212,6 +1214,23 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     logAudit('CREATE', 'Productos', 'Product', newId, `Creación de producto: ${newProduct.name}`);
   };
 
+    const deleteProduct = (productId: string) => {
+    const prod = products.find((p) => p.id === productId);
+    setProducts((prev) => prev.filter((p) => p.id !== productId));
+    setBatches((prev) => prev.filter((b) => b.productId !== productId));
+    setMovements((prev) => prev.filter((m) => m.productId !== productId));
+    if (prod) {
+      logAudit('DELETE', 'Productos', 'Product', productId, `Eliminación de producto: ${prod.name}`);
+    }
+  };
+
+  const clearAllProducts = () => {
+    setProducts([]);
+    setBatches([]);
+    setMovements([]);
+    logAudit('DELETE', 'Productos', 'Product', 'ALL', 'Limpieza total del catálogo de productos y lotes');
+  };
+
   const updateProduct = (updated: Product) => {
     setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
     logAudit('UPDATE', 'Productos', 'Product', updated.id, `Actualización de producto: ${updated.name}`);
@@ -1750,6 +1769,8 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         processBarcodeReturn,
         addProduct,
         updateProduct,
+    deleteProduct,
+    clearAllProducts,
         addBatch,
         getProductBatches,
         getAvailableStock,
