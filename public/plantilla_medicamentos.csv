@@ -1,0 +1,6 @@
+Codigo_Barra,Nombre_Comercial,Nombre_Generico,Categoria,Laboratorio,Presentacion,Concentracion,Unidad_Medida,Costo_Compra_C$,Precio_Venta_C$,Stock_Inicial,Numero_Lote,Fecha_Vencimiento_YYYY_MM_DD,Stock_Minimo_Alerta,Requiere_Receta,Es_Controlado_Psicotropico
+7501000123456,Panadol Extra 500mg,Paracetamol + Cafeína,Analgésicos y Antiinflamatorios,GSK (GlaxoSmithKline),Caja x 24 Tabletas,500 mg / 65 mg,Tableta,120,180,50,LOT-2026-PAN,2027-12-31,10,NO,NO
+7702000654321,Amoxicilina MK 500mg,Amoxicilina Trihidrato,Antibióticos,MK / Tecnoquímicas,Caja x 30 Cápsulas,500 mg,Cápsula,95,150,30,AMX-2026-08,2027-08-30,8,SI,NO
+7503000987654,Omeprazol Ramos 20mg,Omeprazol,Gastrointestinales,Laboratorios Ramos,Caja x 28 Cápsulas,20 mg,Cápsula,70,120,40,OMP-26-44,2028-03-15,10,NO,NO
+7504000321987,Viro-Grip Noche Jarabe 120ml,Acetaminofén + Dextrometorfano + Fenilefrina,Respiratorios y Antigripales,Laboratorios Vijosa,Frasco 120 ml,120 ml,Frasco,110,165,25,VRG-2026-N,2027-10-20,5,NO,NO
+7505000456123,Losartán Potásico 50mg,Losartán Potásico,Cardiovascular y Presión,Laboratorios Rarpe,Caja x 30 Tabletas,50 mg,Tableta,85,140,60,LOS-2026-K,2028-05-30,15,SI,NO
