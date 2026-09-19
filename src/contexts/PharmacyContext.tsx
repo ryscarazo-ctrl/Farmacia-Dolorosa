@@ -188,7 +188,7 @@ const PharmacyContext = createContext<PharmacyContextType | undefined>(undefined
 const loadStorage = <T,>(key: string, defaultValue: T): T => {
   if (typeof window === 'undefined') return defaultValue;
   try {
-    const item = window.localStorage.getItem(`farmacia_prod_${key}`);
+    const item = window.localStorage.getItem(`farmacia_v5_${key}`);
     return item !== null ? JSON.parse(item) : defaultValue;
   } catch {
     return defaultValue;
@@ -198,7 +198,7 @@ const loadStorage = <T,>(key: string, defaultValue: T): T => {
 const saveStorage = <T,>(key: string, value: T) => {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(`farmacia_prod_${key}`, JSON.stringify(value));
+    window.localStorage.setItem(`farmacia_v5_${key}`, JSON.stringify(value));
   } catch {
     // Ignore storage quota limits
   }
@@ -212,50 +212,24 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Estados Limpios para Producción Real (0 ejemplos, persistente en el navegador)
     // Carga con persistencia en localStorage o datos de prueba completos por defecto
-  const [products, setProducts] = useState<Product[]>(() => {
-    const loaded = loadStorage('products', initialProducts);
-    return loaded && loaded.length > 0 ? loaded : initialProducts;
-  });
-  const [batches, setBatches] = useState<ProductBatch[]>(() => {
-    const loaded = loadStorage('batches', initialBatches);
-    return loaded && loaded.length > 0 ? loaded : initialBatches;
-  });
-  const [suppliers, setSuppliers] = useState<Supplier[]>(() => {
-    const loaded = loadStorage('suppliers', initialSuppliers);
-    return loaded && loaded.length > 0 ? loaded : initialSuppliers;
-  });
-  const [customers, setCustomers] = useState<Customer[]>(() => {
-    const loaded = loadStorage('customers', initialCustomers);
-    return loaded && loaded.length > 0 ? loaded : initialCustomers;
-  });
-  const [purchases, setPurchases] = useState<PurchaseInvoice[]>(() => loadStorage('purchases', []));
-  const [supplierOrders, setSupplierOrders] = useState<SupplierOrder[]>(() => loadStorage('supplierOrders', []));
-  const [operationalExpenses, setOperationalExpenses] = useState<OperationalExpense[]>(() => loadStorage('operationalExpenses', []));
+    // Estados en Blanco para Producción Real (0 medicamentos demo, listo para ingresar inventario real)
+  const [products, setProducts] = useState<Product[]>(() => loadStorage('products', initialProducts));
+  const [batches, setBatches] = useState<ProductBatch[]>(() => loadStorage('batches', initialBatches));
+  const [suppliers, setSuppliers] = useState<Supplier[]>(() => loadStorage('suppliers', initialSuppliers));
+  const [customers, setCustomers] = useState<Customer[]>(() => loadStorage('customers', initialCustomers));
+  const [purchases, setPurchases] = useState<PurchaseInvoice[]>(() => loadStorage('purchases', initialPurchases));
+  const [supplierOrders, setSupplierOrders] = useState<SupplierOrder[]>(() => loadStorage('supplierOrders', initialSupplierOrders));
+  const [operationalExpenses, setOperationalExpenses] = useState<OperationalExpense[]>(() => loadStorage('operationalExpenses', initialOperationalExpenses));
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>(() => loadStorage('bankAccounts', initialBankAccounts));
-  const [bankStatements, setBankStatements] = useState<BankStatementItem[]>(() => loadStorage('bankStatements', []));
-  const [cashSessions, setCashSessions] = useState<CashSession[]>(() => {
-    const loaded = loadStorage('cashSessions', initialCashSessions);
-    return loaded && loaded.length > 0 ? loaded : initialCashSessions;
-  });
-  const [sales, setSales] = useState<Sale[]>(() => {
-    const loaded = loadStorage('sales', initialSales);
-    return loaded && loaded.length > 0 ? loaded : initialSales;
-  });
-  const [returns, setReturns] = useState<SaleReturn[]>(() => loadStorage('returns', []));
-  const [barcodeReturns, setBarcodeReturns] = useState<BarcodeReturn[]>(() => loadStorage('barcodeReturns', []));
-  const [movements, setMovements] = useState<InventoryMovement[]>(() => {
-    const loaded = loadStorage('movements', initialMovements);
-    return loaded && loaded.length > 0 ? loaded : initialMovements;
-  });
-  const [transfers, setTransfers] = useState<StockTransfer[]>(() => loadStorage('transfers', []));
-  const [alerts, setAlerts] = useState<Alert[]>(() => {
-    const loaded = loadStorage('alerts', initialAlerts);
-    return loaded && loaded.length > 0 ? loaded : initialAlerts;
-  });
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => {
-    const loaded = loadStorage('auditLogs', initialAuditLogs);
-    return loaded && loaded.length > 0 ? loaded : initialAuditLogs;
-  });
+  const [bankStatements, setBankStatements] = useState<BankStatementItem[]>(() => loadStorage('bankStatements', initialBankStatements));
+  const [cashSessions, setCashSessions] = useState<CashSession[]>(() => loadStorage('cashSessions', initialCashSessions));
+  const [sales, setSales] = useState<Sale[]>(() => loadStorage('sales', initialSales));
+  const [returns, setReturns] = useState<SaleReturn[]>(() => loadStorage('returns', initialReturns));
+  const [barcodeReturns, setBarcodeReturns] = useState<BarcodeReturn[]>(() => loadStorage('barcodeReturns', initialBarcodeReturns));
+  const [movements, setMovements] = useState<InventoryMovement[]>(() => loadStorage('movements', initialMovements));
+  const [transfers, setTransfers] = useState<StockTransfer[]>(() => loadStorage('transfers', initialTransfers));
+  const [alerts, setAlerts] = useState<Alert[]>(() => loadStorage('alerts', initialAlerts));
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => loadStorage('auditLogs', initialAuditLogs));
   const [settings, setSettings] = useState<Settings>(() => {
     const loaded = loadStorage('settings', initialSettings);
     if (!loaded.currencySymbol || loaded.currencySymbol === '$') {
@@ -264,17 +238,6 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return loaded;
   });
   const [cart, setCart] = useState<CartItem[]>([]);
-
-  // Auto-siembra de inventario y datos demo si el almacenamiento local está vacío
-  useEffect(() => {
-    if (!products || products.length === 0) setProducts(initialProducts);
-    if (!batches || batches.length === 0) setBatches(initialBatches);
-    if (!customers || customers.length === 0) setCustomers(initialCustomers);
-    if (!suppliers || suppliers.length === 0) setSuppliers(initialSuppliers);
-    if (!sales || sales.length === 0) setSales(initialSales);
-    if (!cashSessions || cashSessions.length === 0) setCashSessions(initialCashSessions);
-    if (!alerts || alerts.length === 0) setAlerts(initialAlerts);
-  }, []);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => loadStorage('auth_logged_in', false));
 
   // Sincronización automática con almacenamiento local permanente
@@ -318,7 +281,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (typeof window !== 'undefined') {
       try {
         Object.keys(window.localStorage).forEach((k) => {
-          if (k.startsWith('farmacia_prod_')) window.localStorage.removeItem(k);
+          if (k.startsWith('farmacia_v5_')) window.localStorage.removeItem(k);
         });
       } catch {}
     }
