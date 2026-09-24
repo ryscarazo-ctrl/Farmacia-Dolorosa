@@ -42,6 +42,34 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const [time, setTime] = useState<string>('');
   const [showAlerts, setShowAlerts] = useState<boolean>(false);
   const [showBranchMenu, setShowBranchMenu] = useState<boolean>(false);
+  const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsOnline(navigator.onLine);
+
+      const handleOnline = () => {
+        setIsOnline(true);
+        setIsSyncing(true);
+        setTimeout(() => {
+          setIsSyncing(false);
+        }, 3000);
+      };
+
+      const handleOffline = () => {
+        setIsOnline(false);
+      };
+
+      window.addEventListener('online', handleOnline);
+      window.addEventListener('offline', handleOffline);
+
+      return () => {
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -118,6 +146,26 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         <div className="hidden md:flex items-center gap-1.5 text-xs text-emerald-800 font-mono bg-emerald-50/70 px-3 py-1 rounded-lg border border-emerald-200">
           <Clock className="w-3.5 h-3.5 text-emerald-600" />
           <span>{time}</span>
+        </div>
+
+        {/* Indicador de Estado Offline / Sincronización Automática */}
+        <div className="flex items-center">
+          {isSyncing ? (
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-300 text-blue-800 text-[11px] font-bold animate-pulse">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
+              <span>Sincronizando con Nube...</span>
+            </div>
+          ) : !isOnline ? (
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-[11px] font-extrabold animate-bounce" title="Sin Internet. Guardando todo localmente en esta laptop.">
+              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span>Modo Offline (Laptop)</span>
+            </div>
+          ) : (
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold" title="Conexión en línea activa. Sincronizado en la Nube.">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Nube Sincronizada</span>
+            </div>
+          )}
         </div>
       </div>
 
