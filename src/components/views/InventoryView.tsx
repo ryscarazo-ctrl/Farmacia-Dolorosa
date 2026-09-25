@@ -213,6 +213,62 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
     reader.readAsArrayBuffer(file);
   };
 
+
+  // Exportar Inventario Completo a Excel con todas las columnas necesarias para la venta
+  const handleExportExcel = () => {
+    try {
+      if (!products || products.length === 0) {
+        alert('No hay medicamentos en el inventario para exportar.');
+        return;
+      }
+
+      const dataToExport = products.map((p, idx) => {
+        const pBatches = getProductBatches(p.id, currentBranch.id);
+        const mainBatch = pBatches[0];
+        const stock = getAvailableStock(p.id, currentBranch.id);
+        const cost = p.purchasePrice || (mainBatch?.unitCost || 0);
+        const price = p.salePrice || 0;
+        const margin = price > 0 && cost > 0 ? (((price - cost) / price) * 100).toFixed(1) + '%' : '0%';
+        const isReadyForSale = price > 0 && stock > 0 ? 'LISTO PARA VENTA' : (price <= 0 ? 'PENDIENTE PRECIO' : 'SIN STOCK');
+
+        return {
+          'SKU_Codigo_Interno': p.sku,
+          'Codigo_Barra': p.barcode || '',
+          'Nombre_Comercial': p.name,
+          'Nombre_Generico': p.genericName || p.name,
+          'Categoria': p.categoryName || 'General',
+          'Laboratorio': p.laboratoryName || 'Generico',
+          'Presentacion': p.presentation || 'Tabletas',
+          'Unidad_Medida': p.unitMeasure || 'Unidad',
+          'Costo_Compra_Cordobas': cost,
+          'Precio_Venta_Cordobas': price,
+          'Margen_Ganancia_Porcentaje': margin,
+          'Stock_Actual': stock,
+          'Stock_Minimo_Alerta': p.minStock || 10,
+          'Numero_Lote': mainBatch?.batchNumber || ("LT-2026-" + String(idx + 1).padStart(3, '0')),
+          'Fecha_Vencimiento_YYYY_MM_DD': mainBatch?.expirationDate || '2028-12-31',
+          'Requiere_Receta': p.requiresPrescription ? 'SI' : 'NO',
+          'Es_Controlado_Psicotropico': p.isControlled ? 'SI' : 'NO',
+          'Estado_Venta': isReadyForSale,
+        };
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+      worksheet['!cols'] = [
+        { wch: 18 }, { wch: 18 }, { wch: 45 }, { wch: 45 }, { wch: 32 }, { wch: 25 },
+        { wch: 18 }, { wch: 15 }, { wch: 20 }, { wch: 20 }, { wch: 22 }, { wch: 14 },
+        { wch: 18 }, { wch: 18 }, { wch: 28 }, { wch: 16 }, { wch: 25 }, { wch: 20 },
+      ];
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Inventario_Completo');
+      const dateStr = new Date().toISOString().split('T')[0];
+      XLSX.writeFile(workbook, "Inventario_Farmacia_Espiritu_Santo_" + dateStr + ".xlsx");
+    } catch (err: any) {
+      alert('Error al exportar inventario a Excel: ' + (err?.message || 'Error desconocido'));
+    }
+  };
+
   const filtered = products.filter((p) => {
     const matchesSearch =
       p.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -247,6 +303,17 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
             accept=".xlsx, .xls, .csv"
             className="hidden"
           />
+
+          
+          <button
+            type="button"
+            onClick={handleExportExcel}
+            className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm cursor-pointer transition-all active:scale-95 border border-emerald-600"
+            title="Descargar archivo Excel completo con los 122 medicamentos y todas las columnas requeridas para venta"
+          >
+            <FileSpreadsheet className="w-4 h-4 text-emerald-200" />
+            <span>Exportar Excel Completo</span>
+          </button>
 
           <a
             href="/plantilla_medicamentos.xlsx"
