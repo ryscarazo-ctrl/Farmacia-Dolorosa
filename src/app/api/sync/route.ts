@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { initialProducts, initialBatches, initialAlerts, initialSettings } from '../../../data/mockData';
 
-// Base de datos sincronizada en la nube
+// Base de datos global en memoria de servidor (Nube Vercel)
 let cloudDatabase: any = {
-  version: '7.0',
+  version: '8.0',
   lastUpdated: Date.now(),
   products: initialProducts,
   batches: initialBatches,
@@ -17,6 +17,17 @@ let cloudDatabase: any = {
 };
 
 export async function GET() {
+  // Asegurar que nunca devuelva inventario vacío si hay initialProducts
+  if (!cloudDatabase.products || cloudDatabase.products.length === 0) {
+    cloudDatabase.products = initialProducts;
+  }
+  if (!cloudDatabase.batches || cloudDatabase.batches.length === 0) {
+    cloudDatabase.batches = initialBatches;
+  }
+  if (!cloudDatabase.alerts || cloudDatabase.alerts.length === 0) {
+    cloudDatabase.alerts = initialAlerts;
+  }
+
   return NextResponse.json({
     success: true,
     data: cloudDatabase,
@@ -31,7 +42,7 @@ export async function POST(request: Request) {
       if (Array.isArray(body.products) && body.products.length > 0) {
         cloudDatabase.products = body.products;
       }
-      if (Array.isArray(body.batches)) {
+      if (Array.isArray(body.batches) && body.batches.length > 0) {
         cloudDatabase.batches = body.batches;
       }
       if (Array.isArray(body.customers)) {
@@ -43,7 +54,7 @@ export async function POST(request: Request) {
       if (Array.isArray(body.movements)) {
         cloudDatabase.movements = body.movements;
       }
-      if (Array.isArray(body.alerts)) {
+      if (Array.isArray(body.alerts) && body.alerts.length > 0) {
         cloudDatabase.alerts = body.alerts;
       }
       if (body.settings) {

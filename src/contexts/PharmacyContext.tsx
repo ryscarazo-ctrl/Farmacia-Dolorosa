@@ -302,41 +302,36 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [lastSyncTime, setLastSyncTime] = useState<number>(0);
   const isSyncingRef = React.useRef<boolean>(false);
 
-  // 1. Escuchar cambios de la nube periódicamente y al enfocar la pantalla
+  // 1. Escuchar y aplicar cambios de la nube inmediatamente
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const pullFromCloud = async () => {
-      if (isSyncingRef.current) return;
       try {
         const res = await fetch('/api/sync', { cache: 'no-store' });
         if (!res.ok) return;
         const json = await res.json();
         if (json.success && json.data) {
           const serverUpdated = json.lastUpdated || 0;
-          if (serverUpdated > lastSyncTime && lastSyncTime > 0) {
-            isSyncingRef.current = true;
-            if (Array.isArray(json.data.products) && json.data.products.length > 0) {
-              setProducts(json.data.products);
-            }
-            if (Array.isArray(json.data.batches)) {
-              setBatches(json.data.batches);
-            }
-            if (Array.isArray(json.data.customers)) {
-              setCustomers(json.data.customers);
-            }
-            if (Array.isArray(json.data.sales)) {
-              setSales(json.data.sales);
-            }
-            if (Array.isArray(json.data.movements)) {
-              setMovements(json.data.movements);
-            }
-            if (Array.isArray(json.data.alerts)) {
-              setAlerts(json.data.alerts);
-            }
-            setTimeout(() => {
-              isSyncingRef.current = false;
-            }, 500);
+          
+          // Si el servidor tiene productos o está más actualizado, aplicar de inmediato
+          if (Array.isArray(json.data.products) && json.data.products.length > 0) {
+            setProducts(json.data.products);
+          }
+          if (Array.isArray(json.data.batches) && json.data.batches.length > 0) {
+            setBatches(json.data.batches);
+          }
+          if (Array.isArray(json.data.alerts) && json.data.alerts.length > 0) {
+            setAlerts(json.data.alerts);
+          }
+          if (Array.isArray(json.data.customers)) {
+            setCustomers(json.data.customers);
+          }
+          if (Array.isArray(json.data.sales)) {
+            setSales(json.data.sales);
+          }
+          if (Array.isArray(json.data.movements)) {
+            setMovements(json.data.movements);
           }
           setLastSyncTime(serverUpdated);
         }
@@ -345,13 +340,12 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
     };
 
-    // Pull inicial
+    // Ejecutar al montar inmediatamente
     pullFromCloud();
 
-    // Polling cada 3 segundos
-    const syncInterval = setInterval(pullFromCloud, 3000);
+    // Sincronizar automáticamente cada 2.5 segundos
+    const syncInterval = setInterval(pullFromCloud, 2500);
 
-    // Pull al volver a la pestaña o desbloquear celular
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
         pullFromCloud();
@@ -365,12 +359,12 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       window.removeEventListener('visibilitychange', handleVisibility);
       window.removeEventListener('focus', pullFromCloud);
     };
-  }, [lastSyncTime]);
+  }, []);
 
-  // 2. Enviar cambios locales a la nube automáticamente cuando cambie inventario o ventas
+  // 2. Transmitir cambios locales a la nube
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (isSyncingRef.current) return;
+    if (products.length === 0) return; // Nunca enviar inventario vacío por error
 
     const timer = setTimeout(async () => {
       try {
@@ -397,7 +391,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       } catch (err) {
         // offline fallback
       }
-    }, 1200);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, [products, batches, customers, sales, movements, alerts, settings]);
