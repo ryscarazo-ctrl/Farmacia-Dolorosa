@@ -193,7 +193,7 @@ const PharmacyContext = createContext<PharmacyContextType | undefined>(undefined
 const loadStorage = <T,>(key: string, defaultValue: T): T => {
   if (typeof window === 'undefined') return defaultValue;
   try {
-    const cleanedKey = 'farmacia_inventory_clean_v10';
+    const cleanedKey = 'farmacia_inventory_real_v11';
     if (!window.localStorage.getItem(cleanedKey)) {
       window.localStorage.removeItem('farmacia_v5_products');
       window.localStorage.removeItem('farmacia_v5_batches');
@@ -212,13 +212,13 @@ const loadStorage = <T,>(key: string, defaultValue: T): T => {
     const parsed = JSON.parse(item);
 
     if (key === 'products' && Array.isArray(parsed)) {
-      return parsed.filter((p: any) => !p?.id?.startsWith('prod-0')) as unknown as T;
+      return parsed.filter((p: any) => true) as unknown as T;
     }
     if (key === 'batches' && Array.isArray(parsed)) {
-      return parsed.filter((b: any) => !b?.id?.startsWith('bat-0')) as unknown as T;
+      return parsed.filter((b: any) => true) as unknown as T;
     }
     if (key === 'alerts' && Array.isArray(parsed)) {
-      return parsed.filter((a: any) => !a?.id?.startsWith('alt-req-')) as unknown as T;
+      return parsed.filter((a: any) => true) as unknown as T;
     }
 
     return parsed;
@@ -362,13 +362,13 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           const serverUpdated = json.lastUpdated || 0;
           
           if (Array.isArray(json.data.products)) {
-            setProducts(json.data.products.filter((p: any) => !p?.id?.startsWith('prod-0')));
+            setProducts(json.data.products.filter((p: any) => true));
           }
           if (Array.isArray(json.data.batches)) {
-            setBatches(json.data.batches.filter((b: any) => !b?.id?.startsWith('bat-0')));
+            setBatches(json.data.batches.filter((b: any) => true));
           }
           if (Array.isArray(json.data.alerts)) {
-            setAlerts(json.data.alerts.filter((a: any) => !a?.id?.startsWith('alt-req-')));
+            setAlerts(json.data.alerts.filter((a: any) => true));
           }
           if (Array.isArray(json.data.customers)) {
             setCustomers(json.data.customers);

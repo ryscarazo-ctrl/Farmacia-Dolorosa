@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { initialSettings } from '../../../data/mockData';
+import { initialProducts, initialBatches, initialSettings } from '../../../data/mockData';
 
 // Base de datos global en memoria de servidor (Nube Vercel)
 let cloudDatabase: any = {
-  version: '10.0',
+  version: '11.0',
   lastUpdated: Date.now(),
-  products: [],
-  batches: [],
+  products: initialProducts,
+  batches: initialBatches,
   customers: [],
   suppliers: [],
   sales: [],
@@ -17,6 +17,12 @@ let cloudDatabase: any = {
 };
 
 export async function GET() {
+  if (!cloudDatabase.products || cloudDatabase.products.length === 0) {
+    cloudDatabase.products = initialProducts;
+  }
+  if (!cloudDatabase.batches || cloudDatabase.batches.length === 0) {
+    cloudDatabase.batches = initialBatches;
+  }
   return NextResponse.json({
     success: true,
     data: cloudDatabase,
@@ -28,16 +34,11 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     if (body && typeof body === 'object') {
-      if (Array.isArray(body.products)) {
-        // Ignorar medicamentos de prueba legados si un cliente desactualizado intenta subirlos
-        cloudDatabase.products = body.products.filter(
-          (p: any) => p && !p.id?.startsWith('prod-0')
-        );
+      if (Array.isArray(body.products) && body.products.length > 0) {
+        cloudDatabase.products = body.products;
       }
-      if (Array.isArray(body.batches)) {
-        cloudDatabase.batches = body.batches.filter(
-          (b: any) => b && !b.id?.startsWith('bat-0')
-        );
+      if (Array.isArray(body.batches) && body.batches.length > 0) {
+        cloudDatabase.batches = body.batches;
       }
       if (Array.isArray(body.customers)) {
         cloudDatabase.customers = body.customers;
@@ -49,9 +50,7 @@ export async function POST(request: Request) {
         cloudDatabase.movements = body.movements;
       }
       if (Array.isArray(body.alerts)) {
-        cloudDatabase.alerts = body.alerts.filter(
-          (a: any) => a && !a.id?.startsWith('alt-req-')
-        );
+        cloudDatabase.alerts = body.alerts;
       }
       if (body.settings) {
         cloudDatabase.settings = body.settings;
