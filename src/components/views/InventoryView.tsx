@@ -44,6 +44,12 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
 
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [showOnlyPending, setShowOnlyPending] = useState(false);
+
+  const totalPendingCount = products.filter((p) => {
+    const pBatches = getProductBatches(p.id);
+    return !p.salePrice || p.salePrice <= 0 || pBatches.length === 0;
+  }).length;
   const [modalOpen, setModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -311,6 +317,32 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
           </button>
         </div>
       )}
+
+      {/* Filtros Rápidos de Estado */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 select-none">
+        <button
+          onClick={() => setShowOnlyPending(false)}
+          className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+            !showOnlyPending
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+          }`}
+        >
+          Todos los Fármacos ({products.length})
+        </button>
+
+        <button
+          onClick={() => setShowOnlyPending(true)}
+          className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+            showOnlyPending
+              ? 'bg-amber-600 text-white shadow-xs'
+              : 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
+          }`}
+        >
+          <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+          <span>⚠️ Pendientes de Venta ({totalPendingCount})</span>
+        </button>
+      </div>
 
       {/* Buscador y Filtros */}
       <div className="flex flex-col sm:flex-row gap-3">

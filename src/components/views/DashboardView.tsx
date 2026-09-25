@@ -35,6 +35,15 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
   const totalSalesAmount = todaySales.reduce((sum, s) => sum + s.totalAmount, 0);
   const totalProfitAmount = todaySales.reduce((sum, s) => sum + s.profitAmount, 0);
 
+    // Medicamentos Pendientes de Venta (Sin Precio o Sin Lote/Caducidad)
+  const pendingSalesProducts = products.filter((p) => {
+    const pBatches = batches.filter((b) => b.productId === p.id && b.branchId === currentBranch.id);
+    const missingPrice = !p.salePrice || p.salePrice <= 0;
+    const missingBatches = pBatches.length === 0;
+    const allExpired = pBatches.length > 0 && pBatches.every((b) => new Date(b.expirationDate) <= now);
+    return missingPrice || missingBatches || allExpired;
+  });
+
   const lowStockCount = products.filter((p) => {
     const validBatches = batches.filter((b) => b.productId === p.id && b.branchId === currentBranch.id && b.status === 'Available');
     const totalStock = validBatches.reduce((sum, b) => sum + b.currentQuantity, 0);
@@ -95,6 +104,81 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
           </button>
         </div>
       </div>
+
+            {/* PANEL DESTACADO: MEDICAMENTOS PENDIENTES DE REQUISITOS PARA VENTA */}
+      {pendingSalesProducts.length > 0 && (
+        <div className="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/5 border-2 border-amber-300 rounded-3xl p-4 sm:p-5 shadow-xs space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-amber-200/70">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 bg-amber-500 text-white rounded-xl shadow-xs">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-black text-sm sm:text-base text-amber-950 flex items-center gap-2">
+                  <span>Espacio de Medicamentos Pendientes de Venta</span>
+                  <span className="px-2.5 py-0.5 text-xs font-black bg-amber-500 text-white rounded-full">
+                    {pendingSalesProducts.length} Fármacos
+                  </span>
+                </h3>
+                <p className="text-xs text-amber-800/90 font-medium mt-0.5">
+                  Fármacos que no pueden facturarse en caja porque les falta <strong>Precio de Venta (PVP)</strong> o <strong>Lote/Fecha de Caducidad</strong>. Toca cualquiera para configurarlo.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => onNavigate('products')}
+              className="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl flex items-center gap-1 self-start sm:self-auto cursor-pointer shadow-xs transition-all active:scale-95 shrink-0"
+            >
+              <span>Ver en Inventario</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-60 overflow-y-auto pr-1">
+            {pendingSalesProducts.slice(0, 6).map((p) => {
+              const pBatches = batches.filter((b) => b.productId === p.id && b.branchId === currentBranch.id);
+              const missingPrice = !p.salePrice || p.salePrice <= 0;
+              const missingBatch = pBatches.length === 0;
+
+              return (
+                <div
+                  key={p.id}
+                  onClick={() => openProductDetail(p)}
+                  className="p-3 bg-white/90 hover:bg-white border border-amber-200 hover:border-amber-400 rounded-2xl shadow-2xs transition-all cursor-pointer active:scale-98 flex items-start justify-between gap-2"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-[9px] font-mono font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded">
+                        {p.sku}
+                      </span>
+                      {missingPrice && (
+                        <span className="text-[9px] font-black text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
+                          Sin Precio (C$ 0)
+                        </span>
+                      )}
+                      {missingBatch && (
+                        <span className="text-[9px] font-black text-orange-700 bg-orange-50 px-1.5 py-0.5 rounded border border-orange-200">
+                          Sin Lote/Caducidad
+                        </span>
+                      )}
+                    </div>
+                    <h4 className="font-bold text-xs text-slate-900 mt-1 truncate">{p.name}</h4>
+                    <p className="text-[10px] text-slate-500 truncate">{p.presentation}</p>
+                  </div>
+
+                  <div className="text-right shrink-0">
+                    <span className="text-[10px] font-bold text-emerald-700 hover:underline flex items-center gap-0.5 mt-2">
+                      <span>Configurar</span>
+                      <ArrowUpRight className="w-3 h-3" />
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">

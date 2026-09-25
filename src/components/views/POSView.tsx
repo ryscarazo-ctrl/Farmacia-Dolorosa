@@ -23,6 +23,7 @@ import { Product, PaymentMethod, Sale } from '../../types/pharmacy';
 
 export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavigate }) => {
   const {
+    openProductDetail,
     products,
     cart,
     addToCart,
@@ -251,6 +252,11 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                   <div
                     key={product.id}
                     onClick={() => {
+                      if (product.salePrice <= 0) {
+                        openProductDetail(product);
+                        showToast(`Configura el precio de venta para ${product.name}`, 'error');
+                        return;
+                      }
                       if (!isOutOfStock) {
                         const res = addToCart(product);
                         if (res.success) showToast(`+1 ${product.name}`);
@@ -285,9 +291,15 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
 
                     <div className="mt-3 pt-2.5 border-t border-slate-100">
                       <div className="flex items-baseline justify-between">
-                        <span className="text-sm font-black text-slate-900 font-mono">
-                          {settings.currencySymbol} {product.salePrice.toFixed(2)}
-                        </span>
+                        {product.salePrice > 0 ? (
+                          <span className="text-sm font-black text-slate-900 font-mono">
+                            {settings.currencySymbol} {product.salePrice.toFixed(2)}
+                          </span>
+                        ) : (
+                          <span className="text-[11px] font-black text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-300">
+                            ⚠️ Falta Precio
+                          </span>
+                        )}
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                             isOutOfStock
