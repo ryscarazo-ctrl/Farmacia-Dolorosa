@@ -212,7 +212,7 @@ const saveStorage = <T,>(key: string, value: T) => {
 export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [branches] = useState<Branch[]>(initialBranches);
   const [currentBranch, setCurrentBranch] = useState<Branch>(initialBranches[0]);
-  const [currentUser, setCurrentUser] = useState<User>(initialUsers[0]);
+  const [currentUser, setCurrentUser] = useState<User>(() => loadStorage('current_user', initialUsers[0]));
   const [categories] = useState<Category[]>(initialCategories);
 
   // Estados Limpios para Producción Real (0 ejemplos, persistente en el navegador)
@@ -295,6 +295,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => { saveStorage('movements', movements); }, [movements]);
   useEffect(() => { saveStorage('transfers', transfers); }, [transfers]);
   useEffect(() => { saveStorage('alerts', alerts); }, [alerts]);
+  useEffect(() => { saveStorage('current_user', currentUser); }, [currentUser]);
   useEffect(() => { saveStorage('auditLogs', auditLogs); }, [auditLogs]);
   useEffect(() => { saveStorage('settings', settings); }, [settings]); 
  
@@ -396,20 +397,32 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return () => clearTimeout(timer);
   }, [products, batches, customers, sales, movements, alerts, settings]);
 
-  // 3. Bloqueo Automático de Seguridad: Al salir de la pantalla / minimizar / apagar celular
+  // 3. Bloqueo Automático de Seguridad: María y Jonathan se bloquean al salir de la pantalla.
+  // EXCEPCIÓN: La Cajera (Fátima / Rol Cajera) mantiene su sesión abierta durante la jornada, cerrando solo con Cierre de Turno o Manual.
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    const isCashier = (u: User | null | undefined): boolean => {
+      if (!u) return false;
+      const uname = (u.username || '').toLowerCase();
+      const role = (u.role || '').toLowerCase();
+      return uname === 'fatima' || uname === 'cajera' || uname === 'cajero' || role.includes('cajera') || role.includes('cajero');
+    };
+
     const handleAutoLock = () => {
       if (document.hidden || document.visibilityState === 'hidden') {
-        setIsAuthenticated(false);
-        saveStorage('auth_logged_in', false);
+        if (!isCashier(currentUser)) {
+          setIsAuthenticated(false);
+          saveStorage('auth_logged_in', false);
+        }
       }
     };
 
     const handlePageHide = () => {
-      setIsAuthenticated(false);
-      saveStorage('auth_logged_in', false);
+      if (!isCashier(currentUser)) {
+        setIsAuthenticated(false);
+        saveStorage('auth_logged_in', false);
+      }
     };
 
     document.addEventListener('visibilitychange', handleAutoLock);
@@ -419,7 +432,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       document.removeEventListener('visibilitychange', handleAutoLock);
       window.removeEventListener('pagehide', handlePageHide);
     };
-  }, []);
+  }, [currentUser]);
 
 
 

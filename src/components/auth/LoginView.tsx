@@ -123,7 +123,7 @@ export const LoginView: React.FC = () => {
         {/* Notificación de Seguridad Automática */}
         <div className="bg-emerald-50/70 border-b border-emerald-100 px-4 py-2 flex items-center gap-2 text-[11px] text-emerald-900 font-medium">
           <Smartphone className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>La sesión se bloquea al salir de la pantalla por protección de caja e inventario.</span>
+          <span>Seguridad: María y Jonathan se bloquean al salir de pantalla. La Cajera permanece activa durante la jornada.</span>
         </div>
 
         {/* Selector Rápido de Usuario */}
