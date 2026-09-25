@@ -152,22 +152,35 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           <span>{time}</span>
         </div>
 
-        {/* Indicador de Conexión y Sincronización */}
+        {/* Indicador Vibrante de Estado En Vivo / Nube Conectada */}
         <div className="flex items-center shrink-0">
           {isSyncing ? (
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-[10px] sm:text-xs font-bold whitespace-nowrap">
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
-              <span className="hidden sm:inline">Sincronizando...</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-300 text-blue-900 text-[11px] font-black shadow-2xs whitespace-nowrap animate-pulse">
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+              </span>
+              <span className="hidden sm:inline">Guardando en Nube...</span>
+              <span className="sm:hidden">Guardando</span>
             </div>
           ) : !isOnline ? (
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-[10px] sm:text-xs font-bold whitespace-nowrap" title="Modo sin conexión">
-              <WifiOff className="w-3 h-3 text-amber-600 shrink-0" />
-              <span className="hidden sm:inline">Offline</span>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-[11px] font-black shadow-2xs whitespace-nowrap" title="Modo sin conexión. Guardando localmente.">
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+              </span>
+              <span>Offline</span>
             </div>
           ) : (
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] sm:text-xs font-semibold whitespace-nowrap" title="Nube sincronizada en tiempo real">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
-              <span className="hidden sm:inline">Sincronizado</span>
+            <div
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50/90 border border-emerald-300 text-emerald-950 text-[11px] font-black shadow-2xs whitespace-nowrap"
+              title="Sistema conectado en tiempo real con la Nube. Cambios guardados al instante."
+            >
+              <span className="relative flex h-2.5 w-2.5 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-80"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600 shadow-[0_0_8px_rgba(5,150,105,0.9)]"></span>
+              </span>
+              <span className="hidden sm:inline">Nube En Vivo</span>
+              <span className="sm:hidden">En Vivo</span>
             </div>
           )}
         </div>
