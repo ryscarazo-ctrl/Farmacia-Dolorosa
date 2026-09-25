@@ -55,6 +55,9 @@ export async function POST(request: Request) {
       if (body.settings) {
         cloudDatabase.settings = body.settings;
       }
+      if (Array.isArray(body.cashSessions)) {
+        cloudDatabase.cashSessions = body.cashSessions;
+      }
       cloudDatabase.lastUpdated = Date.now();
     }
     return NextResponse.json({

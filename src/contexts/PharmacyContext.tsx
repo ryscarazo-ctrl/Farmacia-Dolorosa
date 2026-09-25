@@ -380,6 +380,12 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           if (Array.isArray(json.data.movements)) {
             setMovements(json.data.movements);
           }
+          if (json.data.settings && typeof json.data.settings === 'object') {
+            setSettings(json.data.settings);
+          }
+          if (Array.isArray(json.data.cashSessions)) {
+            setCashSessions(json.data.cashSessions);
+          }
           setLastSyncTime(serverUpdated);
         }
       } catch (err) {
@@ -397,7 +403,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (document.visibilityState === 'visible') {
         pullFromCloud();
       }
-    }, 4000);
+    }, 1500);
 
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
@@ -432,6 +438,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           movements,
           alerts,
           settings,
+          cashSessions,
         };
         const res = await fetch('/api/sync', {
           method: 'POST',
@@ -447,7 +454,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       } catch (err) {
         // offline fallback
       }
-    }, 1000);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [products, batches, customers, sales, movements, alerts, settings]);
