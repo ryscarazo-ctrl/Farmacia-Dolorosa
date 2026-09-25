@@ -296,7 +296,112 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   useEffect(() => { saveStorage('transfers', transfers); }, [transfers]);
   useEffect(() => { saveStorage('alerts', alerts); }, [alerts]);
   useEffect(() => { saveStorage('auditLogs', auditLogs); }, [auditLogs]);
-  useEffect(() => { saveStorage('settings', settings); }, [settings]);
+  useEffect(() => { saveStorage('settings', settings); }, [settings]); 
+ 
+  // Sincronización Automática Multi-Dispositivo en Tiempo Real (Nube / Celular / Laptop)
+  const [lastSyncTime, setLastSyncTime] = useState<number>(0);
+  const isSyncingRef = React.useRef<boolean>(false);
+
+  // 1. Escuchar cambios de la nube periódicamente y al enfocar la pantalla
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const pullFromCloud = async () => {
+      if (isSyncingRef.current) return;
+      try {
+        const res = await fetch('/api/sync', { cache: 'no-store' });
+        if (!res.ok) return;
+        const json = await res.json();
+        if (json.success && json.data) {
+          const serverUpdated = json.lastUpdated || 0;
+          if (serverUpdated > lastSyncTime && lastSyncTime > 0) {
+            isSyncingRef.current = true;
+            if (Array.isArray(json.data.products) && json.data.products.length > 0) {
+              setProducts(json.data.products);
+            }
+            if (Array.isArray(json.data.batches)) {
+              setBatches(json.data.batches);
+            }
+            if (Array.isArray(json.data.customers)) {
+              setCustomers(json.data.customers);
+            }
+            if (Array.isArray(json.data.sales)) {
+              setSales(json.data.sales);
+            }
+            if (Array.isArray(json.data.movements)) {
+              setMovements(json.data.movements);
+            }
+            if (Array.isArray(json.data.alerts)) {
+              setAlerts(json.data.alerts);
+            }
+            setTimeout(() => {
+              isSyncingRef.current = false;
+            }, 500);
+          }
+          setLastSyncTime(serverUpdated);
+        }
+      } catch (err) {
+        // Modo offline
+      }
+    };
+
+    // Pull inicial
+    pullFromCloud();
+
+    // Polling cada 3 segundos
+    const syncInterval = setInterval(pullFromCloud, 3000);
+
+    // Pull al volver a la pestaña o desbloquear celular
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        pullFromCloud();
+      }
+    };
+    window.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('focus', pullFromCloud);
+
+    return () => {
+      clearInterval(syncInterval);
+      window.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('focus', pullFromCloud);
+    };
+  }, [lastSyncTime]);
+
+  // 2. Enviar cambios locales a la nube automáticamente cuando cambie inventario o ventas
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (isSyncingRef.current) return;
+
+    const timer = setTimeout(async () => {
+      try {
+        const payload = {
+          products,
+          batches,
+          customers,
+          sales,
+          movements,
+          alerts,
+          settings,
+        };
+        const res = await fetch('/api/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.lastUpdated) {
+            setLastSyncTime(json.lastUpdated);
+          }
+        }
+      } catch (err) {
+        // offline fallback
+      }
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, [products, batches, customers, sales, movements, alerts, settings]);
+
 
   const clearAllDemoData = () => {
     setProducts([]);
