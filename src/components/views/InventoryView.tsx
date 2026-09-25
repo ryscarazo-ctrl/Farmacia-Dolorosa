@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import {
   Package,
+  Eye,
   Trash2,
   PackagePlus,
   Search,
@@ -86,6 +87,23 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
       isControlled,
     });
     setModalOpen(false);
+  };
+
+  const handleEdit = (prod: Product) => {
+    setEditingProduct(prod);
+    setName(prod.name);
+    setSku(prod.sku);
+    setBarcode(prod.barcode);
+    setGenericName(prod.genericName || '');
+    setCategoryId(prod.categoryId);
+    setPresentation(prod.presentation);
+    setConcentration(prod.concentration || '');
+    setPurchasePrice(prod.purchasePrice.toString());
+    setSalePrice(prod.salePrice.toString());
+    setMinStock(prod.minStock.toString());
+    setRequiresPrescription(prod.requiresPrescription);
+    setIsControlled(prod.isControlled);
+    setModalOpen(true);
   };
 
   // Manejo de Importación de Excel / CSV
@@ -322,9 +340,99 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
       </div>
 
       {/* Tabla Profesional de Productos */}
-      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
+        {/* Vista Móvil: Tarjetas Táctiles Verticales */}
+        <div className="sm:hidden divide-y divide-slate-100 p-2 space-y-2.5">
+          {filtered.length === 0 ? (
+            <div className="p-8 text-center text-slate-400">
+              <FileSpreadsheet className="w-10 h-10 mx-auto text-slate-300 mb-2" />
+              <p className="font-bold text-slate-600 text-xs">No hay medicamentos que coincidan</p>
+            </div>
+          ) : (
+            filtered.map((prod) => {
+              const stock = getAvailableStock(prod.id);
+              const batches = getProductBatches(prod.id);
+              const isLow = stock <= prod.minStock;
+
+              return (
+                <div
+                  key={prod.id}
+                  className="p-3.5 bg-slate-50/70 hover:bg-emerald-50/40 rounded-xl border border-slate-100 space-y-2.5 transition-all"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="px-2 py-0.5 text-[9px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 rounded-full">
+                          {prod.categoryName || 'General'}
+                        </span>
+                        {prod.requiresPrescription && (
+                          <span className="px-1.5 py-0.5 text-[9px] font-bold bg-amber-100 text-amber-800 rounded border border-amber-200">
+                            Receta
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-sm text-slate-900 mt-1 leading-snug">{prod.name}</h3>
+                      {prod.genericName && (
+                        <p className="text-[11px] text-slate-500 italic mt-0.5">{prod.genericName}</p>
+                      )}
+                      <p className="text-[10px] text-slate-400 mt-0.5">{prod.presentation}</p>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <div className="text-sm font-black text-emerald-700 font-mono">
+                        {settings.currencySymbol || 'C$'} {prod.salePrice.toFixed(2)}
+                      </div>
+                      <span
+                        className={`inline-block mt-1 font-mono font-black text-[10px] px-2 py-0.5 rounded-full border ${
+                          stock === 0
+                            ? 'bg-red-50 text-red-700 border-red-200'
+                            : isLow
+                            ? 'bg-amber-50 text-amber-700 border-amber-200'
+                            : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                        }`}
+                      >
+                        {stock} disp.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-500">
+                    <span className="font-mono text-[10px] text-slate-400">
+                      SKU: {prod.sku} • {batches.length} lote(s)
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => openProductDetail(prod)}
+                        className="px-2.5 py-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg flex items-center gap-1 cursor-pointer"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Ficha / Lotes</span>
+                      </button>
+                      <button
+                        onClick={() => handleEdit(prod)}
+                        className="p-1.5 text-slate-500 hover:text-emerald-700 hover:bg-slate-100 rounded-lg cursor-pointer"
+                        title="Editar"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => setProductToDelete(prod)}
+                        className="p-1.5 text-slate-400 hover:text-red-700 hover:bg-red-50 rounded-lg cursor-pointer"
+                        title="Eliminar"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Vista Escritorio: Tabla Completa */}
+        <div className="hidden sm:block overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase text-[10px] tracking-wider font-bold">
                 <th className="p-3">Código / SKU</th>

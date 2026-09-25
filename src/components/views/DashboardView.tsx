@@ -225,9 +225,9 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
         </div>
 
         {/* Lotes Próximos a Vencer (FEFO Alerts) */}
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm">
+        <div className="bg-white border border-slate-200/80 rounded-3xl p-4 sm:p-5 shadow-xs">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <h2 className="font-bold text-xs uppercase tracking-wider text-slate-700 flex items-center gap-2">
+            <h2 className="font-extrabold text-xs uppercase tracking-wider text-slate-800 flex items-center gap-2">
               <CalendarClock className="w-4 h-4 text-emerald-600" />
               <span>Semáforo de Vencimientos FEFO</span>
             </h2>
@@ -235,12 +235,12 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
               onClick={() => onNavigate('expirations')}
               className="text-xs text-emerald-700 hover:text-emerald-900 flex items-center gap-1 font-bold"
             >
-              <span>Ver auditoría</span>
+              <span>Ver todo</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="divide-y divide-slate-100 mt-2">
+          <div className="space-y-2 mt-3">
             {batches.filter((b) => b.branchId === currentBranch.id).length === 0 ? (
               <div className="py-8 text-center text-slate-400 text-xs">
                 <CalendarClock className="w-8 h-8 mx-auto mb-2 text-slate-300 opacity-60" />
@@ -254,37 +254,62 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
                 .slice(0, 5)
                 .map((batch) => {
                   const prod = products.find((p) => p.id === batch.productId);
-                  const isExpired = new Date(batch.expirationDate) <= now;
-                  const isClose = new Date(batch.expirationDate) <= thirtyDaysFromNow;
+                  const expDate = new Date(batch.expirationDate);
+                  const daysRemaining = Math.ceil((expDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+                  const isCritical = daysRemaining <= 90;
+                  const isNear = daysRemaining > 90 && daysRemaining <= 365;
 
                   return (
-                    <div key={batch.id} className="py-2.5 flex items-center justify-between text-xs">
-                      <div>
-                        <div className="font-bold text-slate-900 truncate max-w-[200px]">
-                          {prod?.name || 'Medicamento'}
+                    <div
+                      key={batch.id}
+                      onClick={() => prod && openProductDetail(prod)}
+                      className={`p-3 rounded-2xl border transition-all cursor-pointer active:scale-98 ${
+                        isCritical
+                          ? 'bg-red-50/60 border-red-200 hover:bg-red-100/50'
+                          : isNear
+                          ? 'bg-amber-50/50 border-amber-200 hover:bg-amber-100/40'
+                          : 'bg-emerald-50/40 border-emerald-200 hover:bg-emerald-100/30'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug break-words">
+                            {prod?.name || 'Medicamento'}
+                          </h4>
+                          <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-500 font-mono">
+                            <span>Lote: {batch.batchNumber}</span>
+                            <span>•</span>
+                            <span className="font-bold text-slate-700">{batch.currentQuantity} unid.</span>
+                          </div>
                         </div>
-                        <div className="text-[10px] text-slate-500 font-mono">
-                          Lote: {batch.batchNumber} • Stock: {batch.currentQuantity}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span
-                          className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
-                            isExpired
-                              ? 'bg-red-50 text-red-700 border-red-200'
-                              : isClose
-                              ? 'bg-amber-50 text-amber-800 border-amber-200'
-                              : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                          }`}
-                        >
-                          {isExpired ? 'VENCIDO' : isClose ? 'CRÍTICO' : 'VÁLIDO'}
-                        </span>
-                        <div className="text-[9px] text-slate-400 mt-0.5">
-                          {new Date(batch.expirationDate).toLocaleDateString('es-SV', {
-                            day: '2-digit',
-                            month: 'short',
-                            year: 'numeric',
-                          })}
+
+                        <div className="text-right shrink-0">
+                          <span
+                            className={`inline-block text-[10px] font-black px-2.5 py-0.5 rounded-full border shadow-2xs ${
+                              isCritical
+                                ? 'bg-red-600 text-white border-red-700'
+                                : isNear
+                                ? 'bg-amber-500 text-white border-amber-600'
+                                : 'bg-emerald-600 text-white border-emerald-700'
+                            }`}
+                          >
+                            {daysRemaining <= 0
+                              ? 'VENCIDO'
+                              : daysRemaining <= 30
+                              ? `${daysRemaining} DÍAS`
+                              : daysRemaining <= 90
+                              ? `${daysRemaining} DÍAS (CRÍTICO)`
+                              : daysRemaining <= 365
+                              ? `${Math.round(daysRemaining / 30)} MESES`
+                              : `VIGENTE (${expDate.getFullYear()})`}
+                          </span>
+                          <div className="text-[10px] text-slate-500 font-medium mt-1">
+                            {expDate.toLocaleDateString('es-SV', {
+                              day: '2-digit',
+                              month: 'short',
+                              year: 'numeric',
+                            })}
+                          </div>
                         </div>
                       </div>
                     </div>
