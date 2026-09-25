@@ -378,17 +378,36 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           if (Array.isArray(json.data.customers)) {
             setCustomers(json.data.customers);
           }
-          if (Array.isArray(json.data.sales)) {
-            setSales(json.data.sales);
+          if (Array.isArray(json.data.sales) && json.data.sales.length > 0) {
+            setSales((prevSales) => {
+              const salesMap = new Map<string, Sale>();
+              prevSales.forEach((s) => { if (s && s.id) salesMap.set(s.id, s); });
+              json.data.sales.forEach((s: Sale) => { if (s && s.id) salesMap.set(s.id, s); });
+              return Array.from(salesMap.values()).sort(
+                (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+              );
+            });
           }
-          if (Array.isArray(json.data.movements)) {
-            setMovements(json.data.movements);
+          if (Array.isArray(json.data.movements) && json.data.movements.length > 0) {
+            setMovements((prevMovements) => {
+              const movMap = new Map<string, InventoryMovement>();
+              prevMovements.forEach((m) => { if (m && m.id) movMap.set(m.id, m); });
+              json.data.movements.forEach((m: InventoryMovement) => { if (m && m.id) movMap.set(m.id, m); });
+              return Array.from(movMap.values()).sort(
+                (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+              );
+            });
           }
           if (json.data.settings && typeof json.data.settings === 'object') {
             setSettings(json.data.settings);
           }
-          if (Array.isArray(json.data.cashSessions)) {
-            setCashSessions(json.data.cashSessions);
+          if (Array.isArray(json.data.cashSessions) && json.data.cashSessions.length > 0) {
+            setCashSessions((prevSessions) => {
+              const sessionMap = new Map<string, CashSession>();
+              prevSessions.forEach((cs) => { if (cs && cs.id) sessionMap.set(cs.id, cs); });
+              json.data.cashSessions.forEach((cs: CashSession) => { if (cs && cs.id) sessionMap.set(cs.id, cs); });
+              return Array.from(sessionMap.values());
+            });
           }
           setLastSyncTime(serverUpdated);
         }
@@ -1035,9 +1054,27 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       createdAt: new Date().toISOString(),
     };
 
+    const nextSales = [newSale, ...sales];
+    const nextMovements = [...newMovements, ...movements];
+
     setBatches(updatedBatches);
-    setSales((prev) => [newSale, ...prev]);
-    setMovements((prev) => [...newMovements, ...prev]);
+    setSales(nextSales);
+    setMovements(nextMovements);
+    saveStorage('sales', nextSales);
+    saveStorage('movements', nextMovements);
+
+    // Envío inmediato a la nube para Jonathan y María
+    if (typeof window !== 'undefined') {
+      fetch('/api/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sales: nextSales,
+          batches: updatedBatches,
+          movements: nextMovements,
+        }),
+      }).catch(() => {});
+    }
 
     // Actualizar caja si hay sesión abierta
     if (currentCashSession) {

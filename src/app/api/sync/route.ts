@@ -14,6 +14,7 @@ let cloudDatabase: any = {
   movements: [],
   alerts: [],
   settings: initialSettings,
+  cashSessions: [],
 };
 
 export async function GET() {
@@ -43,23 +44,54 @@ export async function POST(request: Request) {
       if (Array.isArray(body.customers)) {
         cloudDatabase.customers = body.customers;
       }
-      if (Array.isArray(body.sales)) {
-        cloudDatabase.sales = body.sales;
+
+      // Fusión acumulativa de ventas: NUNCA perder ni borrar ventas ya realizadas
+      if (Array.isArray(body.sales) && body.sales.length > 0) {
+        const salesMap = new Map((cloudDatabase.sales || []).map((s: any) => [s.id, s]));
+        body.sales.forEach((s: any) => {
+          if (s && s.id) {
+            salesMap.set(s.id, s);
+          }
+        });
+        cloudDatabase.sales = Array.from(salesMap.values()).sort(
+          (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       }
-      if (Array.isArray(body.movements)) {
-        cloudDatabase.movements = body.movements;
+
+      // Fusión acumulativa de movimientos Kardex
+      if (Array.isArray(body.movements) && body.movements.length > 0) {
+        const movMap = new Map((cloudDatabase.movements || []).map((m: any) => [m.id, m]));
+        body.movements.forEach((m: any) => {
+          if (m && m.id) {
+            movMap.set(m.id, m);
+          }
+        });
+        cloudDatabase.movements = Array.from(movMap.values()).sort(
+          (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       }
+
       if (Array.isArray(body.alerts)) {
         cloudDatabase.alerts = body.alerts;
       }
       if (body.settings) {
         cloudDatabase.settings = body.settings;
       }
-      if (Array.isArray(body.cashSessions)) {
-        cloudDatabase.cashSessions = body.cashSessions;
+
+      // Fusión de turnos de caja
+      if (Array.isArray(body.cashSessions) && body.cashSessions.length > 0) {
+        const sessionMap = new Map((cloudDatabase.cashSessions || []).map((cs: any) => [cs.id, cs]));
+        body.cashSessions.forEach((cs: any) => {
+          if (cs && cs.id) {
+            sessionMap.set(cs.id, cs);
+          }
+        });
+        cloudDatabase.cashSessions = Array.from(sessionMap.values());
       }
+
       cloudDatabase.lastUpdated = Date.now();
     }
+
     return NextResponse.json({
       success: true,
       data: cloudDatabase,

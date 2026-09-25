@@ -36,16 +36,24 @@ export const SalesHistoryView: React.FC<{
   const [selectedUser, setSelectedUser] = useState('ALL');
   const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
 
-  // Fecha de inicio de HOY
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  // Comprobación de fecha de hoy robusta
+  const isToday = (dateString?: string) => {
+    if (!dateString) return false;
+    const d = new Date(dateString);
+    const now = new Date();
+    return (
+      d.getFullYear() === now.getFullYear() &&
+      d.getMonth() === now.getMonth() &&
+      d.getDate() === now.getDate()
+    );
+  };
 
   // Filtrado según tab y filtros
   const baseSales = (sales || []).filter((s) => {
-    if (s.branchId !== currentBranch.id) return false;
+    const isBranchMatch = !s.branchId || s.branchId === currentBranch.id;
+    if (!isBranchMatch) return false;
     if (activeTab === 'today') {
-      const sDate = new Date(s.createdAt);
-      return sDate >= todayStart;
+      return isToday(s.createdAt);
     }
     return true;
   });
@@ -124,7 +132,7 @@ export const SalesHistoryView: React.FC<{
           <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
           <span>🔴 Ventas de Hoy (En Vivo - Sin Cierre de Caja)</span>
           <span className="px-1.5 py-0.2 rounded-full bg-emerald-800 text-[10px] text-white">
-            {sales.filter((s) => s.branchId === currentBranch.id && new Date(s.createdAt) >= todayStart).length}
+            {sales.filter((s) => s.branchId === currentBranch.id && isToday(s.createdAt)).length}
           </span>
         </button>
 

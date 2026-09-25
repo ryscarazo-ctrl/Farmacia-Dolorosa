@@ -40,12 +40,20 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
   const [selectedTicket, setSelectedTicket] = useState<Sale | null>(null);
 
   // Filtro de ventas de HOY (Tiempo Real sin necesidad de cierre)
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  const isToday = (dateString?: string) => {
+    if (!dateString) return false;
+    const d = new Date(dateString);
+    const now = new Date();
+    return (
+      d.getFullYear() === now.getFullYear() &&
+      d.getMonth() === now.getMonth() &&
+      d.getDate() === now.getDate()
+    );
+  };
 
   const todaySales = (sales || []).filter((s) => {
-    const sDate = new Date(s.createdAt);
-    return s.branchId === currentBranch.id && sDate >= todayStart;
+    const isBranchMatch = !s.branchId || s.branchId === currentBranch.id;
+    return isBranchMatch && isToday(s.createdAt);
   });
 
   const totalSalesAmount = todaySales.reduce((sum, s) => sum + (s.totalAmount || 0), 0);
