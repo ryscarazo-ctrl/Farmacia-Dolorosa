@@ -193,7 +193,7 @@ const PharmacyContext = createContext<PharmacyContextType | undefined>(undefined
 const loadStorage = <T,>(key: string, defaultValue: T): T => {
   if (typeof window === 'undefined') return defaultValue;
   try {
-    const cleanedKey = 'farmacia_inventory_real_v11';
+    const cleanedKey = 'farmacia_inventory_real_v12';
     if (!window.localStorage.getItem(cleanedKey)) {
       window.localStorage.removeItem('farmacia_v5_products');
       window.localStorage.removeItem('farmacia_v5_batches');
@@ -204,6 +204,7 @@ const loadStorage = <T,>(key: string, defaultValue: T): T => {
       window.localStorage.removeItem('farmacia_v5_purchases');
       window.localStorage.removeItem('farmacia_v5_returns');
       window.localStorage.removeItem('farmacia_v5_cart');
+      window.localStorage.removeItem('farmacia_v5_settings');
       window.localStorage.setItem(cleanedKey, 'true');
     }
 
@@ -908,15 +909,15 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
     const totalAfterDiscount = cart.reduce((sum, item) => sum + item.total, 0);
     const discount = subtotal - totalAfterDiscount;
-    const currentTaxRate = typeof settings?.taxRate === 'number' ? settings.taxRate : 0;
-    const tax = totalAfterDiscount * (currentTaxRate / 100);
-    const total = totalAfterDiscount + tax;
+    // Tasa de IVA 0% fija para medicamentos exentos
+    const tax = 0;
+    const total = totalAfterDiscount;
     const totalCost = cart.reduce((sum, item) => {
       const cost = item.allocatedBatch ? item.allocatedBatch.unitCost : item.product.purchasePrice;
       return sum + cost * item.quantity;
     }, 0);
 
-    return { subtotal, discount, tax, total, totalCost };
+    return { subtotal, discount, tax: 0, total, totalCost };
   };
 
   // Procesar Venta con asignación FEFO y Kardex

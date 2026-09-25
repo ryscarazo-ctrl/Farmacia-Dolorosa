@@ -3,7 +3,7 @@ import { initialProducts, initialBatches, initialSettings } from '../../../data/
 
 // Base de datos global en memoria de servidor (Nube Vercel)
 let cloudDatabase: any = {
-  version: '11.0',
+  version: '12.0',
   lastUpdated: Date.now(),
   products: initialProducts,
   batches: initialBatches,
