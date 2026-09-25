@@ -90,7 +90,7 @@ export const CashView: React.FC = () => {
               </button>
               <button
                 onClick={() => {
-                  setActualBalance(currentCashSession.expectedBalance.toFixed(2));
+                  setActualBalance((currentCashSession.expectedBalance || 0).toFixed(2));
                   setCloseModal(true);
                 }}
                 className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl font-bold text-xs flex items-center gap-2 shadow-md shadow-red-200 cursor-pointer"
@@ -119,7 +119,7 @@ export const CashView: React.FC = () => {
             <div className="text-right">
               <span className="text-xs text-slate-500 font-semibold">Saldo Esperado en Caja</span>
               <div className="text-3xl font-black text-emerald-700 font-mono">
-                {settings.currencySymbol} {currentCashSession.expectedBalance.toFixed(2)}
+                {settings.currencySymbol} {(currentCashSession.expectedBalance || 0).toFixed(2)}
               </div>
             </div>
           </div>
@@ -215,9 +215,9 @@ export const CashView: React.FC = () => {
                   <td className="p-3 font-bold text-slate-900">{cs.userName}</td>
                   <td className="p-3 text-right font-mono text-slate-600">{settings.currencySymbol} {cs.openingBalance.toFixed(2)}</td>
                   <td className="p-3 text-right font-mono text-emerald-700 font-bold">{settings.currencySymbol} {cs.cashSales.toFixed(2)}</td>
-                  <td className="p-3 text-right font-mono text-slate-800 font-medium">{settings.currencySymbol} {cs.expectedBalance.toFixed(2)}</td>
+                  <td className="p-3 text-right font-mono text-slate-800 font-medium">{settings.currencySymbol} {(cs.expectedBalance || 0).toFixed(2)}</td>
                   <td className="p-3 text-right font-mono text-slate-900 font-bold">
-                    {cs.actualBalance !== undefined ? `${settings.currencySymbol} ${cs.actualBalance.toFixed(2)}` : '-'}
+                    {cs.actualBalance !== undefined ? `${settings.currencySymbol} ${(cs.actualBalance || 0).toFixed(2)}` : '-'}
                   </td>
                   <td className="p-3 text-center font-mono font-bold">
                     {cs.difference !== undefined ? (
@@ -303,7 +303,7 @@ export const CashView: React.FC = () => {
               </div>
               <div className="flex justify-between font-black text-slate-900 pt-1 border-t border-slate-200">
                 <span>Saldo Esperado en Gaveta:</span>
-                <span className="font-mono text-emerald-700">{settings.currencySymbol} {currentCashSession.expectedBalance.toFixed(2)}</span>
+                <span className="font-mono text-emerald-700">{settings.currencySymbol} {(currentCashSession.expectedBalance || 0).toFixed(2)}</span>
               </div>
             </div>
 

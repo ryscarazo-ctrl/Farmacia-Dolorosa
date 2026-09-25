@@ -70,7 +70,7 @@ function PublicSupplierPortalContent() {
     } else if (supplierOrders.length > 0 && !activeOrder) {
       // Si no viene código, pre-cargar la primera orden activa para demostración inmediata
       setActiveOrder(supplierOrders[0]);
-      setInputCode(supplierOrders[0].accessCode);
+      if (supplierOrders && supplierOrders.length > 0 && supplierOrders[0]?.accessCode) { setInputCode(supplierOrders[0].accessCode); }
     }
   }, [urlCode, supplierOrders]);
 

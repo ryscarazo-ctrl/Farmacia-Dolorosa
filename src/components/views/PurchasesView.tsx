@@ -334,7 +334,7 @@ export const PurchasesView: React.FC<{
                           </span>
                         </td>
                         <td className="p-3.5 text-right font-mono font-black text-slate-900 text-sm">
-                          {settings.currencySymbol} {pur.totalAmount.toFixed(2)}
+                          {settings.currencySymbol} {(pur.totalAmount || 0).toFixed(2)}
                         </td>
                         <td className="p-3.5 text-center">
                           <button
@@ -588,7 +588,7 @@ export const PurchasesView: React.FC<{
             <div className="border-t border-dashed border-slate-300 pt-3 flex justify-between items-center text-sm font-bold">
               <span>TOTAL COMPRA:</span>
               <span className="text-xl font-mono font-black text-emerald-700">
-                {settings.currencySymbol} {selectedInvoice.totalAmount.toFixed(2)}
+                {settings.currencySymbol} {(selectedInvoice.totalAmount || 0).toFixed(2)}
               </span>
             </div>
 

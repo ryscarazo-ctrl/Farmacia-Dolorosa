@@ -196,7 +196,7 @@ export const SalesHistoryView: React.FC<{
                     </td>
 
                     <td className="p-3.5 text-right font-mono font-black text-slate-900 text-sm">
-                      {settings.currencySymbol} {sale.totalAmount.toFixed(2)}
+                      {settings.currencySymbol} {(sale.totalAmount || 0).toFixed(2)}
                     </td>
 
                     <td className="p-3.5 text-center">
@@ -278,7 +278,7 @@ export const SalesHistoryView: React.FC<{
                   <div>
                     <div className="font-bold text-slate-800">{it.productName}</div>
                     <div className="text-[10px] text-slate-500">
-                      {it.quantity} x {settings.currencySymbol} {it.unitPrice.toFixed(2)} • Lote: {it.batchNumber}
+                      {it.quantity} x {settings.currencySymbol} {(it.unitPrice || 0).toFixed(2)} • Lote: {it.batchNumber}
                     </div>
                   </div>
                   <div className="font-bold text-slate-900">
@@ -300,7 +300,7 @@ export const SalesHistoryView: React.FC<{
               </div>
               <div className="flex justify-between text-base font-bold text-slate-900 pt-1 border-t border-slate-100">
                 <span>TOTAL A PAGAR:</span>
-                <span className="text-emerald-700">{settings.currencySymbol} {selectedSale.totalAmount.toFixed(2)}</span>
+                <span className="text-emerald-700">{settings.currencySymbol} {(selectedSale.totalAmount || 0).toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-[11px] text-slate-500 pt-1">
                 <span>Efectivo recibido:</span>

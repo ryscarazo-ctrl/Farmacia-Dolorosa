@@ -224,13 +224,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               </div>
               <div className="text-sm sm:text-base font-black mt-0.5">
                 {product.salePrice > 0 ? (
-                  `${currency} ${product.salePrice.toFixed(2)}`
+                  `${currency} ${(product.salePrice || 0).toFixed(2)}`
                 ) : (
                   <span className="text-amber-200">⚠️ Falta Precio</span>
                 )}
               </div>
               <div className="text-[10px] font-medium text-white/80">
-                Costo: {currency} {product.purchasePrice.toFixed(2)}
+                Costo: {currency} {(product.purchasePrice || 0).toFixed(2)}
               </div>
             </div>
           </div>
@@ -335,7 +335,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                         <div className="text-xs font-bold text-slate-900">1. Precio de Venta al Público (PVP)</div>
                         <div className="text-[11px] text-slate-500">
                           {product.salePrice > 0
-                            ? `Asignado correctamente: ${currency} ${product.salePrice.toFixed(2)}`
+                            ? `Asignado correctamente: ${currency} ${(product.salePrice || 0).toFixed(2)}`
                             : 'Falta asignar precio de venta (actualmente C$ 0.00)'}
                         </div>
                       </div>

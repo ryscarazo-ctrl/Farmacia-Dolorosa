@@ -587,7 +587,7 @@ export const ProductEntryView: React.FC<ProductEntryViewProps> = ({ onNavigateTo
                 <p className="text-[10px] text-slate-500 truncate">{p.categoryName}</p>
               </div>
               <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-slate-200">
-                <span className="font-black text-xs text-emerald-700 font-mono">{settings.currencySymbol} {p.salePrice.toFixed(2)}</span>
+                <span className="font-black text-xs text-emerald-700 font-mono">{settings.currencySymbol} {(p.salePrice || 0).toFixed(2)}</span>
                 <span className="text-[10px] text-slate-400">Min: {p.minStock}</span>
               </div>
             </div>

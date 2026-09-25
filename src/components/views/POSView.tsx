@@ -85,7 +85,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
       } else if (filteredProducts.length === 1) {
         const result = addToCart(filteredProducts[0]);
         if (result.success) {
-          showToast(`+1 ${filteredProducts[0].name}`);
+          showToast(`+1 ${filteredProducts[0]?.name || "Producto"}`);
           setSearchQuery('');
         } else {
           showToast(result.message, 'error');
@@ -293,7 +293,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                       <div className="flex items-baseline justify-between">
                         {product.salePrice > 0 ? (
                           <span className="text-sm font-black text-slate-900 font-mono">
-                            {settings.currencySymbol} {product.salePrice.toFixed(2)}
+                            {settings.currencySymbol} {(product.salePrice || 0).toFixed(2)}
                           </span>
                         ) : (
                           <span className="text-[11px] font-black text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded border border-amber-300">
@@ -423,7 +423,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                       {settings.currencySymbol} {item.total.toFixed(2)}
                     </div>
                     <div className="text-[10px] text-slate-400 font-mono">
-                      {settings.currencySymbol} {item.unitPrice.toFixed(2)} c/u
+                      {settings.currencySymbol} {(item.unitPrice || 0).toFixed(2)} c/u
                     </div>
                   </div>
                 </div>
@@ -621,7 +621,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                     <span>{settings.currencySymbol} {it.total.toFixed(2)}</span>
                   </div>
                   <div className="text-[10px] text-gray-600 flex justify-between">
-                    <span>{it.quantity} x {settings.currencySymbol} {it.unitPrice.toFixed(2)} (Lote: {it.batchNumber})</span>
+                    <span>{it.quantity} x {settings.currencySymbol} {(it.unitPrice || 0).toFixed(2)} (Lote: {it.batchNumber})</span>
                     <span>Vence: {it.expirationDate}</span>
                   </div>
                 </div>
@@ -636,7 +636,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
               </div>
               <div className="flex justify-between font-black text-sm text-emerald-900">
                 <span>TOTAL A PAGAR:</span>
-                <span>{settings.currencySymbol} {lastSale.totalAmount.toFixed(2)}</span>
+                <span>{settings.currencySymbol} {(lastSale.totalAmount || 0).toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-[11px]">
                 <span>FORMA DE PAGO:</span>

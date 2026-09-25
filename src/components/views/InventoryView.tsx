@@ -412,7 +412,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
 
                     <div className="text-right shrink-0">
                       <div className="text-sm font-black text-emerald-700 font-mono">
-                        {settings.currencySymbol || 'C$'} {prod.salePrice.toFixed(2)}
+                        {settings.currencySymbol || 'C$'} {(prod.salePrice || 0).toFixed(2)}
                       </div>
                       <span
                         className={`inline-block mt-1 font-mono font-black text-[10px] px-2 py-0.5 rounded-full border ${
@@ -524,11 +524,11 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
                       </td>
 
                       <td className="p-3 text-right font-mono text-slate-500 font-medium">
-                        {settings.currencySymbol} {prod.purchasePrice.toFixed(2)}
+                        {settings.currencySymbol} {(prod.purchasePrice || 0).toFixed(2)}
                       </td>
 
                       <td className="p-3 text-right font-mono font-black text-emerald-700 text-sm">
-                        {settings.currencySymbol} {prod.salePrice.toFixed(2)}
+                        {settings.currencySymbol} {(prod.salePrice || 0).toFixed(2)}
                       </td>
 
                       <td className="p-3 text-center">

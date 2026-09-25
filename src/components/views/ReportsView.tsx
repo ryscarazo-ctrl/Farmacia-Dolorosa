@@ -104,9 +104,9 @@ export const ReportsView: React.FC = () => {
                       {new Date(sale.createdAt).toLocaleString('es-SV')}
                     </td>
                     <td className="p-3 text-slate-700 font-medium">{sale.customerName}</td>
-                    <td className="p-3 text-right font-mono font-bold text-slate-900">{settings.currencySymbol} {sale.totalAmount.toFixed(2)}</td>
+                    <td className="p-3 text-right font-mono font-bold text-slate-900">{settings.currencySymbol} {(sale.totalAmount || 0).toFixed(2)}</td>
                     <td className="p-3 text-right font-mono text-slate-500">{settings.currencySymbol} {sale.costAmount.toFixed(2)}</td>
-                    <td className="p-3 text-right font-mono font-black text-emerald-700">{settings.currencySymbol} {sale.profitAmount.toFixed(2)}</td>
+                    <td className="p-3 text-right font-mono font-black text-emerald-700">{settings.currencySymbol} {(sale.profitAmount || 0).toFixed(2)}</td>
                     <td className="p-3 text-center font-mono font-bold text-emerald-800">{margin}%</td>
                   </tr>
                 );

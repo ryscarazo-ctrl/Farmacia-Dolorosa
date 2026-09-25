@@ -299,7 +299,7 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
                   </div>
                   <div className="text-right">
                     <div className="font-black text-emerald-700 font-mono text-sm">
-                      {settings.currencySymbol} {sale.totalAmount.toFixed(2)}
+                      {settings.currencySymbol} {(sale.totalAmount || 0).toFixed(2)}
                     </div>
                     <div className="text-[10px] text-slate-400 uppercase font-semibold">{sale.paymentMethod}</div>
                   </div>

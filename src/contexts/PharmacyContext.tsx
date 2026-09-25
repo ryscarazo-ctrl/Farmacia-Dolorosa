@@ -1541,7 +1541,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       'Caja',
       'CashSession',
       currentCashSession.id,
-      `Cierre de caja. Esperado: $${currentCashSession.expectedBalance.toFixed(2)}, Contado: $${actualBalance.toFixed(2)}, Dif: $${diff.toFixed(2)}`
+      `Cierre de caja. Esperado: $${(currentCashSession.expectedBalance || 0).toFixed(2)}, Contado: $${actualBalance.toFixed(2)}, Dif: $${diff.toFixed(2)}`
     );
   };
 
@@ -1651,7 +1651,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       'Compras',
       'PurchaseInvoice',
       newPur.id,
-      `Factura compra ${newPur.invoiceNumber} registrada a ${newPur.supplierName} por $${newPur.totalAmount.toFixed(2)}`
+      `Factura compra ${newPur.invoiceNumber} registrada a ${newPur.supplierName} por $${(newPur.totalAmount || 0).toFixed(2)}`
     );
   };
 

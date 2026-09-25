@@ -312,7 +312,7 @@ export const ReturnsView: React.FC<{ onNavigateToSales?: () => void }> = () => {
                       <div className="text-right">
                         <div className="text-[10px] uppercase font-bold text-slate-400">Precio Unitario</div>
                         <div className="text-lg font-mono font-black text-emerald-800">
-                          {settings.currencySymbol} {detectedProduct.salePrice.toFixed(2)}
+                          {settings.currencySymbol} {(detectedProduct.salePrice || 0).toFixed(2)}
                         </div>
                       </div>
                     </div>

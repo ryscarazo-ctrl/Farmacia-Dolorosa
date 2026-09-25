@@ -357,7 +357,7 @@ export const InventoryValuationView: React.FC = () => {
                     </span>
                   </td>
                   <td className="py-3 px-3 text-right font-mono text-slate-600">
-                    {settings.currencySymbol} {batch.unitCost.toFixed(2)}
+                    {settings.currencySymbol} {(batch.unitCost || 0).toFixed(2)}
                   </td>
                   <td className="py-3 px-3 text-right font-mono font-black text-slate-900">
                     {settings.currencySymbol} {batch.totalCostValue.toFixed(2)}
