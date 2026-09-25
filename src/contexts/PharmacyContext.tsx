@@ -246,7 +246,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return loaded;
   });
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => loadStorage('auth_logged_in', false));
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => loadStorage('auth_logged_in', true));
   const [selectedProductDetail, setSelectedProductDetail] = useState<Product | null>(null);
 
   const openProductDetail = (productOrIdOrName: Product | string) => {
