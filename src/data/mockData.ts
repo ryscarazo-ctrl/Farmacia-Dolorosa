@@ -4076,7 +4076,7 @@ export const initialSettings: Settings = {
   address: 'Costado Norte Parque 19 de Julio, Managua, Nicaragua',
   primaryCurrency: 'NIO',
   currencySymbol: 'C$',
-  taxRate: 15,
+  taxRate: 0,
   invoicePrefix: 'FAC-01-',
   ticketFooter: '¡Gracias por confiar en Farmacia Espíritu Santo! Que Dios bendiga su salud.',
   expiringAlertDays1: 90,

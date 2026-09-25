@@ -264,6 +264,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(() => loadStorage('auditLogs', initialAuditLogs));
   const [settings, setSettings] = useState<Settings>(() => {
     const loaded = loadStorage('settings', initialSettings);
+    if (loaded && (loaded.taxRate === undefined || loaded.taxRate === 15)) { loaded.taxRate = 0; }
     if (!loaded.logoUrl) {
       loaded.logoUrl = '/logo.jpg';
     }
@@ -898,15 +899,17 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const getCartTotals = () => {
     const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
-    const total = cart.reduce((sum, item) => sum + item.total, 0);
-    const discount = subtotal - total;
-    const tax = total * (settings.taxRate / 100);
+    const totalAfterDiscount = cart.reduce((sum, item) => sum + item.total, 0);
+    const discount = subtotal - totalAfterDiscount;
+    const currentTaxRate = typeof settings?.taxRate === 'number' ? settings.taxRate : 0;
+    const tax = totalAfterDiscount * (currentTaxRate / 100);
+    const total = totalAfterDiscount + tax;
     const totalCost = cart.reduce((sum, item) => {
       const cost = item.allocatedBatch ? item.allocatedBatch.unitCost : item.product.purchasePrice;
       return sum + cost * item.quantity;
     }, 0);
 
-    return { subtotal, discount, tax, total: total + tax, totalCost };
+    return { subtotal, discount, tax, total, totalCost };
   };
 
   // Procesar Venta con asignación FEFO y Kardex
