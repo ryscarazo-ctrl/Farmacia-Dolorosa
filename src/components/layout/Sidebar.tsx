@@ -3,6 +3,7 @@
 import React from 'react';
 import {
   LayoutDashboard,
+  Wrench,
   ShoppingCart,
   Receipt,
   RotateCcw,
@@ -45,6 +46,7 @@ export type NavSection =
   | 'counts'
   | 'adjustments'
   | 'transfers'
+  | 'inventory-rectifier'
   | 'purchases'
   | 'suppliers'
   | 'supplier-portal'
@@ -106,6 +108,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       category: 'INVENTARIO & LOTES',
       items: [
+        { id: 'inventory-rectifier', label: '🔧 Rectificador Excel', icon: Wrench },
         { id: 'new-product', label: '+ Ingresar Medicamento', icon: PackagePlus },
         { id: 'products', label: 'Catálogo de Productos', icon: Package },
         { id: 'batches', label: 'Control de Lotes (FEFO)', icon: Layers },

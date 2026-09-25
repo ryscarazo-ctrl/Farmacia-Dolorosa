@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import {
   Package,
+  Wrench,
   Eye,
   Trash2,
   PackagePlus,
@@ -25,9 +26,10 @@ import { Product } from '../../types/pharmacy';
 
 interface InventoryViewProps {
   onNavigateToEntry?: () => void;
+  onNavigateToRectifier?: () => void;
 }
 
-export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry }) => {
+export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry, onNavigateToRectifier }) => {
   const {
     openProductDetail,
     products,

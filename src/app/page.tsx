@@ -7,6 +7,7 @@ import { BottomNavBar } from '../components/layout/BottomNavBar';
 import { DashboardView } from '../components/views/DashboardView';
 import { POSView } from '../components/views/POSView';
 import { InventoryView } from '../components/views/InventoryView';
+import { InventoryRectifierView } from '../components/views/InventoryRectifierView';
 import { BatchesView } from '../components/views/BatchesView';
 import { MovementsView } from '../components/views/MovementsView';
 import { CashView } from '../components/views/CashView';
@@ -53,7 +54,9 @@ export default function Home() {
       case 'new-product':
         return <ProductEntryView onNavigateToCatalog={() => navigateTo('products')} />;
       case 'products':
-        return <InventoryView onNavigateToEntry={() => navigateTo('new-product')} />;
+        return <InventoryView onNavigateToEntry={() => navigateTo('new-product')} onNavigateToRectifier={() => navigateTo('inventory-rectifier')} />;
+      case 'inventory-rectifier':
+        return <InventoryRectifierView onNavigateToCatalog={() => navigateTo('products')} />;
       case 'batches':
         return <BatchesView filterOnlyExpirations={false} />;
       case 'expirations':
