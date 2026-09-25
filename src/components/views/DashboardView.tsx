@@ -20,6 +20,7 @@ import {
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
 export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ onNavigate }) => {
+  const now = new Date();
   const {
     openProductDetail,
     currentBranch,
@@ -50,7 +51,7 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
     return totalStock <= p.minStock;
   }).length;
 
-  const now = new Date();
+  
   const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
   const expiringSoonCount = batches.filter((b) => {
     if (b.branchId !== currentBranch.id || b.status !== 'Available') return false;
