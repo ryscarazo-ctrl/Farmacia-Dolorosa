@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -101,40 +101,40 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     }
   };
 
-  // ── Sucursal: nombre completo en desktop, nombre sin "Sucursal " en móvil
+  // â”€â”€ Sucursal: nombre completo en desktop, nombre sin "Sucursal " en mÃ³vil
   const branchLabel = currentBranch.name.replace(/^[Ss]ucursal\s+/i, '');
 
   return (
     <>
-      {/* ═══════════════════════ TOP NAVBAR ═══════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• TOP NAVBAR â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       <header className="h-12 lg:h-14 bg-white border-b border-emerald-100 flex items-center z-30 shrink-0 select-none shadow-xs w-full relative">
 
-        {/* ──────────── IZQUIERDA ──────────── */}
+        {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ IZQUIERDA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div className="flex items-center flex-1 min-w-0 h-full px-2 lg:px-4 gap-1.5 lg:gap-2">
 
-          {/* Hamburger – solo en dispositivos sin sidebar fijo */}
+          {/* Hamburger â€“ solo en dispositivos sin sidebar fijo */}
           <button
             type="button"
             onClick={onToggleMobileMenu}
             className="md:hidden p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 transition-all active:scale-95 shrink-0 cursor-pointer"
-            title="Menú"
+            title="MenÃº"
           >
             <Menu className="w-4 h-4" />
           </button>
 
-          {/* ── Selector de Sucursal ── */}
+          {/* â”€â”€ Selector de Sucursal â”€â”€ */}
           <div className="relative shrink-0">
             <button
               onClick={() => setShowBranchMenu(!showBranchMenu)}
-              className="flex items-center gap-1 px-2 py-1 bg-emerald-50/90 hover:bg-emerald-100 text-emerald-900 border border-emerald-300/70 rounded-lg font-bold transition-all shadow-2xs cursor-pointer active:scale-98"
+              className="flex items-center gap-1 px-1.5 py-0.5 bg-emerald-50/90 hover:bg-emerald-100 text-emerald-900 border border-emerald-300/70 rounded-md font-bold transition-all shadow-2xs cursor-pointer active:scale-98"
               title="Cambiar Sucursal"
-              style={{ fontSize: '11px' }}
+              style={{ fontSize: '10px' }}
             >
-              <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
+              <MapPin className="w-2.5 h-2.5 text-emerald-600 shrink-0" />
               {/* Nombre corto en < lg, completo en lg+ */}
-              <span className="truncate max-w-[120px] lg:hidden">{branchLabel}</span>
-              <span className="truncate max-w-[200px] hidden lg:block">{currentBranch.name}</span>
-              <ChevronDown className="w-2.5 h-2.5 text-emerald-500 shrink-0 ml-0.5" />
+              <span className="truncate max-w-[90px] lg:hidden">{branchLabel}</span>
+              <span className="truncate max-w-[160px] hidden lg:block">{currentBranch.name}</span>
+              <ChevronDown className="w-2 h-2 text-emerald-500 shrink-0 ml-0.5" />
             </button>
 
             {showBranchMenu && (
@@ -161,13 +161,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             )}
           </div>
 
-          {/* Reloj — solo en pantallas >= 1024px (lg) */}
+          {/* Reloj â€” solo en pantallas >= 1024px (lg) */}
           <div className="hidden lg:flex items-center gap-1 px-2 py-1 bg-emerald-50/70 border border-emerald-200/80 rounded-lg text-[11px] font-bold text-emerald-900 shrink-0">
             <Clock className="w-3 h-3 text-emerald-600 shrink-0" />
             <span className="font-mono">{time}</span>
           </div>
 
-          {/* Indicador sync — solo en pantallas >= 1024px */}
+          {/* Indicador sync â€” solo en pantallas >= 1024px */}
           <div className={`hidden lg:flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[11px] font-bold shrink-0 transition-colors ${
             !isOnline
               ? 'bg-red-50 text-red-700 border-red-200'
@@ -176,7 +176,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               : 'bg-emerald-50/70 text-emerald-900 border-emerald-200/80'
           }`}>
             {!isOnline ? (
-              <><WifiOff className="w-3 h-3 shrink-0" /><span>Sin conexión</span></>
+              <><WifiOff className="w-3 h-3 shrink-0" /><span>Sin conexiÃ³n</span></>
             ) : isSyncing ? (
               <><span className="w-2 h-2 rounded-full bg-amber-500 animate-ping shrink-0" /><span>Sincronizando</span></>
             ) : (
@@ -184,16 +184,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             )}
           </div>
 
-          {/* En móvil/tablet: solo el punto de estado sin texto ni contenedor */}
+          {/* En mÃ³vil/tablet: solo el punto de estado sin texto ni contenedor */}
           <span className={`lg:hidden w-2 h-2 rounded-full shrink-0 ${
             !isOnline ? 'bg-red-500' : isSyncing ? 'bg-amber-500 animate-ping' : 'bg-emerald-500 animate-pulse'
-          }`} title={isOnline ? 'Conectado' : 'Sin conexión'} />
+          }`} title={isOnline ? 'Conectado' : 'Sin conexiÃ³n'} />
         </div>
 
-        {/* ──────────── DERECHA ──────────── */}
+        {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ DERECHA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div className="flex items-center h-full px-2 lg:px-4 gap-1 lg:gap-1.5 shrink-0">
 
-          {/* Manual — siempre solo icono en < xl */}
+          {/* Manual â€” siempre solo icono en < xl */}
           {onNavigateToManual && (
             <button
               onClick={onNavigateToManual}
@@ -204,7 +204,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             </button>
           )}
 
-          {/* Caja — ícono + etiqueta corta */}
+          {/* Caja â€” Ã­cono + etiqueta corta */}
           <button
             onClick={onNavigateToCash}
             className={`flex items-center gap-1 px-2 py-1 rounded-lg border font-black transition-all shadow-2xs cursor-pointer shrink-0 ${
@@ -213,7 +213,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
             }`}
             title={currentCashSession ? 'Caja Abierta' : 'Caja Cerrada'}
-            style={{ fontSize: '11px' }}
+            style={{ fontSize: '10px' }}
           >
             <Vault className={`w-3.5 h-3.5 shrink-0 ${currentCashSession ? 'text-emerald-200' : 'text-amber-600'}`} />
             {/* Texto siempre visible pero compacto */}
@@ -240,7 +240,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           {/* Avatar */}
           <div
             className="w-7 h-7 rounded-full bg-emerald-700 text-white flex items-center justify-center text-xs font-black shadow-xs shrink-0 cursor-default"
-            title={`${currentUser?.firstName} ${currentUser?.lastName} — ${currentUser?.role}`}
+            title={`${currentUser?.firstName} ${currentUser?.lastName} â€” ${currentUser?.role}`}
           >
             {currentUser?.firstName?.charAt(0) || 'U'}
           </div>
@@ -249,7 +249,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           <button
             type="button"
             onClick={logout}
-            title="Cerrar Sesión"
+            title="Cerrar SesiÃ³n"
             className="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 hover:border-red-600 transition-all cursor-pointer shadow-2xs active:scale-95 shrink-0"
           >
             <LogOut className="w-3.5 h-3.5 shrink-0" />
@@ -257,15 +257,15 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </div>
       </header>
 
-      {/* ═══════════════════════ MODAL ALERTAS ═══════════════════════ */}
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• MODAL ALERTAS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
       {showAlerts && (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-150">
           <div className="absolute inset-0" onClick={() => setShowAlerts(false)} />
 
-          {/* Bottom-sheet en móvil, modal centrado en sm+ */}
+          {/* Bottom-sheet en mÃ³vil, modal centrado en sm+ */}
           <div className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] sm:max-h-[82vh] z-10 animate-in slide-in-from-bottom sm:zoom-in-95 duration-200">
 
-            {/* Handle en móvil */}
+            {/* Handle en mÃ³vil */}
             <div className="sm:hidden flex justify-center pt-2.5 pb-1 shrink-0">
               <div className="w-10 h-1 rounded-full bg-slate-300" />
             </div>
@@ -301,7 +301,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               {alerts.length === 0 ? (
                 <div className="text-center py-10">
                   <CheckCircle2 className="w-12 h-12 mx-auto text-emerald-500 mb-2 opacity-80" />
-                  <p className="font-black text-slate-800">Todo al día</p>
+                  <p className="font-black text-slate-800">Todo al dÃ­a</p>
                   <p className="text-xs text-slate-500 mt-1">Sin alertas pendientes.</p>
                 </div>
               ) : (
@@ -348,7 +348,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                         className="flex-1 py-2.5 px-3 bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-800 hover:to-teal-900 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-98"
                       >
                         <Wrench className="w-3.5 h-3.5 text-emerald-200" />
-                        <span>🛠️ Rectificar Error</span>
+                        <span>ðŸ› ï¸ Rectificar Error</span>
                         <ArrowUpRight className="w-3.5 h-3.5 text-emerald-300" />
                       </button>
                       <button
@@ -379,3 +379,4 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </>
   );
 };
+
