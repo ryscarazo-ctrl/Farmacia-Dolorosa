@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
@@ -193,8 +193,35 @@ const PharmacyContext = createContext<PharmacyContextType | undefined>(undefined
 const loadStorage = <T,>(key: string, defaultValue: T): T => {
   if (typeof window === 'undefined') return defaultValue;
   try {
+    const cleanedKey = 'farmacia_inventory_clean_v10';
+    if (!window.localStorage.getItem(cleanedKey)) {
+      window.localStorage.removeItem('farmacia_v5_products');
+      window.localStorage.removeItem('farmacia_v5_batches');
+      window.localStorage.removeItem('farmacia_v5_alerts');
+      window.localStorage.removeItem('farmacia_v5_movements');
+      window.localStorage.removeItem('farmacia_v5_transfers');
+      window.localStorage.removeItem('farmacia_v5_sales');
+      window.localStorage.removeItem('farmacia_v5_purchases');
+      window.localStorage.removeItem('farmacia_v5_returns');
+      window.localStorage.removeItem('farmacia_v5_cart');
+      window.localStorage.setItem(cleanedKey, 'true');
+    }
+
     const item = window.localStorage.getItem(`farmacia_v5_${key}`);
-    return item !== null ? JSON.parse(item) : defaultValue;
+    if (item === null) return defaultValue;
+    const parsed = JSON.parse(item);
+
+    if (key === 'products' && Array.isArray(parsed)) {
+      return parsed.filter((p: any) => !p?.id?.startsWith('prod-0')) as unknown as T;
+    }
+    if (key === 'batches' && Array.isArray(parsed)) {
+      return parsed.filter((b: any) => !b?.id?.startsWith('bat-0')) as unknown as T;
+    }
+    if (key === 'alerts' && Array.isArray(parsed)) {
+      return parsed.filter((a: any) => !a?.id?.startsWith('alt-req-')) as unknown as T;
+    }
+
+    return parsed;
   } catch {
     return defaultValue;
   }
@@ -334,14 +361,14 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (json.success && json.data) {
           const serverUpdated = json.lastUpdated || 0;
           
-          if (Array.isArray(json.data.products) && json.data.products.length > 0) {
-            setProducts(json.data.products);
+          if (Array.isArray(json.data.products)) {
+            setProducts(json.data.products.filter((p: any) => !p?.id?.startsWith('prod-0')));
           }
-          if (Array.isArray(json.data.batches) && json.data.batches.length > 0) {
-            setBatches(json.data.batches);
+          if (Array.isArray(json.data.batches)) {
+            setBatches(json.data.batches.filter((b: any) => !b?.id?.startsWith('bat-0')));
           }
-          if (Array.isArray(json.data.alerts) && json.data.alerts.length > 0) {
-            setAlerts(json.data.alerts);
+          if (Array.isArray(json.data.alerts)) {
+            setAlerts(json.data.alerts.filter((a: any) => !a?.id?.startsWith('alt-req-')));
           }
           if (Array.isArray(json.data.customers)) {
             setCustomers(json.data.customers);
@@ -491,23 +518,23 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const restoreDemoData = () => {
-    setProducts(initialProducts);
-    setBatches(initialBatches);
-    setSuppliers(initialSuppliers);
-    setCustomers(initialCustomers);
-    setPurchases(initialPurchases);
-    setSupplierOrders(initialSupplierOrders);
-    setOperationalExpenses(initialOperationalExpenses);
-    setBankStatements(initialBankStatements);
+    setProducts([]);
+    setBatches([]);
+    setSuppliers([]);
+    setCustomers([]);
+    setPurchases([]);
+    setSupplierOrders([]);
+    setOperationalExpenses([]);
+    setBankStatements([]);
     setBankAccounts(initialBankAccounts);
-    setCashSessions(initialCashSessions);
-    setSales(initialSales);
-    setReturns(initialReturns);
-    setBarcodeReturns(initialBarcodeReturns);
-    setMovements(initialMovements);
-    setTransfers(initialTransfers);
-    setAlerts(initialAlerts);
-    setAuditLogs(initialAuditLogs);
+    setCashSessions([]);
+    setSales([]);
+    setReturns([]);
+    setBarcodeReturns([]);
+    setMovements([]);
+    setTransfers([]);
+    setAlerts([]);
+    setAuditLogs([]);
   };
 
   const exportBackupData = (): { success: boolean; filename: string } => {
@@ -1439,6 +1466,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setProducts([]);
     setBatches([]);
     setMovements([]);
+    setAlerts([]);
     logAudit('DELETE', 'Productos', 'Product', 'ALL', 'Limpieza total del catálogo de productos y lotes');
   };
 

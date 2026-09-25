@@ -271,7 +271,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
           {products.length > 0 && (
             <button
               type="button"
-              onClick={() => setShowClearConfirm(true)}
+              onClick={() => { if (window.confirm('⚠️ ¿Estás seguro de que deseas eliminar TODOS los medicamentos del inventario? Esta acción dejará el catálogo completamente limpio.')) { clearAllProducts(); } }}
               className="px-3 py-2 bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 hover:border-red-600 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-xs cursor-pointer transition-all active:scale-95"
               title="Quitar / Eliminar todos los medicamentos del catálogo para comenzar desde cero"
             >

@@ -41,19 +41,22 @@ export const PurchasesView: React.FC<{
   const [notes, setNotes] = useState('');
 
   // Items de compra en el formulario
-  const [purchaseItems, setPurchaseItems] = useState<PurchaseItemDetail[]>([
-    {
-      productId: products[0]?.id || '',
-      productName: products[0]?.name || 'Medicamento',
-      barcode: products[0]?.barcode || '750100100001',
-      batchNumber: `LOTE-${new Date().getFullYear()}-01`,
-      expirationDate: '2028-06-30',
-      quantityOrdered: 100,
-      quantityReceived: 100,
-      unitCost: products[0]?.purchasePrice || 0.10,
-      subtotal: (products[0]?.purchasePrice || 0.10) * 100,
-    },
-  ]);
+  const [purchaseItems, setPurchaseItems] = useState<PurchaseItemDetail[]>(() => {
+    if (!products || products.length === 0) return [];
+    return [
+      {
+        productId: products[0].id,
+        productName: products[0].name,
+        barcode: products[0].barcode || '750100100001',
+        batchNumber: `LOTE-${new Date().getFullYear()}-01`,
+        expirationDate: '2028-06-30',
+        quantityOrdered: 100,
+        quantityReceived: 100,
+        unitCost: products[0]?.purchasePrice || 0.10,
+        subtotal: (products[0]?.purchasePrice || 0.10) * 100,
+      },
+    ];
+  });
 
   const totalCalculated = purchaseItems.reduce((sum, it) => sum + it.subtotal, 0);
 

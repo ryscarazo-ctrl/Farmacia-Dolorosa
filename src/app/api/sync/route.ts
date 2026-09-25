@@ -1,33 +1,22 @@
 import { NextResponse } from 'next/server';
-import { initialProducts, initialBatches, initialAlerts, initialSettings } from '../../../data/mockData';
+import { initialSettings } from '../../../data/mockData';
 
 // Base de datos global en memoria de servidor (Nube Vercel)
 let cloudDatabase: any = {
-  version: '8.0',
+  version: '10.0',
   lastUpdated: Date.now(),
-  products: initialProducts,
-  batches: initialBatches,
+  products: [],
+  batches: [],
   customers: [],
   suppliers: [],
   sales: [],
   purchases: [],
   movements: [],
-  alerts: initialAlerts,
+  alerts: [],
   settings: initialSettings,
 };
 
 export async function GET() {
-  // Asegurar que nunca devuelva inventario vacío si hay initialProducts
-  if (!cloudDatabase.products || cloudDatabase.products.length === 0) {
-    cloudDatabase.products = initialProducts;
-  }
-  if (!cloudDatabase.batches || cloudDatabase.batches.length === 0) {
-    cloudDatabase.batches = initialBatches;
-  }
-  if (!cloudDatabase.alerts || cloudDatabase.alerts.length === 0) {
-    cloudDatabase.alerts = initialAlerts;
-  }
-
   return NextResponse.json({
     success: true,
     data: cloudDatabase,
@@ -39,11 +28,16 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     if (body && typeof body === 'object') {
-      if (Array.isArray(body.products) && body.products.length > 0) {
-        cloudDatabase.products = body.products;
+      if (Array.isArray(body.products)) {
+        // Ignorar medicamentos de prueba legados si un cliente desactualizado intenta subirlos
+        cloudDatabase.products = body.products.filter(
+          (p: any) => p && !p.id?.startsWith('prod-0')
+        );
       }
-      if (Array.isArray(body.batches) && body.batches.length > 0) {
-        cloudDatabase.batches = body.batches;
+      if (Array.isArray(body.batches)) {
+        cloudDatabase.batches = body.batches.filter(
+          (b: any) => b && !b.id?.startsWith('bat-0')
+        );
       }
       if (Array.isArray(body.customers)) {
         cloudDatabase.customers = body.customers;
@@ -54,8 +48,10 @@ export async function POST(request: Request) {
       if (Array.isArray(body.movements)) {
         cloudDatabase.movements = body.movements;
       }
-      if (Array.isArray(body.alerts) && body.alerts.length > 0) {
-        cloudDatabase.alerts = body.alerts;
+      if (Array.isArray(body.alerts)) {
+        cloudDatabase.alerts = body.alerts.filter(
+          (a: any) => a && !a.id?.startsWith('alt-req-')
+        );
       }
       if (body.settings) {
         cloudDatabase.settings = body.settings;
