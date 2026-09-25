@@ -82,6 +82,8 @@ interface PharmacyContextType {
   auditLogs: AuditLog[];
   settings: Settings;
   updateSettings: (newSettings: Settings) => void;
+  syncNow: () => Promise<void>;
+  isSyncing: boolean;
 
   // Carrito de Venta POS
   cart: CartItem[];
@@ -330,6 +332,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
  
   // Sincronización Automática Multi-Dispositivo en Tiempo Real (Nube / Celular / Laptop)
   const [lastSyncTime, setLastSyncTime] = useState<number>(0);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const isSyncingRef = React.useRef<boolean>(false);
 
   // 1. Escuchar y aplicar cambios de la nube de forma segura y optimizada
@@ -1968,6 +1971,32 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     logAudit('UPDATE', 'Configuración', 'Settings', 'global', 'Configuración institucional actualizada');
   };
 
+  const syncNow = async () => {
+    if (typeof window === 'undefined') return;
+    setIsSyncing(true);
+    try {
+      const res = await fetch('/api/sync', { cache: 'no-store' });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          if (Array.isArray(json.data.products)) setProducts(json.data.products);
+          if (Array.isArray(json.data.batches)) setBatches(json.data.batches);
+          if (Array.isArray(json.data.alerts)) setAlerts(json.data.alerts);
+          if (Array.isArray(json.data.customers)) setCustomers(json.data.customers);
+          if (Array.isArray(json.data.sales)) setSales(json.data.sales);
+          if (Array.isArray(json.data.movements)) setMovements(json.data.movements);
+          if (json.data.settings && typeof json.data.settings === 'object') setSettings(json.data.settings);
+          if (Array.isArray(json.data.cashSessions)) setCashSessions(json.data.cashSessions);
+          if (json.lastUpdated) setLastSyncTime(json.lastUpdated);
+        }
+      }
+    } catch {
+      // silent
+    } finally {
+      setTimeout(() => setIsSyncing(false), 500);
+    }
+  };
+
   return (
     <PharmacyContext.Provider
       value={{
@@ -2010,6 +2039,8 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         auditLogs,
         settings,
         updateSettings,
+        syncNow,
+        isSyncing,
         cart,
         addToCart,
         updateCartQuantity,

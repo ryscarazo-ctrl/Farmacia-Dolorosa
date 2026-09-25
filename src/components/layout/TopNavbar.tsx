@@ -17,7 +17,8 @@ import {
   Wrench,
   ArrowUpRight,
   Check,
-  ShieldAlert
+  ShieldAlert,
+  RefreshCw
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
@@ -43,21 +44,20 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     alerts,
     markAlertAsRead,
     logout,
+    syncNow,
+    isSyncing,
   } = usePharmacy();
 
   const [time, setTime] = useState<string>('');
   const [showAlerts, setShowAlerts] = useState<boolean>(false);
   const [showBranchMenu, setShowBranchMenu] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(true);
-  const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setIsOnline(navigator.onLine);
       const handleOnline = () => {
         setIsOnline(true);
-        setIsSyncing(true);
-        setTimeout(() => setIsSyncing(false), 2500);
       };
       const handleOffline = () => setIsOnline(false);
       window.addEventListener('online', handleOnline);
@@ -192,6 +192,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
         {/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ DERECHA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div className="flex items-center h-full px-2 lg:px-4 gap-1 lg:gap-1.5 shrink-0">
+
+          {/* Botón Refrescar / Sincronizar Manual (Sin reiniciar caja ni afectar venta) */}
+          <button
+            type="button"
+            onClick={() => syncNow()}
+            disabled={isSyncing}
+            className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 transition-all cursor-pointer shrink-0 active:scale-95 flex items-center justify-center"
+            title="Actualizar datos e inventario desde la nube en tiempo real (Sin afectar la caja ni la venta actual)"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 text-emerald-700 shrink-0 ${isSyncing ? 'animate-spin text-emerald-600' : ''}`} />
+          </button>
 
           {/* Manual â€” siempre solo icono en < xl */}
           {onNavigateToManual && (
