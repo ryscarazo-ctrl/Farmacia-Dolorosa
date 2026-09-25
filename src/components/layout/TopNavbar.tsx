@@ -14,7 +14,10 @@ import {
   LogOut,
   BookOpen,
   WifiOff,
-  ShieldCheck
+  Wrench,
+  ArrowUpRight,
+  Check,
+  Sparkles
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
@@ -45,7 +48,6 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const [time, setTime] = useState<string>('');
   const [showAlerts, setShowAlerts] = useState<boolean>(false);
   const [showBranchMenu, setShowBranchMenu] = useState<boolean>(false);
-  const [showUserMenu, setShowUserMenu] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
@@ -93,6 +95,42 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   }, []);
 
   const unreadAlerts = alerts.filter((a) => !a.isRead);
+
+  // Función inteligente para rectificar cualquier alerta con 1 clic
+  const handleRectifyAlert = (alert: any) => {
+    markAlertAsRead(alert.id);
+    setShowAlerts(false);
+
+    const text = (alert.title + ' ' + alert.message).toLowerCase();
+
+    if (text.includes('cefadroxilo')) {
+      const p = products.find(prod => prod.name.toLowerCase().includes('cefadroxilo'));
+      if (p) openProductDetail(p);
+      else openProductDetail('cefadroxilo');
+    } else if (text.includes('colipax')) {
+      const p = products.find(prod => prod.name.toLowerCase().includes('colipax'));
+      if (p) openProductDetail(p);
+      else openProductDetail('colipax');
+    } else if (text.includes('cardiosorbide')) {
+      const p = products.find(prod => prod.name.toLowerCase().includes('cardiosorbide'));
+      if (p) openProductDetail(p);
+      else openProductDetail('cardiosorbide');
+    } else if (text.includes('amoxicilina')) {
+      const p = products.find(prod => prod.name.toLowerCase().includes('amoxicilina'));
+      if (p) openProductDetail(p);
+      else openProductDetail('amoxicilina');
+    } else if (text.includes('precio') || text.includes('costo') || text.includes('pvp')) {
+      const pNoPrice = products.find(prod => !prod.salePrice || prod.salePrice <= 0);
+      if (pNoPrice) openProductDetail(pNoPrice);
+      else if (products.length > 0) openProductDetail(products[0]);
+    } else if (text.includes('lote') || text.includes('vencimiento')) {
+      const pNoBatch = products.find(prod => prod.sku === 'MED-028' || !prod.salePrice);
+      if (pNoBatch) openProductDetail(pNoBatch);
+      else if (products.length > 0) openProductDetail(products[0]);
+    } else {
+      if (products.length > 0) openProductDetail(products[0]);
+    }
+  };
 
   return (
     <header className="h-14 bg-white border-b border-emerald-100 px-2 sm:px-4 flex items-center justify-between z-30 shrink-0 select-none shadow-2xs w-full max-w-full overflow-hidden">
@@ -211,7 +249,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           <span>{currentCashSession ? 'Caja Abierta' : 'Caja Cerrada'}</span>
         </button>
 
-        {/* Campana de Alertas */}
+        {/* Centro de Alertas con Botón de Rectificar Error */}
         <div className="relative shrink-0">
           <button
             onClick={() => setShowAlerts(!showAlerts)}
@@ -220,78 +258,107 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           >
             <Bell className="w-4 h-4 text-slate-700" />
             {unreadAlerts.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+              <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs animate-pulse">
                 {unreadAlerts.length}
               </span>
             )}
           </button>
 
-          {/* Drawer de Alertas */}
+          {/* Modal / Drawer Desplegable de Notificaciones y Rectificación */}
           {showAlerts && (
-            <div className="absolute right-0 top-full mt-1.5 w-72 sm:w-80 bg-white border border-emerald-100 rounded-2xl shadow-2xl p-3 z-50 animate-in fade-in zoom-in-95 duration-100">
-              <div className="flex items-center justify-between pb-2 border-b border-emerald-100">
-                <div className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
-                  <AlertTriangle className="w-4 h-4 text-amber-500" />
-                  <span>Alertas del Sistema ({unreadAlerts.length})</span>
+            <div className="fixed sm:absolute inset-x-3 sm:inset-x-auto right-auto sm:right-0 top-16 sm:top-full mt-0 sm:mt-1.5 w-auto sm:w-96 max-w-sm bg-white border border-emerald-200 rounded-3xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150 max-h-[85vh] flex flex-col">
+              
+              {/* Cabecera del Panel de Alertas */}
+              <div className="flex items-center justify-between pb-3 border-b border-emerald-100 shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-xl bg-amber-100 text-amber-800">
+                    <AlertTriangle className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-xs sm:text-sm text-slate-900 leading-tight">
+                      Centro de Alertas & Errores
+                    </h3>
+                    <p className="text-[10px] text-slate-500 font-medium">
+                      {unreadAlerts.length} pendientes de rectificar
+                    </p>
+                  </div>
                 </div>
                 <button
                   onClick={() => setShowAlerts(false)}
-                  className="text-slate-400 hover:text-slate-600 p-1"
+                  className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="max-h-64 overflow-y-auto divide-y divide-slate-100 mt-2">
+              {/* Lista de Alertas con Botones de Acción */}
+              <div className="overflow-y-auto divide-y divide-slate-100 my-2 space-y-2.5 flex-1 pr-1">
                 {alerts.length === 0 ? (
-                  <div className="text-center py-4 text-xs text-slate-400">
-                    No hay alertas activas
+                  <div className="text-center py-8 text-xs text-slate-400">
+                    <CheckCircle2 className="w-8 h-8 mx-auto text-emerald-500 mb-1.5 opacity-70" />
+                    <p className="font-bold text-slate-700">¡Todo al día!</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">No hay errores ni alertas pendientes de rectificación.</p>
                   </div>
                 ) : (
-                  alerts.slice(0, 6).map((alert) => (
+                  alerts.map((alert) => (
                     <div
                       key={alert.id}
-                      onClick={() => {
-                        markAlertAsRead(alert.id);
-                        setShowAlerts(false);
-                        if (alert.title.toLowerCase().includes('cefadroxilo') || alert.message.toLowerCase().includes('cefadroxilo')) {
-                          openProductDetail('cefadroxilo');
-                        } else if (alert.title.toLowerCase().includes('colipax') || alert.message.toLowerCase().includes('colipax')) {
-                          openProductDetail('colipax');
-                        } else if (alert.title.toLowerCase().includes('cardiosorbide') || alert.message.toLowerCase().includes('cardiosorbide')) {
-                          openProductDetail('cardiosorbide');
-                        } else if (alert.title.toLowerCase().includes('amoxicilina') || alert.message.toLowerCase().includes('amoxicilina')) {
-                          openProductDetail('amoxicilina');
-                        } else if (alert.title.toLowerCase().includes('precios') || alert.message.toLowerCase().includes('precios')) {
-                          const noPrice = products.find((p) => p.salePrice === 0 || p.purchasePrice === 0);
-                          if (noPrice) openProductDetail(noPrice);
-                        } else {
-                          openProductDetail(alert.title);
-                        }
-                      }}
-                      className={`py-2 text-xs cursor-pointer hover:bg-emerald-50/60 p-1.5 rounded-lg transition-colors ${
-                        !alert.isRead ? 'bg-emerald-50/40' : 'opacity-70'
+                      className={`p-3 rounded-2xl border transition-all space-y-2 ${
+                        alert.severity === 'Critical'
+                          ? 'bg-red-50/80 border-red-200'
+                          : alert.severity === 'Warning'
+                          ? 'bg-amber-50/80 border-amber-200'
+                          : 'bg-emerald-50/70 border-emerald-200'
                       }`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-start justify-between gap-1.5">
                         <span
-                          className={`font-semibold ${
+                          className={`font-black text-xs leading-snug ${
                             alert.severity === 'Critical'
-                              ? 'text-red-600'
+                              ? 'text-red-900'
                               : alert.severity === 'Warning'
-                              ? 'text-amber-700'
-                              : 'text-emerald-700'
+                              ? 'text-amber-900'
+                              : 'text-emerald-900'
                           }`}
                         >
                           {alert.title}
                         </span>
-                        {!alert.isRead && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                        )}
+                        <span
+                          className={`px-1.5 py-0.5 text-[8px] font-black uppercase rounded-md shrink-0 ${
+                            alert.severity === 'Critical'
+                              ? 'bg-red-200 text-red-900'
+                              : alert.severity === 'Warning'
+                              ? 'bg-amber-200 text-amber-900'
+                              : 'bg-emerald-200 text-emerald-900'
+                          }`}
+                        >
+                          {alert.severity === 'Critical' ? 'Urgente' : 'Alerta'}
+                        </span>
                       </div>
-                      <p className="text-[11px] text-slate-600 mt-0.5 line-clamp-2">
+
+                      <p className="text-[11px] text-slate-700 leading-relaxed font-medium">
                         {alert.message}
                       </p>
+
+                      {/* BOTÓN RECTIFICAR / CORREGIR ERROR DESTACADO */}
+                      <div className="pt-1.5 border-t border-black/5 flex items-center justify-between gap-2">
+                        <button
+                          onClick={() => handleRectifyAlert(alert)}
+                          className="flex-1 py-1.5 px-3 bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all"
+                        >
+                          <Wrench className="w-3.5 h-3.5 text-emerald-200" />
+                          <span>🛠️ Rectificar Error</span>
+                          <ArrowUpRight className="w-3 h-3 text-emerald-300" />
+                        </button>
+
+                        <button
+                          onClick={() => markAlertAsRead(alert.id)}
+                          className="py-1.5 px-2.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold rounded-xl cursor-pointer transition-colors shrink-0"
+                          title="Marcar como resuelta"
+                        >
+                          <Check className="w-3.5 h-3.5 text-slate-500" />
+                        </button>
+                      </div>
                     </div>
                   ))
                 )}
