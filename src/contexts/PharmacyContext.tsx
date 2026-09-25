@@ -286,7 +286,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (typeof window !== 'undefined') {
       try {
         Object.keys(window.localStorage).forEach((k) => {
-          if (k.startsWith('farmacia_v5_')) window.localStorage.removeItem(k);
+          if (k.startsWith('farmacia_')) window.localStorage.removeItem(k);
         });
       } catch {}
     }
