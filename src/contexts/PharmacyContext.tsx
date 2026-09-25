@@ -131,6 +131,7 @@ interface PharmacyContextType {
   updateProduct: (product: Product) => void;
   deleteProduct: (productId: string) => void;
   clearAllProducts: () => void;
+  bulkUpsertProducts: (importedRows: any[]) => { updatedCount: number; createdCount: number };
   addBatch: (batch: Omit<ProductBatch, 'id'>) => void;
   getProductBatches: (productId: string, branchId?: string) => ProductBatch[];
   getAvailableStock: (productId: string, branchId?: string) => number;
@@ -1513,6 +1514,160 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
+  
+  const bulkUpsertProducts = (
+    importedRows: Array<{
+      sku?: string;
+      barcode: string;
+      name: string;
+      genericName?: string;
+      categoryId?: string;
+      categoryName?: string;
+      laboratoryName?: string;
+      presentation?: string;
+      concentration?: string;
+      unitMeasure?: string;
+      purchasePrice: number;
+      salePrice: number;
+      minStock: number;
+      requiresPrescription?: boolean;
+      isControlled?: boolean;
+      batch?: {
+        batchNumber: string;
+        expirationDate: string;
+        quantity: number;
+        unitCost: number;
+      };
+    }>
+  ): { updatedCount: number; createdCount: number } => {
+    let currentProds = [...products];
+    let currentBatches = [...batches];
+    let updatedCount = 0;
+    let createdCount = 0;
+
+    importedRows.forEach((row, idx) => {
+      if (!row.name || !row.name.trim()) return;
+
+      const normRowName = row.name.trim().toLowerCase();
+      const normRowSku = row.sku ? row.sku.trim().toLowerCase() : '';
+
+      // Búsqueda inteligente por SKU o por Nombre Comercial
+      const existingIdx = currentProds.findIndex((p) => {
+        if (normRowSku && p.sku && p.sku.trim().toLowerCase() === normRowSku) return true;
+        if (p.name && p.name.trim().toLowerCase() === normRowName) return true;
+        return false;
+      });
+
+      let targetProductId = '';
+
+      if (existingIdx !== -1) {
+        // ACTUALIZAR PRODUCTO EXISTENTE (Se actualiza el código de barra, precio y detalles sin duplicar)
+        const existing = currentProds[existingIdx];
+        targetProductId = existing.id;
+        currentProds[existingIdx] = {
+          ...existing,
+          barcode: row.barcode || existing.barcode,
+          name: row.name || existing.name,
+          genericName: row.genericName !== undefined ? row.genericName : existing.genericName,
+          laboratoryName: row.laboratoryName !== undefined ? row.laboratoryName : existing.laboratoryName,
+          presentation: row.presentation || existing.presentation,
+          concentration: row.concentration || existing.concentration,
+          unitMeasure: row.unitMeasure || existing.unitMeasure,
+          purchasePrice: !isNaN(row.purchasePrice) && row.purchasePrice > 0 ? row.purchasePrice : existing.purchasePrice,
+          salePrice: !isNaN(row.salePrice) && row.salePrice > 0 ? row.salePrice : existing.salePrice,
+          minStock: !isNaN(row.minStock) && row.minStock > 0 ? row.minStock : existing.minStock,
+          requiresPrescription: row.requiresPrescription !== undefined ? row.requiresPrescription : existing.requiresPrescription,
+          isControlled: row.isControlled !== undefined ? row.isControlled : existing.isControlled,
+          isActive: true,
+        };
+        updatedCount++;
+      } else {
+        // CREAR NUEVO MEDICAMENTO
+        targetProductId = `prod-${Date.now()}-${idx}`;
+        const newSku = row.sku || `MED-${String(currentProds.length + 1).padStart(3, '0')}`;
+        const newProd: Product = {
+          id: targetProductId,
+          sku: newSku,
+          barcode: row.barcode,
+          name: row.name,
+          genericName: row.genericName,
+          categoryId: row.categoryId || 'cat-01',
+          categoryName: row.categoryName || 'General',
+          laboratoryName: row.laboratoryName,
+          presentation: row.presentation || 'Caja / Unidad',
+          concentration: row.concentration,
+          unitMeasure: row.unitMeasure || 'Unidad',
+          purchasePrice: row.purchasePrice || 0,
+          salePrice: row.salePrice || 0,
+          minStock: row.minStock || 5,
+          maxStock: (row.minStock || 5) * 10,
+          requiresPrescription: !!row.requiresPrescription,
+          isControlled: !!row.isControlled,
+          isActive: true,
+        };
+        currentProds.push(newProd);
+        createdCount++;
+      }
+
+      // Gestionar Lote
+      if (row.batch && row.batch.quantity > 0) {
+        const normBatchNum = row.batch.batchNumber.trim().toLowerCase();
+        const existingBatchIdx = currentBatches.findIndex(
+          (b) => b.productId === targetProductId && b.batchNumber.trim().toLowerCase() === normBatchNum && b.branchId === currentBranch.id
+        );
+
+        if (existingBatchIdx !== -1) {
+          const exBatch = currentBatches[existingBatchIdx];
+          currentBatches[existingBatchIdx] = {
+            ...exBatch,
+            currentQuantity: row.batch.quantity,
+            expirationDate: row.batch.expirationDate || exBatch.expirationDate,
+            unitCost: row.batch.unitCost || exBatch.unitCost,
+            status: 'Available',
+          };
+        } else {
+          currentBatches.push({
+            id: `bat-${Date.now()}-${idx}`,
+            productId: targetProductId,
+            branchId: currentBranch.id,
+            batchNumber: row.batch.batchNumber,
+            expirationDate: row.batch.expirationDate,
+            initialQuantity: row.batch.quantity,
+            currentQuantity: row.batch.quantity,
+            unitCost: row.batch.unitCost,
+            status: 'Available',
+          });
+        }
+      }
+    });
+
+    setProducts(currentProds);
+    setBatches(currentBatches);
+    saveStorage('products', currentProds);
+    saveStorage('batches', currentBatches);
+
+    if (typeof window !== 'undefined') {
+      fetch('/api/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          products: currentProds,
+          batches: currentBatches,
+        }),
+      }).catch(() => {});
+    }
+
+    logAudit(
+      'UPDATE',
+      'Inventario',
+      'Product',
+      'bulk-upsert',
+      `Actualización Masiva Excel: ${updatedCount} medicamentos actualizados, ${createdCount} creados.`
+    );
+
+    return { updatedCount, createdCount };
+  };
+
   const clearAllProducts = () => {
     setProducts([]);
     setBatches([]);
@@ -2092,6 +2247,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updateProduct,
     deleteProduct,
     clearAllProducts,
+        bulkUpsertProducts,
         addBatch,
         getProductBatches,
         getAvailableStock,

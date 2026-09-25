@@ -35,6 +35,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
     updateProduct,
     deleteProduct,
     clearAllProducts,
+    bulkUpsertProducts,
     addProduct,
     getAvailableStock,
     getProductBatches,
@@ -112,7 +113,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
     setModalOpen(true);
   };
 
-  // Manejo de Importación de Excel / CSV
+    // Manejo de Importación y Actualización Inteligente (UPSERT) de Excel / CSV
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -131,10 +132,13 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
           return;
         }
 
-        let importedCount = 0;
+        const itemsToUpsert: any[] = [];
+
         jsonData.forEach((row, idx) => {
           const rowName = row['Nombre_Comercial'] || row['Nombre'] || row['Medicamento'] || row['Producto'];
           if (!rowName) return;
+
+          const rowSku = row['SKU'] || row['Sku'] || row['Codigo_Interno'] || '';
 
           let rawBarcode = row['Codigo_Barra'] || row['Codigo'] || row['Barcode'];
           let rowBarcode = '';
@@ -142,9 +146,8 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
             rowBarcode = BigInt(Math.floor(rawBarcode)).toString();
           } else if (rawBarcode) {
             rowBarcode = String(rawBarcode).trim();
-          } else {
-            rowBarcode = `750${Date.now().toString().slice(-7)}${idx}`;
           }
+
           const rowGeneric = row['Nombre_Generico'] || row['Generico'] || '';
           const rowCatName = row['Categoria'] || '';
           const foundCat = categories.find(c => c.name.toLowerCase().includes(String(rowCatName).toLowerCase())) || categories[0];
@@ -162,42 +165,45 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry 
           const rowBatch = String(row['Numero_Lote'] || row['Lote'] || `LOT-${Date.now().toString().slice(-4)}-${idx + 1}`);
           const rowExp = String(row['Fecha_Vencimiento_YYYY_MM_DD'] || row['Fecha_Vencimiento'] || row['Vencimiento'] || '2027-12-31');
 
-          const newProdSku = `MED-${String(products.length + importedCount + 1).padStart(3, '0')}`;
-
-          addProduct(
-            {
-              sku: newProdSku,
-              barcode: rowBarcode,
-              name: String(rowName),
-              genericName: rowGeneric ? String(rowGeneric) : undefined,
-              categoryId: foundCat?.id || 'cat-01',
-              categoryName: foundCat?.name || 'General',
-              laboratoryName: rowLab ? String(rowLab) : undefined,
-              presentation: rowPresentation,
-              concentration: rowConcentration,
-              unitMeasure: rowUnit,
-              purchasePrice: isNaN(rowCost) ? 0 : rowCost,
-              salePrice: isNaN(rowSale) ? 0 : rowSale,
-              minStock: isNaN(rowMinStock) ? 5 : rowMinStock,
-              maxStock: (isNaN(rowMinStock) ? 5 : rowMinStock) * 10,
-              requiresPrescription: rowReceta,
-              isControlled: rowControlado,
-              isActive: true,
-            },
-            rowStock > 0 ? {
+          itemsToUpsert.push({
+            sku: rowSku ? String(rowSku).trim() : undefined,
+            barcode: rowBarcode,
+            name: String(rowName).trim(),
+            genericName: rowGeneric ? String(rowGeneric).trim() : undefined,
+            categoryId: foundCat?.id || 'cat-01',
+            categoryName: foundCat?.name || 'General',
+            laboratoryName: rowLab ? String(rowLab).trim() : undefined,
+            presentation: rowPresentation,
+            concentration: rowConcentration,
+            unitMeasure: rowUnit,
+            purchasePrice: isNaN(rowCost) ? 0 : rowCost,
+            salePrice: isNaN(rowSale) ? 0 : rowSale,
+            minStock: isNaN(rowMinStock) ? 5 : rowMinStock,
+            requiresPrescription: rowReceta,
+            isControlled: rowControlado,
+            batch: rowStock > 0 ? {
               batchNumber: rowBatch,
               expirationDate: rowExp.includes('-') ? rowExp : '2027-12-31',
               quantity: rowStock,
               unitCost: isNaN(rowCost) ? 0 : rowCost,
             } : undefined
-          );
-
-          importedCount++;
+          });
         });
 
+        const result = bulkUpsertProducts(itemsToUpsert);
+
+        let resultMsg = '';
+        if (result.updatedCount > 0 && result.createdCount > 0) {
+          resultMsg = `¡Inventario actualizado con éxito! Se actualizaron ${result.updatedCount} medicamento(s) existentes con sus nuevos códigos de barra y se agregaron ${result.createdCount} nuevos.`;
+        } else if (result.updatedCount > 0) {
+          resultMsg = `¡Excelente! Se actualizaron con éxito los ${result.updatedCount} medicamento(s) existentes (códigos de barra y precios actualizados sin duplicar nada).`;
+        } else {
+          resultMsg = `¡Se ingresaron con éxito ${result.createdCount} nuevos medicamentos al sistema!`;
+        }
+
         setImportStatus({
-          count: importedCount,
-          message: `¡Se importaron con éxito ${importedCount} medicamento(s) con sus lotes y precios al sistema!`,
+          count: result.updatedCount + result.createdCount,
+          message: resultMsg,
           type: 'success'
         });
 
