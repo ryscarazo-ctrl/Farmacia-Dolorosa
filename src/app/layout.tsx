@@ -35,12 +35,24 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
+              // Manejo de errores globales y registro de Service Worker
+              window.addEventListener('error', function(e) {
+                if (e.message && (e.message.indexOf('ChunkLoadError') !== -1 || e.message.indexOf('Loading chunk') !== -1)) {
+                  window.location.reload();
+                }
+              });
+              window.addEventListener('unhandledrejection', function(e) {
+                if (e.reason && (String(e.reason).indexOf('ChunkLoadError') !== -1 || String(e.reason).indexOf('Loading chunk') !== -1)) {
+                  window.location.reload();
+                }
+              });
+
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js?v=9').then(function(reg) {
+                  navigator.serviceWorker.register('/sw.js?v=15').then(function(reg) {
                     reg.update();
                   }).catch(function(err) {
-                    console.log('ServiceWorker registration failed: ', err);
+                    console.log('SW registration note:', err);
                   });
                 });
               }

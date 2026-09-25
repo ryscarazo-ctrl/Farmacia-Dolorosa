@@ -303,19 +303,37 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [lastSyncTime, setLastSyncTime] = useState<number>(0);
   const isSyncingRef = React.useRef<boolean>(false);
 
-  // 1. Escuchar y aplicar cambios de la nube inmediatamente
+  // 1. Escuchar y aplicar cambios de la nube de forma segura y optimizada
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    let isFetching = false;
+
     const pullFromCloud = async () => {
+      if (isFetching) return;
+      if (document.hidden || document.visibilityState === 'hidden') return;
+      if (typeof navigator !== 'undefined' && !navigator.onLine) return;
+
+      isFetching = true;
       try {
-        const res = await fetch('/api/sync', { cache: 'no-store' });
-        if (!res.ok) return;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+        const res = await fetch('/api/sync', {
+          cache: 'no-store',
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) {
+          isFetching = false;
+          return;
+        }
+
         const json = await res.json();
         if (json.success && json.data) {
           const serverUpdated = json.lastUpdated || 0;
           
-          // Si el servidor tiene productos o está más actualizado, aplicar de inmediato
           if (Array.isArray(json.data.products) && json.data.products.length > 0) {
             setProducts(json.data.products);
           }
@@ -337,28 +355,37 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           setLastSyncTime(serverUpdated);
         }
       } catch (err) {
-        // Modo offline
+        // Modo offline silencioso y protegido
+      } finally {
+        isFetching = false;
       }
     };
 
-    // Ejecutar al montar inmediatamente
+    // Ejecutar al inicio de forma segura
     pullFromCloud();
 
-    // Sincronizar automáticamente cada 2.5 segundos
-    const syncInterval = setInterval(pullFromCloud, 2500);
+    // Sincronización inteligente cada 4 segundos solo cuando la pestaña esté activa
+    const syncInterval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        pullFromCloud();
+      }
+    }, 4000);
 
     const handleVisibility = () => {
       if (document.visibilityState === 'visible') {
         pullFromCloud();
       }
     };
+
     window.addEventListener('visibilitychange', handleVisibility);
-    window.addEventListener('focus', pullFromCloud);
+    window.addEventListener('focus', handleVisibility);
+    window.addEventListener('online', handleVisibility);
 
     return () => {
       clearInterval(syncInterval);
       window.removeEventListener('visibilitychange', handleVisibility);
-      window.removeEventListener('focus', pullFromCloud);
+      window.removeEventListener('focus', handleVisibility);
+      window.removeEventListener('online', handleVisibility);
     };
   }, []);
 
