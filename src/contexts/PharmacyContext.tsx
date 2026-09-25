@@ -367,8 +367,61 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (json.success && json.data) {
           const serverUpdated = json.lastUpdated || 0;
           
-          if (Array.isArray(json.data.products)) {
-            setProducts(json.data.products.filter((p: any) => true));
+          if (Array.isArray(json.data.products) && json.data.products.length > 0) {
+            setProducts((prevProducts) => {
+              const prodMap = new Map<string, Product>();
+              prevProducts.forEach((p) => {
+                if (p && (p.id || p.sku || p.name)) {
+                  prodMap.set(p.id || p.sku || p.name, p);
+                }
+              });
+
+              json.data.products.forEach((srv: Product) => {
+                if (!srv) return;
+                const key = srv.id || srv.sku || srv.name;
+                
+                let local = prodMap.get(key);
+                if (!local) {
+                  for (const item of Array.from(prodMap.values())) {
+                    if (
+                      (srv.sku && item.sku && srv.sku.trim().toLowerCase() === item.sku.trim().toLowerCase()) ||
+                      (srv.name && item.name && srv.name.trim().toLowerCase() === item.name.trim().toLowerCase())
+                    ) {
+                      local = item;
+                      break;
+                    }
+                  }
+                }
+
+                if (local) {
+                  const localBarcode = (local.barcode || '').trim();
+                  const srvBarcode = (srv.barcode || '').trim();
+
+                  // ESCUDO ANTI-PÉRDIDA DE CÓDIGO: Si local o servidor tiene código real, nunca degradar a vacío o 7441...
+                  let protectedBarcode = srvBarcode || localBarcode;
+                  if (localBarcode && !localBarcode.startsWith('7441')) {
+                    if (!srvBarcode || srvBarcode.startsWith('7441')) {
+                      protectedBarcode = localBarcode;
+                    }
+                  } else if (srvBarcode && !srvBarcode.startsWith('7441')) {
+                    protectedBarcode = srvBarcode;
+                  }
+
+                  prodMap.set(local.id || key, {
+                    ...srv,
+                    ...local,
+                    id: local.id || srv.id,
+                    barcode: protectedBarcode,
+                    salePrice: srv.salePrice > 0 ? srv.salePrice : local.salePrice,
+                    purchasePrice: srv.purchasePrice > 0 ? srv.purchasePrice : local.purchasePrice,
+                  });
+                } else {
+                  prodMap.set(key, srv);
+                }
+              });
+
+              return Array.from(prodMap.values());
+            });
           }
           if (Array.isArray(json.data.batches)) {
             setBatches(json.data.batches.filter((b: any) => true));
@@ -2171,7 +2224,40 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (res.ok) {
         const json = await res.json();
         if (json.success && json.data) {
-          if (Array.isArray(json.data.products)) setProducts(json.data.products);
+          if (Array.isArray(json.data.products) && json.data.products.length > 0) {
+            setProducts((prevProducts) => {
+              const prodMap = new Map<string, Product>();
+              prevProducts.forEach((p) => { if (p) prodMap.set(p.id || p.sku || p.name, p); });
+              json.data.products.forEach((srv: Product) => {
+                if (!srv) return;
+                const key = srv.id || srv.sku || srv.name;
+                const local = prodMap.get(key) || prevProducts.find((p) =>
+                  (p.sku && srv.sku && p.sku.trim().toLowerCase() === srv.sku.trim().toLowerCase()) ||
+                  (p.name && srv.name && p.name.trim().toLowerCase() === srv.name.trim().toLowerCase())
+                );
+                if (local) {
+                  const localBarcode = (local.barcode || '').trim();
+                  const srvBarcode = (srv.barcode || '').trim();
+                  let protectedBarcode = srvBarcode || localBarcode;
+                  if (localBarcode && !localBarcode.startsWith('7441')) {
+                    if (!srvBarcode || srvBarcode.startsWith('7441')) protectedBarcode = localBarcode;
+                  } else if (srvBarcode && !srvBarcode.startsWith('7441')) {
+                    protectedBarcode = srvBarcode;
+                  }
+                  prodMap.set(local.id || key, {
+                    ...srv,
+                    ...local,
+                    id: local.id || srv.id,
+                    barcode: protectedBarcode,
+                    salePrice: srv.salePrice > 0 ? srv.salePrice : local.salePrice,
+                  });
+                } else {
+                  prodMap.set(key, srv);
+                }
+              });
+              return Array.from(prodMap.values());
+            });
+          }
           if (Array.isArray(json.data.batches)) setBatches(json.data.batches);
           if (Array.isArray(json.data.alerts)) setAlerts(json.data.alerts);
           if (Array.isArray(json.data.customers)) setCustomers(json.data.customers);

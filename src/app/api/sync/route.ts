@@ -3,7 +3,7 @@ import { initialProducts, initialBatches, initialSettings } from '../../../data/
 
 // Base de datos global en memoria de servidor (Nube Vercel)
 let cloudDatabase: any = {
-  version: '12.0',
+  version: '15.0',
   lastUpdated: Date.now(),
   products: initialProducts,
   batches: initialBatches,
@@ -35,12 +35,85 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     if (body && typeof body === 'object') {
+      
+      // =========================================================================
+      // 🛡️ ESCUDO ANTI-PÉRDIDA DE CÓDIGOS DE BARRA Y PRODUCTOS (SMART MERGE)
+      // =========================================================================
       if (Array.isArray(body.products) && body.products.length > 0) {
-        cloudDatabase.products = body.products;
+        const prodMap = new Map<string, any>();
+        
+        // 1. Indexar productos existentes en el servidor
+        (cloudDatabase.products || []).forEach((p: any) => {
+          if (p && (p.id || p.sku || p.name)) {
+            prodMap.set(p.id || p.sku || p.name, p);
+          }
+        });
+
+        // 2. Fusionar inteligentemente los productos entrantes SIN BORRAR códigos de barra reales
+        body.products.forEach((incoming: any) => {
+          if (!incoming) return;
+          const key = incoming.id || incoming.sku || incoming.name;
+
+          // Buscar coincidencia existente por ID, SKU o Nombre Comercial
+          let existing = prodMap.get(key);
+          if (!existing) {
+            for (const item of Array.from(prodMap.values())) {
+              if (
+                (incoming.sku && item.sku && incoming.sku.trim().toLowerCase() === item.sku.trim().toLowerCase()) ||
+                (incoming.name && item.name && incoming.name.trim().toLowerCase() === item.name.trim().toLowerCase())
+              ) {
+                existing = item;
+                break;
+              }
+            }
+          }
+
+          if (existing) {
+            const exBarcode = (existing.barcode || '').trim();
+            const inBarcode = (incoming.barcode || '').trim();
+
+            // Decidir el código de barra ganador con máxima inmunidad:
+            // Si existing o incoming tienen un código real (que no sea provisorio 7441...), se PRESERVA SIEMPRE
+            let protectedBarcode = inBarcode || exBarcode;
+            if (exBarcode && !exBarcode.startsWith('7441')) {
+              if (!inBarcode || inBarcode.startsWith('7441')) {
+                protectedBarcode = exBarcode;
+              }
+            } else if (inBarcode && !inBarcode.startsWith('7441')) {
+              protectedBarcode = inBarcode;
+            }
+
+            const merged = {
+              ...existing,
+              ...incoming,
+              id: existing.id || incoming.id,
+              barcode: protectedBarcode,
+              salePrice: incoming.salePrice > 0 ? incoming.salePrice : existing.salePrice,
+              purchasePrice: incoming.purchasePrice > 0 ? incoming.purchasePrice : existing.purchasePrice,
+              minStock: incoming.minStock > 0 ? incoming.minStock : existing.minStock,
+              isActive: incoming.isActive !== undefined ? incoming.isActive : existing.isActive,
+            };
+            prodMap.set(merged.id || key, merged);
+          } else {
+            prodMap.set(key, incoming);
+          }
+        });
+
+        cloudDatabase.products = Array.from(prodMap.values());
       }
+
+      // Fusión acumulativa de Lotes
       if (Array.isArray(body.batches) && body.batches.length > 0) {
-        cloudDatabase.batches = body.batches;
+        const batchMap = new Map<string, any>();
+        (cloudDatabase.batches || []).forEach((b: any) => {
+          if (b && b.id) batchMap.set(b.id, b);
+        });
+        body.batches.forEach((b: any) => {
+          if (b && b.id) batchMap.set(b.id, b);
+        });
+        cloudDatabase.batches = Array.from(batchMap.values());
       }
+
       if (Array.isArray(body.customers)) {
         cloudDatabase.customers = body.customers;
       }
