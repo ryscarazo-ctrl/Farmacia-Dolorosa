@@ -17,7 +17,8 @@ import {
   Wrench,
   ArrowUpRight,
   Check,
-  Sparkles
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
@@ -96,7 +97,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
   const unreadAlerts = alerts.filter((a) => !a.isRead);
 
-  // Función inteligente para rectificar cualquier alerta con 1 clic
+  // Funcion inteligente para rectificar cualquier alerta con 1 solo clic
   const handleRectifyAlert = (alert: any) => {
     markAlertAsRead(alert.id);
     setShowAlerts(false);
@@ -104,27 +105,27 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     const text = (alert.title + ' ' + alert.message).toLowerCase();
 
     if (text.includes('cefadroxilo')) {
-      const p = products.find(prod => prod.name.toLowerCase().includes('cefadroxilo'));
+      const p = products.find((prod) => prod.name.toLowerCase().includes('cefadroxilo'));
       if (p) openProductDetail(p);
       else openProductDetail('cefadroxilo');
     } else if (text.includes('colipax')) {
-      const p = products.find(prod => prod.name.toLowerCase().includes('colipax'));
+      const p = products.find((prod) => prod.name.toLowerCase().includes('colipax'));
       if (p) openProductDetail(p);
       else openProductDetail('colipax');
     } else if (text.includes('cardiosorbide')) {
-      const p = products.find(prod => prod.name.toLowerCase().includes('cardiosorbide'));
+      const p = products.find((prod) => prod.name.toLowerCase().includes('cardiosorbide'));
       if (p) openProductDetail(p);
       else openProductDetail('cardiosorbide');
     } else if (text.includes('amoxicilina')) {
-      const p = products.find(prod => prod.name.toLowerCase().includes('amoxicilina'));
+      const p = products.find((prod) => prod.name.toLowerCase().includes('amoxicilina'));
       if (p) openProductDetail(p);
       else openProductDetail('amoxicilina');
     } else if (text.includes('precio') || text.includes('costo') || text.includes('pvp')) {
-      const pNoPrice = products.find(prod => !prod.salePrice || prod.salePrice <= 0);
+      const pNoPrice = products.find((prod) => !prod.salePrice || prod.salePrice <= 0);
       if (pNoPrice) openProductDetail(pNoPrice);
       else if (products.length > 0) openProductDetail(products[0]);
     } else if (text.includes('lote') || text.includes('vencimiento')) {
-      const pNoBatch = products.find(prod => prod.sku === 'MED-028' || !prod.salePrice);
+      const pNoBatch = products.find((prod) => prod.sku === 'MED-028' || !prod.salePrice);
       if (pNoBatch) openProductDetail(pNoBatch);
       else if (products.length > 0) openProductDetail(products[0]);
     } else {
@@ -133,187 +134,243 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   };
 
   return (
-    <header className="h-14 bg-white border-b border-emerald-100 px-2 sm:px-4 flex items-center justify-between z-30 shrink-0 select-none shadow-2xs w-full max-w-full overflow-hidden">
-      
-      {/* SECCIÓN IZQUIERDA: Menú + Sucursal + En Vivo */}
-      <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
-        {/* Botón Hamburguesa para Móvil */}
-        <button
-          type="button"
-          onClick={onToggleMobileMenu}
-          className="md:hidden p-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-all active:scale-95 shrink-0"
-          title="Abrir menú"
-        >
-          <Menu className="w-4 h-4 text-emerald-800" />
-        </button>
-
-        {/* Pastilla de Sucursal */}
-        <div className="relative shrink-0">
+    <>
+      <header className="h-14 bg-white border-b border-emerald-100 px-2 sm:px-4 flex items-center justify-between z-30 shrink-0 select-none shadow-xs w-full max-w-full relative">
+        {/* SECCION IZQUIERDA: Menu + Sucursal + En Vivo */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
+          {/* Boton Hamburguesa para Movil */}
           <button
-            onClick={() => setShowBranchMenu(!showBranchMenu)}
-            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 text-xs font-black text-emerald-950 border border-emerald-200 transition-all shadow-2xs whitespace-nowrap"
+            type="button"
+            onClick={onToggleMobileMenu}
+            className="md:hidden p-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-all active:scale-95 shrink-0 cursor-pointer"
+            title="Abrir menu"
           >
-            <Building className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-            <span className="truncate max-w-[80px] sm:max-w-[180px]">{currentBranch.name.replace('Sucursal ', '')}</span>
-            <ChevronDown className="w-3 h-3 text-emerald-700 shrink-0" />
+            <Menu className="w-5 h-5" />
           </button>
 
-          {showBranchMenu && (
-            <div className="absolute top-full left-0 mt-1.5 w-64 sm:w-72 bg-white border border-emerald-200 rounded-2xl shadow-2xl py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
-              <div className="px-3 py-1.5 text-[10px] font-bold text-emerald-700 uppercase tracking-wider border-b border-emerald-100">
-                Cambiar de Sucursal
-              </div>
-              {branches.map((b) => (
-                <button
-                  key={b.id}
-                  onClick={() => {
-                    setCurrentBranch(b);
-                    setShowBranchMenu(false);
-                  }}
-                  className={`w-full px-3 py-2 text-xs text-left flex items-center justify-between hover:bg-emerald-50 transition-colors cursor-pointer ${
-                    b.id === currentBranch.id ? 'bg-emerald-100/70 text-emerald-900 font-bold' : 'text-slate-700'
-                  }`}
-                >
-                  <div>
-                    <div className="font-semibold">{b.name}</div>
-                    <div className="text-[10px] text-slate-500">{b.code} • {b.phone}</div>
-                  </div>
-                  {b.id === currentBranch.id && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Indicador Luminoso 'En Vivo' / Nube Conectada */}
-        <div className="flex items-center shrink-0">
-          {isSyncing ? (
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-900 text-[10px] font-black shadow-2xs whitespace-nowrap animate-pulse">
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-              </span>
-              <span className="hidden sm:inline">Guardando</span>
-            </div>
-          ) : !isOnline ? (
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-[10px] font-black shadow-2xs whitespace-nowrap" title="Modo offline">
-              <WifiOff className="w-3 h-3 text-amber-600 shrink-0" />
-              <span className="hidden sm:inline">Offline</span>
-            </div>
-          ) : (
-            <div
-              className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-950 text-[10px] font-black shadow-2xs whitespace-nowrap"
-              title="Sincronización activa con la Nube"
+          {/* Selector de Sucursal */}
+          <div className="relative shrink-0">
+            <button
+              onClick={() => setShowBranchMenu(!showBranchMenu)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100/80 text-emerald-950 border border-emerald-300/80 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
+              title="Cambiar Sucursal Activa"
             >
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-80"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600 shadow-[0_0_6px_rgba(5,150,105,0.9)]"></span>
+              <Building className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+              <span className="truncate max-w-[130px] sm:max-w-[190px]">
+                {currentBranch.name}
               </span>
-              <span>En Vivo</span>
-            </div>
+              <ChevronDown className="w-3 h-3 text-emerald-600 shrink-0" />
+            </button>
+
+            {/* Menu Desplegable Sucursales */}
+            {showBranchMenu && (
+              <div className="absolute left-0 top-full mt-1.5 w-64 bg-white border border-emerald-200 rounded-2xl shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="text-[10px] font-black text-emerald-800 uppercase px-2.5 py-1 tracking-wider border-b border-emerald-100/60 mb-1">
+                  Sucursales Disponibles
+                </div>
+                {branches.map((b) => (
+                  <button
+                    key={b.id}
+                    onClick={() => {
+                      setCurrentBranch(b);
+                      setShowBranchMenu(false);
+                    }}
+                    className={`w-full text-left px-2.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                      currentBranch.id === b.id
+                        ? 'bg-emerald-600 text-white shadow-xs'
+                        : 'text-slate-700 hover:bg-emerald-50 hover:text-emerald-950'
+                    }`}
+                  >
+                    <span className="truncate">{b.name}</span>
+                    {currentBranch.id === b.id && (
+                      <CheckCircle2 className="w-3.5 h-3.5 text-white shrink-0" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Reloj y Estado */}
+          <div className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl text-xs font-bold text-emerald-950 shrink-0">
+            <Clock className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+            <span className="font-mono text-[11px]">{time}</span>
+          </div>
+
+          {/* Indicador de Sincronizacion */}
+          <div
+            className={`hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold shrink-0 transition-colors ${
+              !isOnline
+                ? 'bg-red-50 text-red-700 border-red-200'
+                : isSyncing
+                ? 'bg-amber-50 text-amber-700 border-amber-200'
+                : 'bg-emerald-50/70 text-emerald-950 border-emerald-200/80'
+            }`}
+          >
+            {!isOnline ? (
+              <>
+                <WifiOff className="w-3.5 h-3.5 text-red-600 shrink-0" />
+                <span>Offline</span>
+              </>
+            ) : isSyncing ? (
+              <>
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+                <span>Sincronizando...</span>
+              </>
+            ) : (
+              <>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Nube Sincronizada</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* SECCION DERECHA: Manual + Caja + Alertas + Perfil */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Boton Manual de Usuario */}
+          {onNavigateToManual && (
+            <button
+              onClick={onNavigateToManual}
+              className="flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-950 border border-emerald-300 font-bold text-xs transition-colors cursor-pointer shrink-0"
+              title="Manual del Sistema"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+              <span className="hidden sm:inline font-extrabold">Manual</span>
+            </button>
           )}
-        </div>
 
-        {/* Reloj Digital (Solo Pantallas Grandes) */}
-        <div className="hidden lg:flex items-center gap-1.5 text-xs text-emerald-800 font-mono bg-emerald-50/70 px-2 py-0.5 rounded-lg border border-emerald-200 shrink-0 whitespace-nowrap">
-          <Clock className="w-3 h-3 text-emerald-600" />
-          <span>{time}</span>
-        </div>
-      </div>
-
-      {/* SECCIÓN DERECHA: Manual, Caja, Alertas y Perfil */}
-      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-        
-        {/* Botón Manual (Visible en Computadoras) */}
-        <button
-          type="button"
-          onClick={onNavigateToManual}
-          className="hidden md:flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 text-emerald-900 border border-emerald-300 font-bold text-xs cursor-pointer shadow-2xs transition-all active:scale-95 whitespace-nowrap"
-          title="Ver Manual de Usuario"
-        >
-          <BookOpen className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-          <span>Manual</span>
-        </button>
-
-        {/* Estado de Caja (Visible en Pantallas Medianas) */}
-        <button
-          onClick={onNavigateToCash}
-          className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold border transition-all whitespace-nowrap ${
-            currentCashSession
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
-              : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
-          }`}
-          title="Ver estado de caja"
-        >
-          <Vault className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-          <span>{currentCashSession ? 'Caja Abierta' : 'Caja Cerrada'}</span>
-        </button>
-
-        {/* Centro de Alertas con Botón de Rectificar Error */}
-        <div className="relative shrink-0">
+          {/* Boton Caja Estado */}
           <button
-            onClick={() => setShowAlerts(!showAlerts)}
-            className="p-1.5 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-700 relative border border-slate-200 transition-colors cursor-pointer"
-            title="Alertas y Notificaciones"
+            onClick={onNavigateToCash}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border font-black text-xs transition-all shadow-xs cursor-pointer shrink-0 ${
+              currentCashSession
+                ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700'
+                : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
+            }`}
+            title="Ver estado de caja"
+          >
+            <Vault className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <span>{currentCashSession ? 'Caja Abierta' : 'Caja Cerrada'}</span>
+          </button>
+
+          {/* Boton Campana de Alertas con Badge Contador */}
+          <button
+            onClick={() => setShowAlerts(true)}
+            className="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-700 relative border border-slate-200 transition-colors cursor-pointer shrink-0 active:scale-95"
+            title="Centro de Alertas y Notificaciones"
           >
             <Bell className="w-4 h-4 text-slate-700" />
             {unreadAlerts.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs animate-pulse">
+              <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-[10px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center shadow-md animate-pulse border-2 border-white">
                 {unreadAlerts.length}
               </span>
             )}
           </button>
 
-          {/* Modal / Drawer Desplegable de Notificaciones y Rectificación */}
-          {showAlerts && (
-            <div className="fixed sm:absolute inset-x-3 sm:inset-x-auto right-auto sm:right-0 top-16 sm:top-full mt-0 sm:mt-1.5 w-auto sm:w-96 max-w-sm bg-white border border-emerald-200 rounded-3xl shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150 max-h-[85vh] flex flex-col">
-              
-              {/* Cabecera del Panel de Alertas */}
-              <div className="flex items-center justify-between pb-3 border-b border-emerald-100 shrink-0">
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-xl bg-amber-100 text-amber-800">
-                    <AlertTriangle className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h3 className="font-black text-xs sm:text-sm text-slate-900 leading-tight">
-                      Centro de Alertas & Errores
-                    </h3>
-                    <p className="text-[10px] text-slate-500 font-medium">
-                      {unreadAlerts.length} pendientes de rectificar
-                    </p>
-                  </div>
+          {/* Avatar de Usuario y Salir */}
+          <div className="flex items-center gap-1 sm:gap-1.5 pl-1 sm:pl-1.5 border-l border-slate-200 shrink-0">
+            <div
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center text-xs font-black shadow-2xs shrink-0 cursor-default"
+              title={`${currentUser?.firstName} ${currentUser?.lastName} (${currentUser?.role})`}
+            >
+              {currentUser?.firstName?.charAt(0) || 'U'}
+            </div>
+
+            <div className="hidden xl:block text-left whitespace-nowrap">
+              <div className="text-xs font-bold text-slate-900 leading-none">
+                {currentUser?.firstName} {currentUser?.lastName}
+              </div>
+              <div className="text-[10px] text-emerald-700 font-semibold leading-tight mt-0.5">
+                {currentUser?.role}
+              </div>
+            </div>
+
+            {/* Boton Cerrar Sesion */}
+            <button
+              type="button"
+              onClick={logout}
+              title="Cerrar Sesion"
+              className="p-1.5 sm:px-2 sm:py-1 rounded-xl bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 hover:border-red-600 transition-all font-bold text-xs cursor-pointer shadow-2xs active:scale-95 shrink-0 flex items-center gap-1"
+            >
+              <LogOut className="w-3.5 h-3.5 shrink-0" />
+              <span className="hidden lg:inline">Salir</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* MODAL GLOBAL CENTRADO DE ALERTAS & RECTIFICACION DE ERRORES */}
+      {showAlerts && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150">
+          {/* Backdrop click to close */}
+          <div className="absolute inset-0" onClick={() => setShowAlerts(false)} />
+
+          {/* Modal Card */}
+          <div className="relative w-full max-w-lg bg-white border border-emerald-200 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] z-10 animate-in zoom-in-95 duration-150">
+            {/* Cabecera Modal */}
+            <div className="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-4 flex items-center justify-between shrink-0 shadow-sm">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-2xl bg-amber-400 text-slate-950 font-black shadow-xs">
+                  <AlertTriangle className="w-5 h-5" />
                 </div>
-                <button
-                  onClick={() => setShowAlerts(false)}
-                  className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                <div>
+                  <h3 className="font-black text-base sm:text-lg leading-tight flex items-center gap-2">
+                    Centro de Alertas & Errores
+                    <span className="px-2 py-0.5 rounded-full bg-emerald-600/80 text-[10px] uppercase tracking-wider font-extrabold">
+                      En Vivo
+                    </span>
+                  </h3>
+                  <p className="text-xs text-emerald-100/90 font-medium">
+                    {unreadAlerts.length} {unreadAlerts.length === 1 ? 'alerta pendiente' : 'alertas pendientes'} de rectificar
+                  </p>
+                </div>
               </div>
 
-              {/* Lista de Alertas con Botones de Acción */}
-              <div className="overflow-y-auto divide-y divide-slate-100 my-2 space-y-2.5 flex-1 pr-1">
-                {alerts.length === 0 ? (
-                  <div className="text-center py-8 text-xs text-slate-400">
-                    <CheckCircle2 className="w-8 h-8 mx-auto text-emerald-500 mb-1.5 opacity-70" />
-                    <p className="font-bold text-slate-700">¡Todo al día!</p>
-                    <p className="text-[10px] text-slate-400 mt-0.5">No hay errores ni alertas pendientes de rectificación.</p>
-                  </div>
-                ) : (
-                  alerts.map((alert) => (
-                    <div
-                      key={alert.id}
-                      className={`p-3 rounded-2xl border transition-all space-y-2 ${
-                        alert.severity === 'Critical'
-                          ? 'bg-red-50/80 border-red-200'
-                          : alert.severity === 'Warning'
-                          ? 'bg-amber-50/80 border-amber-200'
-                          : 'bg-emerald-50/70 border-emerald-200'
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-1.5">
+              <button
+                onClick={() => setShowAlerts(false)}
+                className="p-2 rounded-2xl bg-white/10 hover:bg-white/20 text-white cursor-pointer transition-colors active:scale-95"
+                title="Cerrar ventana"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Lista de Alertas con Boton Grande 'Rectificar Error Ahora' */}
+            <div className="overflow-y-auto p-4 space-y-3 flex-1 divide-y-0">
+              {alerts.length === 0 ? (
+                <div className="text-center py-12 px-4">
+                  <CheckCircle2 className="w-12 h-12 mx-auto text-emerald-500 mb-2 opacity-80" />
+                  <p className="font-black text-slate-800 text-base">Todo el inventario al día</p>
+                  <p className="text-xs text-slate-500 mt-1">No hay errores, bloqueos ni medicamentos pendientes de rectificar.</p>
+                </div>
+              ) : (
+                alerts.map((alert) => (
+                  <div
+                    key={alert.id}
+                    className={`p-4 rounded-2xl border-2 transition-all space-y-3 shadow-xs ${
+                      alert.severity === 'Critical'
+                        ? 'bg-red-50/90 border-red-200'
+                        : alert.severity === 'Warning'
+                        ? 'bg-amber-50/90 border-amber-200'
+                        : 'bg-emerald-50/90 border-emerald-200'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
                         <span
-                          className={`font-black text-xs leading-snug ${
+                          className={`p-1.5 rounded-xl text-xs font-black ${
+                            alert.severity === 'Critical'
+                              ? 'bg-red-200 text-red-900'
+                              : alert.severity === 'Warning'
+                              ? 'bg-amber-200 text-amber-900'
+                              : 'bg-emerald-200 text-emerald-900'
+                          }`}
+                        >
+                          <ShieldAlert className="w-4 h-4" />
+                        </span>
+                        <h4
+                          className={`font-black text-sm leading-snug ${
                             alert.severity === 'Critical'
                               ? 'text-red-900'
                               : alert.severity === 'Warning'
@@ -322,82 +379,63 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                           }`}
                         >
                           {alert.title}
-                        </span>
-                        <span
-                          className={`px-1.5 py-0.5 text-[8px] font-black uppercase rounded-md shrink-0 ${
-                            alert.severity === 'Critical'
-                              ? 'bg-red-200 text-red-900'
-                              : alert.severity === 'Warning'
-                              ? 'bg-amber-200 text-amber-900'
-                              : 'bg-emerald-200 text-emerald-900'
-                          }`}
-                        >
-                          {alert.severity === 'Critical' ? 'Urgente' : 'Alerta'}
-                        </span>
+                        </h4>
                       </div>
 
-                      <p className="text-[11px] text-slate-700 leading-relaxed font-medium">
-                        {alert.message}
-                      </p>
-
-                      {/* BOTÓN RECTIFICAR / CORREGIR ERROR DESTACADO */}
-                      <div className="pt-1.5 border-t border-black/5 flex items-center justify-between gap-2">
-                        <button
-                          onClick={() => handleRectifyAlert(alert)}
-                          className="flex-1 py-1.5 px-3 bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white font-extrabold text-xs rounded-xl shadow-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all"
-                        >
-                          <Wrench className="w-3.5 h-3.5 text-emerald-200" />
-                          <span>🛠️ Rectificar Error</span>
-                          <ArrowUpRight className="w-3 h-3 text-emerald-300" />
-                        </button>
-
-                        <button
-                          onClick={() => markAlertAsRead(alert.id)}
-                          className="py-1.5 px-2.5 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 text-[10px] font-bold rounded-xl cursor-pointer transition-colors shrink-0"
-                          title="Marcar como resuelta"
-                        >
-                          <Check className="w-3.5 h-3.5 text-slate-500" />
-                        </button>
-                      </div>
+                      <span
+                        className={`px-2 py-0.5 text-[9px] font-black uppercase rounded-lg shrink-0 ${
+                          alert.severity === 'Critical'
+                            ? 'bg-red-600 text-white'
+                            : alert.severity === 'Warning'
+                            ? 'bg-amber-600 text-white'
+                            : 'bg-emerald-600 text-white'
+                        }`}
+                      >
+                        {alert.severity === 'Critical' ? 'URGENTE' : 'ALERTA'}
+                      </span>
                     </div>
-                  ))
-                )}
-              </div>
-            </div>
-          )}
-        </div>
 
-        {/* Avatar de Usuario y Cerrar Sesión */}
-        <div className="flex items-center gap-1 sm:gap-1.5 pl-1 sm:pl-1.5 border-l border-slate-200 shrink-0">
-          <div
-            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center text-xs font-black shadow-2xs shrink-0 cursor-default"
-            title={`${currentUser?.firstName} ${currentUser?.lastName} (${currentUser?.role})`}
-          >
-            {currentUser?.firstName?.charAt(0) || 'U'}
+                    <p className="text-xs text-slate-700 leading-relaxed font-semibold bg-white/70 p-2.5 rounded-xl border border-black/5">
+                      {alert.message}
+                    </p>
+
+                    {/* BOTON DESTACADO: RECTIFICAR ERROR AHORA */}
+                    <div className="pt-1 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
+                      <button
+                        onClick={() => handleRectifyAlert(alert)}
+                        className="flex-1 py-2.5 px-4 bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-800 hover:to-teal-900 active:scale-98 text-white font-black text-xs sm:text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all border border-emerald-600/50"
+                      >
+                        <Wrench className="w-4 h-4 text-emerald-200" />
+                        <span>🛠️ Rectificar Error Ahora</span>
+                        <ArrowUpRight className="w-4 h-4 text-emerald-300" />
+                      </button>
+
+                      <button
+                        onClick={() => markAlertAsRead(alert.id)}
+                        className="py-2 px-3 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold rounded-xl cursor-pointer transition-colors shrink-0 flex items-center justify-center gap-1.5 shadow-2xs"
+                        title="Marcar como resuelta"
+                      >
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Resuelto</span>
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Footer con boton cerrar */}
+            <div className="p-3 bg-slate-50 border-t border-slate-200 flex items-center justify-end shrink-0">
+              <button
+                onClick={() => setShowAlerts(false)}
+                className="py-1.5 px-4 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs rounded-xl cursor-pointer transition-colors"
+              >
+                Cerrar Ventana
+              </button>
+            </div>
           </div>
-
-          <div className="hidden xl:block text-left whitespace-nowrap">
-            <div className="text-xs font-bold text-slate-900 leading-none">
-              {currentUser?.firstName} {currentUser?.lastName}
-            </div>
-            <div className="text-[10px] text-emerald-700 font-semibold leading-tight mt-0.5">
-              {currentUser?.role}
-            </div>
-          </div>
-
-          {/* Botón Cerrar Sesión */}
-          <button
-            type="button"
-            onClick={logout}
-            title="Cerrar Sesión"
-            className="p-1.5 sm:px-2 sm:py-1 rounded-xl bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 hover:border-red-600 transition-all font-bold text-xs cursor-pointer shadow-2xs active:scale-95 shrink-0 flex items-center gap-1"
-          >
-            <LogOut className="w-3.5 h-3.5 shrink-0" />
-            <span className="hidden lg:inline">Salir</span>
-          </button>
         </div>
-
-      </div>
-    </header>
+      )}
+    </>
   );
 };
