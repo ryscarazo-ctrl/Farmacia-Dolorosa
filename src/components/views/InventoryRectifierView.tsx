@@ -24,6 +24,48 @@ import {
 import * as XLSX from 'xlsx';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
+
+// Helper flexible para leer columnas de cualquier Excel
+const getFlexVal = (row: any, patterns: string[]): any => {
+  if (!row || typeof row !== 'object') return undefined;
+  const keys = Object.keys(row);
+  for (const pat of patterns) {
+    if (row[pat] !== undefined && row[pat] !== null && String(row[pat]).trim() !== '') {
+      return row[pat];
+    }
+  }
+  for (const k of keys) {
+    const cleanK = k.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
+    for (const pat of patterns) {
+      const cleanPat = pat.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '');
+      if (cleanK === cleanPat || (cleanPat.length >= 4 && cleanK.includes(cleanPat))) {
+        const val = row[k];
+        if (val !== undefined && val !== null && String(val).trim() !== '') {
+          return val;
+        }
+      }
+    }
+  }
+  return undefined;
+};
+
+const parseFlexDate = (val: any): string => {
+  if (!val) return '2027-12-31';
+  if (typeof val === 'number') {
+    const date = new Date(Math.round((val - 25569) * 86400 * 1000));
+    if (!isNaN(date.getTime()) && date.getFullYear() > 2000) {
+      return date.toISOString().slice(0, 10);
+    }
+  }
+  const str = String(val).trim();
+  if (str.match(/^\d{4}-\d{2}-\d{2}$/)) return str;
+  const parts = str.split(/[\/\-\.]/);
+  if (parts.length === 3 && parts[2].length === 4) {
+    return parts[2] + '-' + parts[1].padStart(2, '0') + '-' + parts[0].padStart(2, '0');
+  }
+  return '2027-12-31';
+};
+
 export const InventoryRectifierView: React.FC<{ onNavigateToCatalog?: () => void }> = ({
   onNavigateToCatalog,
 }) => {
@@ -166,12 +208,18 @@ export const InventoryRectifierView: React.FC<{ onNavigateToCatalog?: () => void
         let unchanged = 0;
 
         jsonData.forEach((row, idx) => {
-          const rowName = row['Nombre_Comercial'] || row['Nombre'] || row['Medicamento'] || row['Producto'];
+          const rowName = getFlexVal(row, [
+            'Nombre_Comercial', 'FARMACO O PRODUCTO', 'FARMACO', 'Medicamento', 'Producto', 
+            'Nombre', 'Descripcion', 'Articulo', 'Item'
+          ]);
           if (!rowName) return;
 
-          const rowSku = row['SKU'] || row['Sku'] || row['Codigo_Interno'] || '';
+          const rowSku = getFlexVal(row, ['SKU', 'Sku', 'Codigo_Interno', 'Cod_Interno', 'Referencia']) || ('');
 
-          let rawBarcode = row['Codigo_Barra'] || row['Codigo'] || row['Barcode'];
+          let rawBarcode = getFlexVal(row, [
+            'Codigo_Barra', 'CODIGO DE BARRA', 'CODIGO DE BARRAS', 'CÓDIGO DE BARRA', 
+            'Barcode', 'Barras', 'Codigo_Barras', 'Codigo', 'EAN', 'UPC', 'Cod_Barra'
+          ]);
           let rowBarcode = '';
           if (typeof rawBarcode === 'number') {
             rowBarcode = BigInt(Math.floor(rawBarcode)).toString();
@@ -179,22 +227,37 @@ export const InventoryRectifierView: React.FC<{ onNavigateToCatalog?: () => void
             rowBarcode = String(rawBarcode).trim();
           }
 
-          const rowGeneric = row['Nombre_Generico'] || row['Generico'] || '';
-          const rowCatName = row['Categoria'] || '';
+          const rowGeneric = getFlexVal(row, ['Nombre_Generico', 'Generico', 'Principio_Activo']) || ('');
+          const rowCatName = getFlexVal(row, ['Categoria', 'Rubro', 'Clase']) || ('');
           const foundCat = categories.find((c) => c.name.toLowerCase().includes(String(rowCatName).toLowerCase())) || categories[0];
-          const rowLab = row['Laboratorio'] || '';
-          const rowPresentation = row['Presentacion'] || 'Caja / Unidad';
-          const rowConcentration = row['Concentracion'] || '';
-          const rowUnit = row['Unidad_Medida'] || 'Unidad';
-          const rowCost = parseFloat(row['Costo_Compra_C$'] || row['Costo'] || row['Precio_Compra'] || 0);
-          const rowSale = parseFloat(row['Precio_Venta_C$'] || row['Precio_Venta'] || row['Precio'] || (rowCost * 1.4));
-          const rowMinStock = parseInt(row['Stock_Minimo_Alerta'] || row['Stock_Minimo'] || 10);
-          const rowReceta = String(row['Requiere_Receta'] || '').toUpperCase() === 'SI';
-          const rowControlado = String(row['Es_Controlado_Psicotropico'] || '').toUpperCase() === 'SI';
+          const rowLab = getFlexVal(row, ['Laboratorio', 'Fabricante', 'Marca']) || 'Genérico / Comercial';
+          const rowPresentation = getFlexVal(row, ['Presentacion', 'PRESENTACION', 'Forma', 'Empaque']) || 'Caja / Unidad';
+          const rowConcentration = getFlexVal(row, ['Concentracion', 'Dosis']) || '';
+          const rowUnit = getFlexVal(row, ['Unidad_Medida', 'Unidad']) || 'Unidad';
+          
+          const rawCost = getFlexVal(row, ['Costo_Compra_C$', 'Costo', 'Precio_Compra', 'Costo_Unitario', 'Compra']);
+          const rawSale = getFlexVal(row, ['Precio_Venta_C$', 'PRECIOS', 'PRECIO', 'Precio_Venta', 'P.Venta', 'Venta', 'Precio']);
+          
+          const rowCost = parseFloat(rawCost || 0);
+          const rowSale = parseFloat(rawSale || (rowCost > 0 ? rowCost * 1.4 : 10));
+          
+          const rawMinStock = getFlexVal(row, ['Stock_Minimo_Alerta', 'Stock_Minimo', 'Minimo']);
+          const rowMinStock = parseInt(rawMinStock || 5);
+          
+          const rawReceta = getFlexVal(row, ['Requiere_Receta', 'Receta']);
+          const rowReceta = String(rawReceta || '').toUpperCase() === 'SI';
+          
+          const rawControlado = getFlexVal(row, ['Es_Controlado_Psicotropico', 'Controlado', 'Psicotropico']);
+          const rowControlado = String(rawControlado || '').toUpperCase() === 'SI';
 
-          const rowStock = parseInt(row['Stock_Actual'] || row['Stock_Inicial'] || row['Stock'] || row['Cantidad'] || 0);
-          const rowBatch = String(row['Numero_Lote'] || row['Lote'] || `LOT-${Date.now().toString().slice(-4)}-${idx + 1}`);
-          const rowExp = String(row['Fecha_Vencimiento_YYYY_MM_DD'] || row['Fecha_Vencimiento'] || row['Vencimiento'] || '2027-12-31');
+          const rawStock = getFlexVal(row, ['Stock_Actual', 'CANTIDAD', 'Stock_Inicial', 'Stock', 'Existencia', 'Cantidad_Total']);
+          const rowStock = parseInt(rawStock || 0);
+          
+          const rawBatch = getFlexVal(row, ['Numero_Lote', 'Lote', 'No_Lote', 'Batch']);
+          const rowBatch = String(rawBatch || ('LOT-' + new Date().getFullYear() + '-' + String(idx + 1).padStart(3, '0')));
+          
+          const rawExp = getFlexVal(row, ['Fecha_Vencimiento_YYYY_MM_DD', 'FECHA DE VENCIMIENTO', 'Fecha_Vencimiento', 'Vencimiento', 'Vence']);
+          const rowExp = parseFlexDate(rawExp);
 
           // Comparar con el producto existente en el sistema
           const normRowSku = rowSku ? String(rowSku).trim().toLowerCase() : '';
