@@ -10,10 +10,11 @@ import {
   AlertTriangle,
   X,
   ChevronDown,
-  Lock,
   Menu,
   LogOut,
   BookOpen,
+  Wifi,
+  WifiOff
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
@@ -56,7 +57,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         setIsSyncing(true);
         setTimeout(() => {
           setIsSyncing(false);
-        }, 3000);
+        }, 2500);
       };
 
       const handleOffline = () => {
@@ -93,32 +94,33 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const unreadAlerts = alerts.filter((a) => !a.isRead);
 
   return (
-    <header className="h-14 bg-white border-b border-emerald-100 px-3 sm:px-4 flex items-center justify-between z-30 shrink-0 select-none shadow-sm">
-      {/* Botón Menú Móvil + Selector de Sucursal y Reloj */}
-      <div className="flex items-center gap-2 sm:gap-4">
-        {/* Botón Hamburguesa ☰ para Teléfonos */}
+    <header className="h-14 bg-white border-b border-emerald-100 px-2.5 sm:px-4 flex items-center justify-between z-30 shrink-0 select-none shadow-2xs">
+      
+      {/* LADO IZQUIERDO: Menú Móvil + Sucursal + Estado */}
+      <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
+        {/* Botón Hamburguesa para Móvil */}
         <button
           type="button"
           onClick={onToggleMobileMenu}
-          className="md:hidden p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-all active:scale-95 shadow-xs"
-          title="Abrir menú de navegación"
+          className="md:hidden p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-all active:scale-95 shrink-0"
+          title="Abrir menú"
         >
-          <Menu className="w-5 h-5 text-emerald-800" />
+          <Menu className="w-4 h-4 text-emerald-800" />
         </button>
 
-        {/* Branch Selector Dropdown */}
-        <div className="relative">
+        {/* Selector de Sucursal */}
+        <div className="relative shrink min-w-0">
           <button
             onClick={() => setShowBranchMenu(!showBranchMenu)}
-            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 text-xs font-bold text-emerald-900 border border-emerald-200 transition-all shadow-sm max-w-[150px] sm:max-w-none truncate"
+            className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100/80 text-xs font-bold text-emerald-900 border border-emerald-200 transition-all shadow-2xs whitespace-nowrap"
           >
             <Building className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span className="truncate">{currentBranch.name}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+            <span className="truncate max-w-[120px] sm:max-w-[220px]">{currentBranch.name}</span>
+            <ChevronDown className="w-3 h-3 text-emerald-700 shrink-0" />
           </button>
 
           {showBranchMenu && (
-            <div className="absolute top-full left-0 mt-1.5 w-72 bg-white border border-emerald-200 rounded-2xl shadow-xl py-1 z-50">
+            <div className="absolute top-full left-0 mt-1.5 w-72 bg-white border border-emerald-200 rounded-2xl shadow-xl py-1 z-50 animate-in fade-in zoom-in-95 duration-100">
               <div className="px-3 py-1.5 text-[10px] font-bold text-emerald-700 uppercase tracking-wider border-b border-emerald-100">
                 Cambiar de Sucursal
               </div>
@@ -129,7 +131,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                     setCurrentBranch(b);
                     setShowBranchMenu(false);
                   }}
-                  className={`w-full px-3 py-2 text-xs text-left flex items-center justify-between hover:bg-emerald-50 transition-colors ${
+                  className={`w-full px-3 py-2 text-xs text-left flex items-center justify-between hover:bg-emerald-50 transition-colors cursor-pointer ${
                     b.id === currentBranch.id ? 'bg-emerald-100/70 text-emerald-900 font-bold' : 'text-slate-700'
                   }`}
                 >
@@ -144,72 +146,71 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           )}
         </div>
 
-        {/* Reloj en vivo (visible en pantallas medianas y grandes) */}
-        <div className="hidden md:flex items-center gap-1.5 text-xs text-emerald-800 font-mono bg-emerald-50/70 px-3 py-1 rounded-lg border border-emerald-200">
+        {/* Reloj Digital (Solo Pantallas Medianas/Grandes) */}
+        <div className="hidden lg:flex items-center gap-1.5 text-xs text-emerald-800 font-mono bg-emerald-50/70 px-2.5 py-1 rounded-lg border border-emerald-200 shrink-0 whitespace-nowrap">
           <Clock className="w-3.5 h-3.5 text-emerald-600" />
           <span>{time}</span>
         </div>
 
-        {/* Indicador de Estado Offline / Sincronización Automática */}
-        <div className="flex items-center">
+        {/* Indicador de Conexión y Sincronización */}
+        <div className="flex items-center shrink-0">
           {isSyncing ? (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-300 text-blue-800 text-[11px] font-bold animate-pulse">
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-[10px] sm:text-xs font-bold whitespace-nowrap">
               <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
-              <span>Sincronizando con Nube...</span>
+              <span className="hidden sm:inline">Sincronizando...</span>
             </div>
           ) : !isOnline ? (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-[11px] font-extrabold animate-bounce" title="Sin Internet. Guardando todo localmente en esta laptop.">
-              <span className="w-2 h-2 rounded-full bg-amber-500"></span>
-              <span>Modo Offline (Laptop)</span>
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 border border-amber-300 text-amber-900 text-[10px] sm:text-xs font-bold whitespace-nowrap" title="Modo sin conexión">
+              <WifiOff className="w-3 h-3 text-amber-600 shrink-0" />
+              <span className="hidden sm:inline">Offline</span>
             </div>
           ) : (
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold" title="Conexión en línea activa. Sincronizado en la Nube.">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span>Nube Sincronizada</span>
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[10px] sm:text-xs font-semibold whitespace-nowrap" title="Nube sincronizada en tiempo real">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              <span className="hidden sm:inline">Sincronizado</span>
             </div>
           )}
         </div>
       </div>
 
-      {/* Acceso a Manual, Estado de Caja, Alertas y Perfil */}
-      <div className="flex items-center gap-2 sm:gap-3">
-        {/* Botón Estratégico: MANUAL DE USUARIO */}
+      {/* LADO DERECHO: Manual, Caja, Alertas y Perfil */}
+      <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        
+        {/* Botón Manual (Visible en tablets y computadoras) */}
         <button
           type="button"
           onClick={onNavigateToManual}
-          className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 text-emerald-900 border border-emerald-300 font-extrabold text-[11px] sm:text-xs cursor-pointer shadow-xs transition-all active:scale-95"
-          title="Ver Manual de Usuario y Guía de Uso"
+          className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 hover:from-emerald-100 hover:to-teal-100 text-emerald-900 border border-emerald-300 font-bold text-xs cursor-pointer shadow-2xs transition-all active:scale-95 whitespace-nowrap"
+          title="Ver Manual de Usuario"
         >
           <BookOpen className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-          <span className="hidden sm:inline">📖 Manual</span>
-          <span className="sm:hidden font-bold">Manual</span>
+          <span>Manual</span>
         </button>
 
-        {/* Estado de Caja */}
+        {/* Estado de Caja (Visible en tablets y computadoras) */}
         <button
           onClick={onNavigateToCash}
-          className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-bold border transition-all ${
+          className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-bold border transition-all whitespace-nowrap ${
             currentCashSession
               ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
               : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
           }`}
-          title="Ver módulo de caja"
+          title="Ver estado de caja"
         >
           <Vault className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-          <span className="hidden sm:inline">{currentCashSession ? 'Caja Abierta' : 'Caja Cerrada'}</span>
-          <span className="sm:hidden">{currentCashSession ? 'Abierta' : 'Cerrada'}</span>
+          <span>{currentCashSession ? 'Caja Abierta' : 'Caja Cerrada'}</span>
         </button>
 
         {/* Centro de Alertas */}
-        <div className="relative">
+        <div className="relative shrink-0">
           <button
             onClick={() => setShowAlerts(!showAlerts)}
-            className="p-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-600 relative border border-slate-200 transition-colors"
+            className="p-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-700 relative border border-slate-200 transition-colors cursor-pointer"
             title="Alertas y Notificaciones"
           >
             <Bell className="w-4 h-4 text-slate-700" />
             {unreadAlerts.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                 {unreadAlerts.length}
               </span>
             )}
@@ -217,7 +218,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
 
           {/* Drawer de Alertas */}
           {showAlerts && (
-            <div className="absolute right-0 top-full mt-1.5 w-72 sm:w-80 bg-white border border-emerald-100 rounded-2xl shadow-xl p-3 z-50">
+            <div className="absolute right-0 top-full mt-1.5 w-72 sm:w-80 bg-white border border-emerald-100 rounded-2xl shadow-xl p-3 z-50 animate-in fade-in zoom-in-95 duration-100">
               <div className="flex items-center justify-between pb-2 border-b border-emerald-100">
                 <div className="font-bold text-xs text-slate-800 flex items-center gap-1.5">
                   <AlertTriangle className="w-4 h-4 text-amber-500" />
@@ -225,7 +226,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                 </div>
                 <button
                   onClick={() => setShowAlerts(false)}
-                  className="text-slate-400 hover:text-slate-600"
+                  className="text-slate-400 hover:text-slate-600 p-1"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -290,12 +291,16 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </div>
 
         {/* Perfil de Usuario y Botón Cerrar Sesión */}
-        <div className="flex items-center gap-1.5 sm:gap-2 pl-1.5 sm:pl-2 border-l border-emerald-100">
-          <div className="w-7 h-7 sm:w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold shadow-sm shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 pl-1 sm:pl-2 border-l border-slate-200 shrink-0">
+          <div
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center text-xs font-black shadow-2xs shrink-0"
+            title={`${currentUser?.firstName} ${currentUser?.lastName} (${currentUser?.role})`}
+          >
             {currentUser?.firstName?.charAt(0) || 'U'}
           </div>
-          <div className="hidden lg:block text-left">
-            <div className="text-xs font-bold text-slate-800 leading-none">
+
+          <div className="hidden xl:block text-left whitespace-nowrap">
+            <div className="text-xs font-bold text-slate-900 leading-none">
               {currentUser?.firstName} {currentUser?.lastName}
             </div>
             <div className="text-[10px] text-emerald-700 font-semibold leading-tight mt-0.5">
@@ -303,17 +308,18 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             </div>
           </div>
 
-          {/* Botón Directo Cerrar Sesión */}
+          {/* Botón Cerrar Sesión */}
           <button
             type="button"
             onClick={logout}
-            title="Cerrar Sesión / Finalizar Día"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 hover:border-red-600 transition-all font-bold text-xs cursor-pointer shadow-xs active:scale-95"
+            title="Cerrar Sesión"
+            className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-red-50 hover:bg-red-600 text-red-700 hover:text-white border border-red-200 hover:border-red-600 transition-all font-bold text-xs cursor-pointer shadow-2xs active:scale-95 shrink-0 flex items-center gap-1"
           >
-            <LogOut className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Cerrar Sesión</span>
+            <LogOut className="w-3.5 h-3.5 shrink-0" />
+            <span className="hidden md:inline">Cerrar Sesión</span>
           </button>
         </div>
+
       </div>
     </header>
   );
