@@ -1777,16 +1777,7 @@ export const initialBatches: ProductBatch[] = [
 ];
 export const initialSuppliers: Supplier[] = [];
 
-export const initialCustomers: Customer[] = [
-  {
-    id: 'cust-general',
-    name: 'Consumidor Final (Cliente General)',
-    taxId: '000-000000-0000X',
-    phone: '',
-    email: '',
-    address: 'Managua, Nicaragua',
-  },
-];
+export const initialCustomers: Customer[] = [];
 
 export const initialCashSessions: CashSession[] = [];
 export const initialSales: Sale[] = [];

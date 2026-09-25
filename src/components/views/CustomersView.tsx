@@ -101,7 +101,7 @@ export const CustomersView: React.FC = () => {
           <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Pacientes Frecuentes / Crónicos</div>
           <div className="text-2xl font-mono font-black text-emerald-700 flex items-center gap-1.5">
             <HeartPulse className="w-5 h-5 text-emerald-600" />
-            <span>3 pacientes</span>
+            <span>{customers.filter((c: any) => c.isChronic).length} pacientes</span>
           </div>
           <div className="text-[10px] text-slate-500">
             Tratamientos mensuales continuos
@@ -148,8 +148,10 @@ export const CustomersView: React.FC = () => {
             <tbody className="divide-y divide-slate-100">
               {filteredCustomers.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-8 text-center text-slate-400">
-                    No se encontraron clientes coincidentes.
+                  <td colSpan={6} className="p-10 text-center text-slate-400">
+                    <Users className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+                    <p className="font-semibold text-slate-600 text-sm">No hay clientes ni pacientes registrados</p>
+                    <p className="text-[11px] text-slate-400 mt-1">El directorio está completamente en blanco. Haz clic en "+ Registrar Cliente / Paciente" para agregar uno.</p>
                   </td>
                 </tr>
               ) : (

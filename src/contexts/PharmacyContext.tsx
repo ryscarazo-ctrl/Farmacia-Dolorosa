@@ -221,7 +221,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [products, setProducts] = useState<Product[]>(() => loadStorage('products', initialProducts));
   const [batches, setBatches] = useState<ProductBatch[]>(() => loadStorage('batches', initialBatches));
   const [suppliers, setSuppliers] = useState<Supplier[]>(() => loadStorage('suppliers', initialSuppliers));
-  const [customers, setCustomers] = useState<Customer[]>(() => loadStorage('customers', initialCustomers));
+  const [customers, setCustomers] = useState<Customer[]>(() => loadStorage('customers', []));
   const [purchases, setPurchases] = useState<PurchaseInvoice[]>(() => loadStorage('purchases', initialPurchases));
   const [supplierOrders, setSupplierOrders] = useState<SupplierOrder[]>(() => loadStorage('supplierOrders', initialSupplierOrders));
   const [operationalExpenses, setOperationalExpenses] = useState<OperationalExpense[]>(() => loadStorage('operationalExpenses', initialOperationalExpenses));
