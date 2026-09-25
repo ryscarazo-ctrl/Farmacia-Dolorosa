@@ -29,6 +29,8 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   onToggleMobileMenu,
 }) => {
   const {
+    products,
+    openProductDetail,
     branches,
     currentBranch,
     setCurrentBranch,
@@ -238,7 +240,24 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                   alerts.slice(0, 6).map((alert) => (
                     <div
                       key={alert.id}
-                      onClick={() => markAlertAsRead(alert.id)}
+                      onClick={() => {
+                        markAlertAsRead(alert.id);
+                        setShowAlerts(false);
+                        if (alert.title.toLowerCase().includes('cefadroxilo') || alert.message.toLowerCase().includes('cefadroxilo')) {
+                          openProductDetail('cefadroxilo');
+                        } else if (alert.title.toLowerCase().includes('colipax') || alert.message.toLowerCase().includes('colipax')) {
+                          openProductDetail('colipax');
+                        } else if (alert.title.toLowerCase().includes('cardiosorbide') || alert.message.toLowerCase().includes('cardiosorbide')) {
+                          openProductDetail('cardiosorbide');
+                        } else if (alert.title.toLowerCase().includes('amoxicilina') || alert.message.toLowerCase().includes('amoxicilina')) {
+                          openProductDetail('amoxicilina');
+                        } else if (alert.title.toLowerCase().includes('precios') || alert.message.toLowerCase().includes('precios')) {
+                          const noPrice = products.find((p) => p.salePrice === 0 || p.purchasePrice === 0);
+                          if (noPrice) openProductDetail(noPrice);
+                        } else {
+                          openProductDetail(alert.title);
+                        }
+                      }}
                       className={`py-2 text-xs cursor-pointer hover:bg-emerald-50/60 p-1.5 rounded-lg transition-colors ${
                         !alert.isRead ? 'bg-emerald-50/40' : 'opacity-70'
                       }`}

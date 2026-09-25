@@ -26,10 +26,11 @@ import { InventoryValuationView } from '../components/views/InventoryValuationVi
 import { BankReconciliationView } from '../components/views/BankReconciliationView';
 import { ManualView } from '../components/views/ManualView';
 import { usePharmacy } from '../contexts/PharmacyContext';
+import { ProductDetailModal } from '../components/modals/ProductDetailModal';
 import { LoginView } from '../components/auth/LoginView';
 
 export default function Home() {
-  const { isAuthenticated } = usePharmacy();
+  const { isAuthenticated, selectedProductDetail, closeProductDetail } = usePharmacy();
   const [currentView, setCurrentView] = useState<NavSection>('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
@@ -127,6 +128,13 @@ export default function Home() {
           {renderView()}
         </main>
       </div>
+      {selectedProductDetail && (
+        <ProductDetailModal
+          product={selectedProductDetail}
+          onClose={closeProductDetail}
+          onNavigateToView={(view) => navigateTo(view as any)}
+        />
+      )}
     </div>
   );
 }

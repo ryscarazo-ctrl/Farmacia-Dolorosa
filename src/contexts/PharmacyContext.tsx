@@ -57,6 +57,9 @@ import {
 } from '../data/mockData';
 
 interface PharmacyContextType {
+  selectedProductDetail: Product | null;
+  openProductDetail: (productOrIdOrName: Product | string) => void;
+  closeProductDetail: () => void;
   // Entidades principales
   branches: Branch[];
   currentBranch: Branch;
@@ -244,6 +247,36 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   });
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => loadStorage('auth_logged_in', false));
+  const [selectedProductDetail, setSelectedProductDetail] = useState<Product | null>(null);
+
+  const openProductDetail = (productOrIdOrName: Product | string) => {
+    if (typeof productOrIdOrName === 'object' && productOrIdOrName !== null) {
+      setSelectedProductDetail(productOrIdOrName);
+      return;
+    }
+    const query = String(productOrIdOrName).toLowerCase().trim();
+    const found = products.find((p) =>
+      p.id.toLowerCase() === query ||
+      p.sku.toLowerCase() === query ||
+      (p.barcode && p.barcode.toLowerCase() === query) ||
+      p.name.toLowerCase().includes(query) ||
+      query.includes(p.name.toLowerCase()) ||
+      (p.genericName && p.genericName.toLowerCase().includes(query))
+    );
+    if (found) {
+      setSelectedProductDetail(found);
+    } else if (products.length > 0) {
+      const words = query.split(/[^a-z0-9]/i).filter(w => w.length >= 4);
+      const wordMatch = products.find(p =>
+        words.some(w => p.name.toLowerCase().includes(w.toLowerCase()))
+      );
+      setSelectedProductDetail(wordMatch || products[0]);
+    }
+  };
+
+  const closeProductDetail = () => {
+    setSelectedProductDetail(null);
+  };
 
   // Sincronización automática con almacenamiento local permanente
   useEffect(() => { saveStorage('products', products); }, [products]);
@@ -1721,6 +1754,9 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   return (
     <PharmacyContext.Provider
       value={{
+        selectedProductDetail,
+        openProductDetail,
+        closeProductDetail,
         branches,
         currentBranch,
         setCurrentBranch,
