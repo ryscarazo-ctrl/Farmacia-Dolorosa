@@ -21,6 +21,7 @@ import { usePharmacy } from '../../contexts/PharmacyContext';
 
 export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ onNavigate }) => {
   const {
+    openProductDetail,
     currentBranch,
     sales,
     products,
@@ -54,7 +55,7 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
   }).length;
 
   return (
-    <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-slate-50 text-slate-800">
+    <div className="flex-1 p-3 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto bg-slate-50 text-slate-800">
       {/* Banner de Bienvenida Blanco y Verde */}
       <div className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 text-white rounded-3xl p-6 shadow-lg shadow-emerald-900/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
@@ -96,7 +97,7 @@ export const DashboardView: React.FC<{ onNavigate: (view: any) => void }> = ({ o
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         {/* Ventas Hoy */}
         <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">

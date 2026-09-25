@@ -28,6 +28,7 @@ interface InventoryViewProps {
 
 export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry }) => {
   const {
+    openProductDetail,
     products,
     categories,
     updateProduct,

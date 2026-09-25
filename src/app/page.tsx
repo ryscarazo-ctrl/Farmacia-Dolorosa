@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Sidebar, NavSection } from '../components/layout/Sidebar';
 import { TopNavbar } from '../components/layout/TopNavbar';
+import { BottomNavBar } from '../components/layout/BottomNavBar';
 import { DashboardView } from '../components/views/DashboardView';
 import { POSView } from '../components/views/POSView';
 import { InventoryView } from '../components/views/InventoryView';
@@ -128,6 +129,11 @@ export default function Home() {
           {renderView()}
         </main>
       </div>
+      <BottomNavBar
+        currentView={currentView}
+        onNavigate={(view) => navigateTo(view)}
+        onOpenMenu={() => setIsMobileMenuOpen(true)}
+      />
       {selectedProductDetail && (
         <ProductDetailModal
           product={selectedProductDetail}
