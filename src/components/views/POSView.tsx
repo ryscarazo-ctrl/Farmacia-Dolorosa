@@ -24,6 +24,8 @@ import {
   Check,
   Smartphone,
   ChevronUp,
+  Sparkles,
+  Link2,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 import { Product, PaymentMethod, Sale } from '../../types/pharmacy';
@@ -33,6 +35,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
     openProductDetail,
     products,
     categories,
+    updateProduct,
     cart,
     addToCart,
     updateCartQuantity,
@@ -57,21 +60,40 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
   const [receiptModalOpen, setReceiptModalOpen] = useState(false);
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
+  // Modal para vincular códigos de barra escaneados que aún no están asignados
+  const [unassignedBarcode, setUnassignedBarcode] = useState<string | null>(null);
+  const [assignSearch, setAssignSearch] = useState<string>('');
+
   // Vista en móvil: 'catalog' o 'cart'
   const [mobileView, setMobileView] = useState<'catalog' | 'cart'>('catalog');
 
   const barcodeInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    // Focus search on desktop
-    if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
-      barcodeInputRef.current?.focus();
+  // Sonido Sintetizado de Escaneo POS (Beep de Caja Registradora)
+  const playBeep = () => {
+    try {
+      if (typeof window === 'undefined') return;
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1750, ctx.currentTime);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.08);
+    } catch (e) {
+      // Audio fallback silencioso
     }
-  }, []);
+  };
 
   const showToast = (message: string, type: 'success' | 'error' = 'success') => {
     setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
+    setTimeout(() => setNotification(null), 3500);
   };
 
   // Normalización para búsquedas sin tildes ni mayúsculas
@@ -81,6 +103,105 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
       .replace(/[\u0300-\u036f]/g, '')
       .toLowerCase()
       .trim();
+
+  // Función Central de Procesamiento de Código de Barra Escaneado
+  const processScannedBarcode = (code: string) => {
+    if (!code || !code.trim()) return;
+    const cleanCode = code.trim().toLowerCase();
+    const cleanNoZeros = cleanCode.replace(/^0+/, '');
+
+    // Buscar por coincidencia de Código de Barra exacto, sin ceros o por SKU
+    const match = products.find((p) => {
+      const pBarcode = (p.barcode || '').trim().toLowerCase();
+      const pBarcodeNoZeros = pBarcode.replace(/^0+/, '');
+      const pSku = (p.sku || '').trim().toLowerCase();
+
+      return (
+        (pBarcode && pBarcode === cleanCode) ||
+        (pBarcodeNoZeros && cleanNoZeros && pBarcodeNoZeros === cleanNoZeros) ||
+        (pSku && pSku === cleanCode)
+      );
+    });
+
+    if (match) {
+      playBeep();
+      if (match.salePrice <= 0) {
+        openProductDetail(match);
+        showToast(`⚠️ Configura el precio de venta para ${match.name}`, 'error');
+        return;
+      }
+      const res = addToCart(match);
+      if (res.success) {
+        showToast(`✅ Escaneado: +1 ${match.name}`);
+        setSearchQuery('');
+      } else {
+        showToast(res.message, 'error');
+      }
+    } else {
+      // Si el código de barra no existe aún en la base de datos:
+      // Abrir asistente rápido para vincularlo al medicamento físico en 1 clic
+      setUnassignedBarcode(code.trim());
+      setAssignSearch('');
+    }
+  };
+
+  // LISTENER GLOBAL DE PISTOLA LECTORA DE CÓDIGOS DE BARRA USB / BLUETOOTH
+  useEffect(() => {
+    let buffer = '';
+    let lastKeyTime = Date.now();
+
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // Si el usuario está escribiendo en el modal de pago o cliente, no interferir
+      if (paymentModalOpen) return;
+
+      const currentTime = Date.now();
+      const timeDiff = currentTime - lastKeyTime;
+      lastKeyTime = currentTime;
+
+      if (e.key === 'Enter') {
+        if (buffer.length >= 3 && timeDiff < 200) {
+          e.preventDefault();
+          processScannedBarcode(buffer);
+          buffer = '';
+          return;
+        }
+        buffer = '';
+        return;
+      }
+
+      if (e.key.length === 1) {
+        if (timeDiff > 200) {
+          buffer = e.key;
+        } else {
+          buffer += e.key;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [products, paymentModalOpen]);
+
+  // Vinculación Rápida de Código de Barra
+  const handleAssignBarcodeToProduct = (product: Product) => {
+    if (!unassignedBarcode) return;
+
+    const updatedProd: Product = {
+      ...product,
+      barcode: unassignedBarcode,
+    };
+
+    updateProduct(updatedProd);
+    playBeep();
+
+    const res = addToCart(updatedProd);
+    if (res.success) {
+      showToast(`🎉 ¡Código ${unassignedBarcode} asignado a ${product.name}!`);
+    }
+
+    setUnassignedBarcode(null);
+    setSearchQuery('');
+  };
 
   const filteredProducts = products.filter((p) => {
     if (p.isActive === false) return false;
@@ -115,30 +236,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
 
   const handleBarcodeKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      const q = searchQuery.trim().toLowerCase();
-      const match = products.find(
-        (p) =>
-          (p.barcode && p.barcode.trim().toLowerCase() === q) ||
-          (p.sku && p.sku.trim().toLowerCase() === q)
-      );
-
-      if (match) {
-        const result = addToCart(match);
-        if (result.success) {
-          showToast(`+1 ${match.name}`);
-          setSearchQuery('');
-        } else {
-          showToast(result.message, 'error');
-        }
-      } else if (filteredProducts.length === 1) {
-        const result = addToCart(filteredProducts[0]);
-        if (result.success) {
-          showToast(`+1 ${filteredProducts[0]?.name || 'Medicamento'}`);
-          setSearchQuery('');
-        } else {
-          showToast(result.message, 'error');
-        }
-      }
+      processScannedBarcode(searchQuery);
     }
   };
 
@@ -253,7 +351,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleBarcodeKeyDown}
-              placeholder="Buscar por medicamento, principio activo o código..."
+              placeholder="Buscar por medicamento, principio activo o escanear código de barras..."
               className="w-full bg-white border-2 border-slate-200 focus:border-emerald-500 rounded-xl pl-9 pr-9 py-2.5 text-xs text-slate-900 font-semibold placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-100 shadow-sm"
             />
             {searchQuery && (
@@ -337,6 +435,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                         showToast(`Configura el precio de venta para ${product.name}`, 'error');
                         return;
                       }
+                      playBeep();
                       const res = addToCart(product);
                       if (res.success) {
                         showToast(`+1 ${product.name}`);
@@ -430,7 +529,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
         )}
       </div>
 
-      {/* PANEL DERECHO: CARRITO DE VENTA POS (ADAPTADO A MÓVIL Y DESKTOP) */}
+      {/* PANEL DERECHO: CARRITO DE VENTA POS */}
       <div
         className={`w-full lg:w-96 bg-white flex-col h-full border-l border-slate-200 shadow-sm ${
           mobileView === 'cart' ? 'flex' : 'hidden lg:flex'
@@ -488,7 +587,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
               <Barcode className="w-12 h-12 mb-2 stroke-[1.5] text-slate-300" />
               <p className="font-bold text-slate-600">Carrito vacío</p>
               <p className="text-[11px] text-slate-400 mt-1">
-                Toca cualquier medicamento del catálogo para agregarlo a la venta.
+                Toca cualquier medicamento o escanea un código de barra para agregarlo.
               </p>
             </div>
           ) : (
@@ -579,7 +678,93 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
         </div>
       </div>
 
-      {/* MODAL DE PAGO (OPTIMIZADO PARA MÓVIL Y DESKTOP) */}
+      {/* MODAL ASISTENTE INTELIGENTE: VINCULAR CÓDIGO DE BARRA ESCANEADO EN 1 CLIC */}
+      {unassignedBarcode && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border-2 border-emerald-400 animate-in zoom-in-95 duration-200">
+            <div className="bg-gradient-to-r from-emerald-800 to-teal-900 text-white p-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Barcode className="w-5 h-5 text-emerald-300" />
+                <h3 className="font-black text-sm sm:text-base">Código Escaneado no Asignado</h3>
+              </div>
+              <button
+                onClick={() => setUnassignedBarcode(null)}
+                className="p-1 rounded-full hover:bg-white/20 text-white cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-4 sm:p-5 space-y-4 text-xs">
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl">
+                <div className="text-[10px] font-black text-amber-800 uppercase tracking-wider">
+                  Código de Barra Detectado por la Pistola:
+                </div>
+                <div className="text-xl font-black text-slate-900 font-mono mt-0.5">
+                  {unassignedBarcode}
+                </div>
+                <p className="text-[11px] text-amber-700 mt-1">
+                  Este código físico no estaba en el sistema. Escribe el nombre del medicamento abajo para vincularlo en 1 clic y agregarlo a la venta.
+                </p>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="font-bold text-slate-700">Buscar Medicamento a Vincular:</label>
+                <div className="relative">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    autoFocus
+                    value={assignSearch}
+                    onChange={(e) => setAssignSearch(e.target.value)}
+                    placeholder="Escribe el nombre del medicamento..."
+                    className="w-full bg-slate-50 border-2 border-emerald-300 rounded-xl pl-9 pr-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* Lista de Medicamentos Sugeridos */}
+              <div className="max-h-56 overflow-y-auto space-y-1.5 border border-slate-200 rounded-2xl p-2 bg-slate-50/50">
+                {products
+                  .filter((p) => {
+                    if (!assignSearch.trim()) return true;
+                    return (
+                      normalize(p.name).includes(normalize(assignSearch)) ||
+                      normalize(p.sku).includes(normalize(assignSearch))
+                    );
+                  })
+                  .slice(0, 10)
+                  .map((p) => (
+                    <div
+                      key={p.id}
+                      onClick={() => handleAssignBarcodeToProduct(p)}
+                      className="p-2.5 bg-white hover:bg-emerald-50 border border-slate-200 hover:border-emerald-400 rounded-xl cursor-pointer flex items-center justify-between transition-colors group"
+                    >
+                      <div className="flex-1 min-w-0 pr-2">
+                        <div className="font-bold text-slate-900 text-xs truncate group-hover:text-emerald-900">
+                          {p.name}
+                        </div>
+                        <div className="text-[10px] text-slate-500 font-mono">
+                          SKU: {p.sku} • Stock: {getAvailableStock(p.id)} • {settings.currencySymbol} {p.salePrice.toFixed(2)}
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-[10px] font-black shrink-0 flex items-center gap-1 shadow-xs group-hover:bg-emerald-700"
+                      >
+                        <Link2 className="w-3 h-3" />
+                        <span>Vincular</span>
+                      </button>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE PAGO */}
       {paymentModalOpen && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150">
           <div className="bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200 animate-in slide-in-from-bottom sm:zoom-in-95 duration-200">
@@ -592,7 +777,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                 onClick={() => setPaymentModalOpen(false)}
                 className="p-1.5 rounded-full hover:bg-white/20 text-white cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
@@ -722,7 +907,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
         </div>
       )}
 
-      {/* MODAL DE COMPROBANTE / TICKET FINALIZADO (CON OPCIÓN DE WHATSAPP) */}
+      {/* MODAL DE COMPROBANTE / TICKET FINALIZADO */}
       {receiptModalOpen && lastSale && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-150">
           <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden border border-slate-200 animate-in zoom-in-95 duration-200">
