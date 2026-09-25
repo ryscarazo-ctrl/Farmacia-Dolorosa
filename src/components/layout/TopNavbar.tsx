@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  Building,
+  Building2,
   Bell,
   Vault,
   Clock,
@@ -137,7 +137,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     <>
       <header className="h-14 bg-white border-b border-emerald-100 px-2 sm:px-4 flex items-center justify-between z-30 shrink-0 select-none shadow-xs w-full max-w-full relative">
         {/* SECCION IZQUIERDA: Menu + Sucursal + En Vivo */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 min-w-0 flex-1">
+        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-1">
           {/* Boton Hamburguesa para Movil */}
           <button
             type="button"
@@ -145,28 +145,29 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             className="md:hidden p-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-all active:scale-95 shrink-0 cursor-pointer"
             title="Abrir menu"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-4 h-4" />
           </button>
 
-          {/* Selector de Sucursal */}
+          {/* Selector de Sucursal: Icono y proporciones armoniosas */}
           <div className="relative shrink-0">
             <button
               onClick={() => setShowBranchMenu(!showBranchMenu)}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100/80 text-emerald-950 border border-emerald-300/80 rounded-xl text-xs font-bold transition-all shadow-xs cursor-pointer"
+              className="flex items-center gap-1.5 px-2 py-1 sm:px-2.5 sm:py-1.5 bg-emerald-50/90 hover:bg-emerald-100/90 text-emerald-950 border border-emerald-300/80 rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-2xs cursor-pointer active:scale-98"
               title="Cambiar Sucursal Activa"
             >
-              <Building className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-              <span className="truncate max-w-[130px] sm:max-w-[190px]">
+              <Building2 className="w-3 h-3 text-emerald-700 shrink-0" />
+              <span className="truncate max-w-[110px] sm:max-w-[175px]">
                 {currentBranch.name}
               </span>
-              <ChevronDown className="w-3 h-3 text-emerald-600 shrink-0" />
+              <ChevronDown className="w-3 h-3 text-emerald-600 shrink-0 opacity-70" />
             </button>
 
             {/* Menu Desplegable Sucursales */}
             {showBranchMenu && (
-              <div className="absolute left-0 top-full mt-1.5 w-64 bg-white border border-emerald-200 rounded-2xl shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
-                <div className="text-[10px] font-black text-emerald-800 uppercase px-2.5 py-1 tracking-wider border-b border-emerald-100/60 mb-1">
-                  Sucursales Disponibles
+              <div className="absolute left-0 top-full mt-1.5 w-60 bg-white border border-emerald-200 rounded-2xl shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="text-[10px] font-black text-emerald-800 uppercase px-2.5 py-1 tracking-wider border-b border-emerald-100/60 mb-1 flex items-center gap-1.5">
+                  <Building2 className="w-3 h-3 text-emerald-600" />
+                  <span>Sucursales Disponibles</span>
                 </div>
                 {branches.map((b) => (
                   <button
@@ -192,14 +193,14 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           </div>
 
           {/* Reloj y Estado */}
-          <div className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl text-xs font-bold text-emerald-950 shrink-0">
-            <Clock className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+          <div className="hidden sm:flex items-center gap-1 px-2 py-1 sm:px-2.5 sm:py-1.5 bg-emerald-50/70 border border-emerald-200/80 rounded-xl text-[11px] sm:text-xs font-bold text-emerald-950 shrink-0">
+            <Clock className="w-3 h-3 text-emerald-700 shrink-0" />
             <span className="font-mono text-[11px]">{time}</span>
           </div>
 
           {/* Indicador de Sincronizacion */}
           <div
-            className={`hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-xs font-bold shrink-0 transition-colors ${
+            className={`hidden md:flex items-center gap-1.5 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-xl border text-[11px] sm:text-xs font-bold shrink-0 transition-colors ${
               !isOnline
                 ? 'bg-red-50 text-red-700 border-red-200'
                 : isSyncing
@@ -209,7 +210,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           >
             {!isOnline ? (
               <>
-                <WifiOff className="w-3.5 h-3.5 text-red-600 shrink-0" />
+                <WifiOff className="w-3 h-3 text-red-600 shrink-0" />
                 <span>Offline</span>
               </>
             ) : isSyncing ? (
@@ -227,7 +228,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
         </div>
 
         {/* SECCION DERECHA: Manual + Caja + Alertas + Perfil */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
           {/* Boton Manual de Usuario */}
           {onNavigateToManual && (
             <button
@@ -243,7 +244,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           {/* Boton Caja Estado */}
           <button
             onClick={onNavigateToCash}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border font-black text-xs transition-all shadow-xs cursor-pointer shrink-0 ${
+            className={`flex items-center gap-1.5 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-xl border font-black text-xs transition-all shadow-2xs cursor-pointer shrink-0 ${
               currentCashSession
                 ? 'bg-emerald-600 border-emerald-700 text-white hover:bg-emerald-700'
                 : 'bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100'
@@ -251,13 +252,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             title="Ver estado de caja"
           >
             <Vault className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span>{currentCashSession ? 'Caja Abierta' : 'Caja Cerrada'}</span>
+            <span className="text-[11px] sm:text-xs">{currentCashSession ? 'Caja Abierta' : 'Caja Cerrada'}</span>
           </button>
 
           {/* Boton Campana de Alertas con Badge Contador */}
           <button
             onClick={() => setShowAlerts(true)}
-            className="p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-700 relative border border-slate-200 transition-colors cursor-pointer shrink-0 active:scale-95"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-50 hover:bg-emerald-50 text-slate-700 relative border border-slate-200 transition-colors cursor-pointer shrink-0 active:scale-95"
             title="Centro de Alertas y Notificaciones"
           >
             <Bell className="w-4 h-4 text-slate-700" />
