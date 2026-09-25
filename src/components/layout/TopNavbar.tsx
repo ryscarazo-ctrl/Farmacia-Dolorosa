@@ -1,8 +1,8 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import {
-  Building2,
+  MapPin,
   Bell,
   Vault,
   Clock,
@@ -155,7 +155,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               className="flex items-center gap-1.5 px-2 py-1 sm:px-2.5 sm:py-1.5 bg-emerald-50/90 hover:bg-emerald-100/90 text-emerald-950 border border-emerald-300/80 rounded-xl text-[11px] sm:text-xs font-bold transition-all shadow-2xs cursor-pointer active:scale-98"
               title="Cambiar Sucursal Activa"
             >
-              <Building2 className="w-3 h-3 text-emerald-700 shrink-0" />
+              <MapPin className="w-3 h-3 text-emerald-700 shrink-0" />
               <span className="truncate max-w-[110px] sm:max-w-[175px]">
                 {currentBranch.name}
               </span>
@@ -166,7 +166,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             {showBranchMenu && (
               <div className="absolute left-0 top-full mt-1.5 w-60 bg-white border border-emerald-200 rounded-2xl shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150">
                 <div className="text-[10px] font-black text-emerald-800 uppercase px-2.5 py-1 tracking-wider border-b border-emerald-100/60 mb-1 flex items-center gap-1.5">
-                  <Building2 className="w-3 h-3 text-emerald-600" />
+                  <MapPin className="w-3 h-3 text-emerald-600" />
                   <span>Sucursales Disponibles</span>
                 </div>
                 {branches.map((b) => (
@@ -342,7 +342,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
               {alerts.length === 0 ? (
                 <div className="text-center py-12 px-4">
                   <CheckCircle2 className="w-12 h-12 mx-auto text-emerald-500 mb-2 opacity-80" />
-                  <p className="font-black text-slate-800 text-base">Todo el inventario al día</p>
+                  <p className="font-black text-slate-800 text-base">Todo el inventario al dÃ­a</p>
                   <p className="text-xs text-slate-500 mt-1">No hay errores, bloqueos ni medicamentos pendientes de rectificar.</p>
                 </div>
               ) : (
@@ -407,7 +407,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                         className="flex-1 py-2.5 px-4 bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-800 hover:to-teal-900 active:scale-98 text-white font-black text-xs sm:text-sm rounded-xl shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all border border-emerald-600/50"
                       >
                         <Wrench className="w-4 h-4 text-emerald-200" />
-                        <span>🛠️ Rectificar Error Ahora</span>
+                        <span>ðŸ› ï¸ Rectificar Error Ahora</span>
                         <ArrowUpRight className="w-4 h-4 text-emerald-300" />
                       </button>
 
@@ -440,3 +440,4 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
     </>
   );
 };
+
