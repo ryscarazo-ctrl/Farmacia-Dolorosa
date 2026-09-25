@@ -114,6 +114,10 @@ export const CashView: React.FC = () => {
               <div className="text-xs text-slate-500 mt-1">
                 Apertura: {new Date(currentCashSession.openedAt).toLocaleString('es-SV')} por <strong>{currentCashSession.userName}</strong>
               </div>
+              <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-[10px] font-extrabold shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Monitoreo en Vivo para Jonathan & María • Ventas reflejadas en tiempo real sin requerir cierre de turno</span>
+              </div>
             </div>
 
             <div className="text-right">

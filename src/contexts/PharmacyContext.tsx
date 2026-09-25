@@ -461,7 +461,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [products, batches, customers, sales, movements, alerts, settings]);
+  }, [products, batches, customers, sales, movements, alerts, settings, cashSessions]);
 
   // 3. Bloqueo Automático de Seguridad: María y Jonathan se bloquean al salir de la pantalla.
   // EXCEPCIÓN: La Cajera (Fátima / Rol Cajera) mantiene su sesión abierta durante la jornada, cerrando solo con Cierre de Turno o Manual.
