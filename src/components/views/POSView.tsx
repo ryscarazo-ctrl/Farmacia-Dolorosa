@@ -445,10 +445,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                 <span className="font-mono">-{settings.currencySymbol} {totals.discount.toFixed(2)}</span>
               </div>
             )}
-            <div className="flex justify-between text-slate-500">
-              <span>Impuesto (0% exento):</span>
-              <span className="font-mono text-slate-900">{settings.currencySymbol} 0.00</span>
-            </div>
+
             <div className="flex justify-between text-base font-black text-slate-900 pt-1 border-t border-slate-100">
               <span>Total a Pagar:</span>
               <span className="text-emerald-700 text-xl font-mono font-black">{settings.currencySymbol} {totals.total.toFixed(2)}</span>

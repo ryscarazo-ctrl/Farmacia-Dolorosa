@@ -445,10 +445,7 @@ export const ProductEntryView: React.FC<ProductEntryViewProps> = ({ onNavigateTo
                     +{settings.currencySymbol} {Math.max(0, (parseFloat(salePrice) || 0) - (parseFloat(purchasePrice) || 0)).toFixed(2)}
                   </span>
                 </div>
-                <div className="text-right">
-                  <span className="text-[10px] text-slate-500 font-semibold block">IVA Medicamentos</span>
-                  <span className="text-xs font-black text-slate-700">0% (Exento)</span>
-                </div>
+
               </div>
 
               <div className="grid grid-cols-2 gap-2 pt-1">
