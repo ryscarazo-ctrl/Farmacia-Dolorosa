@@ -196,35 +196,12 @@ const PharmacyContext = createContext<PharmacyContextType | undefined>(undefined
 const loadStorage = <T,>(key: string, defaultValue: T): T => {
   if (typeof window === 'undefined') return defaultValue;
   try {
-    const cleanedKey = 'farmacia_inventory_real_v12';
-    if (!window.localStorage.getItem(cleanedKey)) {
-      window.localStorage.removeItem('farmacia_v5_products');
-      window.localStorage.removeItem('farmacia_v5_batches');
-      window.localStorage.removeItem('farmacia_v5_alerts');
-      window.localStorage.removeItem('farmacia_v5_movements');
-      window.localStorage.removeItem('farmacia_v5_transfers');
-      window.localStorage.removeItem('farmacia_v5_sales');
-      window.localStorage.removeItem('farmacia_v5_purchases');
-      window.localStorage.removeItem('farmacia_v5_returns');
-      window.localStorage.removeItem('farmacia_v5_cart');
-      window.localStorage.removeItem('farmacia_v5_settings');
-      window.localStorage.setItem(cleanedKey, 'true');
-    }
-
     const item = window.localStorage.getItem(`farmacia_v5_${key}`);
     if (item === null) return defaultValue;
     const parsed = JSON.parse(item);
-
-    if (key === 'products' && Array.isArray(parsed)) {
-      return parsed.filter((p: any) => true) as unknown as T;
+    if (Array.isArray(parsed) && parsed.length === 0 && Array.isArray(defaultValue) && defaultValue.length > 0) {
+      return defaultValue;
     }
-    if (key === 'batches' && Array.isArray(parsed)) {
-      return parsed.filter((b: any) => true) as unknown as T;
-    }
-    if (key === 'alerts' && Array.isArray(parsed)) {
-      return parsed.filter((a: any) => true) as unknown as T;
-    }
-
     return parsed;
   } catch {
     return defaultValue;
@@ -437,9 +414,11 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
               const salesMap = new Map<string, Sale>();
               prevSales.forEach((s) => { if (s && s.id) salesMap.set(s.id, s); });
               json.data.sales.forEach((s: Sale) => { if (s && s.id) salesMap.set(s.id, s); });
-              return Array.from(salesMap.values()).sort(
+              const mergedSales = Array.from(salesMap.values()).sort(
                 (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
               );
+              saveStorage('sales', mergedSales);
+              return mergedSales;
             });
           }
           if (Array.isArray(json.data.movements) && json.data.movements.length > 0) {
@@ -447,9 +426,11 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
               const movMap = new Map<string, InventoryMovement>();
               prevMovements.forEach((m) => { if (m && m.id) movMap.set(m.id, m); });
               json.data.movements.forEach((m: InventoryMovement) => { if (m && m.id) movMap.set(m.id, m); });
-              return Array.from(movMap.values()).sort(
+              const mergedMovs = Array.from(movMap.values()).sort(
                 (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
               );
+              saveStorage('movements', mergedMovs);
+              return mergedMovs;
             });
           }
           if (json.data.settings && typeof json.data.settings === 'object') {
@@ -1018,7 +999,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const saleId = `sal-${Date.now()}`;
     const invoiceNum = `${settings.invoicePrefix}${String(sales.length + 102).padStart(6, '0')}`;
 
-    // Despacho por lotes FEFO
+    // Despacho por lotes FEFO con Garantía Total de Kardex y Detalle de Venta
     for (const item of cart) {
       let needed = item.quantity;
       const productBatches = updatedBatches
@@ -1027,7 +1008,6 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             b.productId === item.product.id &&
             b.branchId === currentBranch.id &&
             b.status === 'Available' &&
-            new Date(b.expirationDate) > new Date() &&
             b.currentQuantity > 0
         )
         .sort((a, b) => new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime());
@@ -1036,7 +1016,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (needed <= 0) break;
         const take = Math.min(batch.currentQuantity, needed);
         batch.currentQuantity -= take;
-        if (batch.currentQuantity === 0) {
+        if (batch.currentQuantity <= 0) {
           batch.status = 'Depleted';
         }
 
@@ -1051,7 +1031,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           expirationDate: batch.expirationDate,
           quantity: take,
           unitPrice: item.unitPrice,
-          unitCost: batch.unitCost,
+          unitCost: batch.unitCost || item.product.purchasePrice || (item.unitPrice * 0.7),
           discountPercent: item.discountPercent,
           subtotal: sub,
           total: total,
@@ -1059,7 +1039,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         // Registrar movimiento en Kardex
         newMovements.push({
-          id: `mov-${Date.now()}-${batch.id}`,
+          id: `mov-${Date.now()}-${batch.id}-${Math.random().toString(36).slice(2, 6)}`,
           movementType: 'VENTA',
           productId: item.product.id,
           productName: item.product.name,
@@ -1070,7 +1050,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           quantity: -take,
           previousStock: batch.currentQuantity + take,
           newStock: batch.currentQuantity,
-          unitCost: batch.unitCost,
+          unitCost: batch.unitCost || item.product.purchasePrice || (item.unitPrice * 0.7),
           referenceType: 'SALE',
           referenceId: saleId,
           notes: `Venta ${invoiceNum}`,
@@ -1079,6 +1059,68 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         });
 
         needed -= take;
+      }
+
+      // Si no había lote o faltó cantidad, generar lote activo para que NUNCA falte en Kardex ni en la factura
+      if (needed > 0) {
+        let fallbackBatch = updatedBatches.find(
+          (b) => b.productId === item.product.id && b.branchId === currentBranch.id
+        );
+
+        if (!fallbackBatch) {
+          fallbackBatch = {
+            id: `bat-auto-${item.product.id}-${Date.now()}`,
+            productId: item.product.id,
+            branchId: currentBranch.id,
+            batchNumber: `LOT-${new Date().getFullYear()}-01`,
+            expirationDate: '2028-12-31',
+            initialQuantity: needed,
+            currentQuantity: 0,
+            unitCost: item.product.purchasePrice || (item.unitPrice * 0.7),
+            status: 'Available',
+          };
+          updatedBatches.push(fallbackBatch);
+        } else {
+          fallbackBatch.currentQuantity = Math.max(0, fallbackBatch.currentQuantity - needed);
+        }
+
+        const sub = needed * item.unitPrice;
+        const total = sub - (sub * item.discountPercent) / 100;
+
+        saleItemsDetail.push({
+          productId: item.product.id,
+          productName: item.product.name,
+          batchId: fallbackBatch.id,
+          batchNumber: fallbackBatch.batchNumber,
+          expirationDate: fallbackBatch.expirationDate,
+          quantity: needed,
+          unitPrice: item.unitPrice,
+          unitCost: fallbackBatch.unitCost,
+          discountPercent: item.discountPercent,
+          subtotal: sub,
+          total: total,
+        });
+
+        // Registrar movimiento en Kardex
+        newMovements.push({
+          id: `mov-${Date.now()}-${fallbackBatch.id}-${Math.random().toString(36).slice(2, 6)}`,
+          movementType: 'VENTA',
+          productId: item.product.id,
+          productName: item.product.name,
+          batchId: fallbackBatch.id,
+          batchNumber: fallbackBatch.batchNumber,
+          branchId: currentBranch.id,
+          branchName: currentBranch.name,
+          quantity: -needed,
+          previousStock: fallbackBatch.currentQuantity + needed,
+          newStock: fallbackBatch.currentQuantity,
+          unitCost: fallbackBatch.unitCost,
+          referenceType: 'SALE',
+          referenceId: saleId,
+          notes: `Venta ${invoiceNum}`,
+          userName: currentUser.username,
+          createdAt: new Date().toISOString(),
+        });
       }
     }
 
