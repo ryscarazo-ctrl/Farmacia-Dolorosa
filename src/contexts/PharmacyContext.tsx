@@ -1172,25 +1172,35 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }).catch(() => {});
     }
 
-    // Actualizar caja si hay sesión abierta
+    // Actualizar caja si hay sesión abierta con guardado inmediato
     if (currentCashSession) {
-      setCashSessions((prev) =>
-        prev.map((cs) => {
-          if (cs.id === currentCashSession.id) {
-            const isCash = params.paymentMethod === 'Cash';
-            const isCard = params.paymentMethod === 'Card';
-            const isTrf = params.paymentMethod === 'Transfer';
-            return {
-              ...cs,
-              cashSales: isCash ? cs.cashSales + totals.total : cs.cashSales,
-              cardSales: isCard ? cs.cardSales + totals.total : cs.cardSales,
-              transferSales: isTrf ? cs.transferSales + totals.total : cs.transferSales,
-              expectedBalance: isCash ? cs.expectedBalance + totals.total : cs.expectedBalance,
-            };
-          }
-          return cs;
-        })
-      );
+      const isCash = params.paymentMethod === 'Cash';
+      const isCard = params.paymentMethod === 'Card';
+      const isTrf = params.paymentMethod === 'Transfer';
+
+      const nextCashSessions = cashSessions.map((cs) => {
+        if (cs.id === currentCashSession.id) {
+          return {
+            ...cs,
+            cashSales: isCash ? cs.cashSales + totals.total : cs.cashSales,
+            cardSales: isCard ? cs.cardSales + totals.total : cs.cardSales,
+            transferSales: isTrf ? cs.transferSales + totals.total : cs.transferSales,
+            expectedBalance: isCash ? cs.expectedBalance + totals.total : cs.expectedBalance,
+          };
+        }
+        return cs;
+      });
+
+      setCashSessions(nextCashSessions);
+      saveStorage('cashSessions', nextCashSessions);
+
+      if (typeof window !== 'undefined') {
+        fetch('/api/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cashSessions: nextCashSessions }),
+        }).catch(() => {});
+      }
     }
 
     logAudit(
@@ -1806,7 +1816,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     logAudit('CREATE', 'Lotes', 'ProductBatch', newId, `Nuevo lote ${batchData.batchNumber} ingresado`);
   };
 
-  // Cajas
+  // Cajas con Persistencia Total y Sincronización en la Nube
   const openCashSession = (openingBalance: number, notes?: string) => {
     const newSession: CashSession = {
       id: `cs-${Date.now()}`,
@@ -1826,28 +1836,48 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       status: 'Open',
       notes,
     };
-    setCashSessions((prev) => [newSession, ...prev]);
-    logAudit('CASH_OPEN', 'Caja', 'CashSession', newSession.id, `Apertura con $${openingBalance.toFixed(2)}`);
+    const nextSessions = [newSession, ...cashSessions];
+    setCashSessions(nextSessions);
+    saveStorage('cashSessions', nextSessions);
+
+    if (typeof window !== 'undefined') {
+      fetch('/api/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cashSessions: nextSessions }),
+      }).catch(() => {});
+    }
+
+    logAudit('CASH_OPEN', 'Caja', 'CashSession', newSession.id, `Apertura de turno con ${settings.currencySymbol} ${openingBalance.toFixed(2)}`);
   };
 
   const closeCashSession = (actualBalance: number, notes?: string) => {
     if (!currentCashSession) return;
     const diff = actualBalance - currentCashSession.expectedBalance;
-    setCashSessions((prev) =>
-      prev.map((cs) => {
-        if (cs.id === currentCashSession.id) {
-          return {
-            ...cs,
-            closedAt: new Date().toISOString(),
-            actualBalance,
-            difference: diff,
-            status: 'Closed',
-            notes: notes ? `${cs.notes || ''} - Cierre: ${notes}` : cs.notes,
-          };
-        }
-        return cs;
-      })
-    );
+    const nextSessions = cashSessions.map((cs) => {
+      if (cs.id === currentCashSession.id) {
+        return {
+          ...cs,
+          closedAt: new Date().toISOString(),
+          actualBalance,
+          difference: diff,
+          status: 'Closed' as const,
+          notes: notes ? `${cs.notes || ''} - Cierre: ${notes}` : cs.notes,
+        };
+      }
+      return cs;
+    });
+
+    setCashSessions(nextSessions);
+    saveStorage('cashSessions', nextSessions);
+
+    if (typeof window !== 'undefined') {
+      fetch('/api/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cashSessions: nextSessions }),
+      }).catch(() => {});
+    }
 
     if (Math.abs(diff) > 0.01) {
       setAlerts((prev) => [
@@ -1856,10 +1886,10 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           type: 'CashDiscrepancy',
           severity: 'Critical',
           title: 'Descuadre en Cierre de Caja',
-          message: `Diferencia de $${diff.toFixed(2)} en cierre de turno por ${currentUser.username}`,
+          message: `Diferencia de ${settings.currencySymbol} ${diff.toFixed(2)} en cierre de turno por ${currentUser.username}`,
           branchId: currentBranch.id,
-          isRead: false,
           createdAt: new Date().toISOString(),
+          isRead: false,
         },
         ...prev,
       ]);
@@ -1870,29 +1900,39 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       'Caja',
       'CashSession',
       currentCashSession.id,
-      `Cierre de caja. Esperado: $${(currentCashSession.expectedBalance || 0).toFixed(2)}, Contado: $${actualBalance.toFixed(2)}, Dif: $${diff.toFixed(2)}`
+      `Cierre de caja. Esperado: ${settings.currencySymbol} ${(currentCashSession.expectedBalance || 0).toFixed(2)}, Contado: ${settings.currencySymbol} ${actualBalance.toFixed(2)}, Dif: ${settings.currencySymbol} ${diff.toFixed(2)}`
     );
   };
 
   const addCashMovement = (type: 'IN' | 'OUT', amount: number, reason: string) => {
     if (!currentCashSession) return;
-    setCashSessions((prev) =>
-      prev.map((cs) => {
-        if (cs.id === currentCashSession.id) {
-          const cashIn = type === 'IN' ? cs.cashIn + amount : cs.cashIn;
-          const cashOut = type === 'OUT' ? cs.cashOut + amount : cs.cashOut;
-          const expected = cs.openingBalance + cs.cashSales + cashIn - cashOut;
-          return { ...cs, cashIn, cashOut, expectedBalance: expected };
-        }
-        return cs;
-      })
-    );
+    const nextSessions = cashSessions.map((cs) => {
+      if (cs.id === currentCashSession.id) {
+        const cashIn = type === 'IN' ? cs.cashIn + amount : cs.cashIn;
+        const cashOut = type === 'OUT' ? cs.cashOut + amount : cs.cashOut;
+        const expected = cs.openingBalance + cs.cashSales + cashIn - cashOut;
+        return { ...cs, cashIn, cashOut, expectedBalance: expected };
+      }
+      return cs;
+    });
+
+    setCashSessions(nextSessions);
+    saveStorage('cashSessions', nextSessions);
+
+    if (typeof window !== 'undefined') {
+      fetch('/api/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cashSessions: nextSessions }),
+      }).catch(() => {});
+    }
+
     logAudit(
       type === 'IN' ? 'CASH_IN' : 'CASH_OUT',
       'Caja',
       'CashMovement',
       currentCashSession.id,
-      `${type === 'IN' ? 'Ingreso' : 'Retiro'} de $${amount.toFixed(2)}: ${reason}`
+      `${type === 'IN' ? 'Ingreso' : 'Retiro'} de ${settings.currencySymbol} ${amount.toFixed(2)}: ${reason}`
     );
   };
 
