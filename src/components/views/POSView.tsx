@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 import { Product, PaymentMethod, Sale } from '../../types/pharmacy';
+import { ProductLogo } from '../common/ProductLogo';
 
 export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavigate }) => {
   const {
@@ -455,21 +456,31 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                     )}
 
                     <div>
-                      <div className="flex items-start justify-between gap-1 mb-1">
-                        <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                          {product.sku}
-                        </span>
-                        {product.requiresPrescription && (
-                          <span className="text-[9px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                            Receta
-                          </span>
-                        )}
+                      <div className="flex items-start gap-2.5 mb-1.5">
+                        <ProductLogo
+                          name={product.name}
+                          laboratoryName={product.laboratoryName}
+                          presentation={product.presentation}
+                          categoryName={product.categoryName}
+                          size="md"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="text-[9px] font-mono font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200 truncate">
+                              {product.sku}
+                            </span>
+                            {product.requiresPrescription && (
+                              <span className="text-[8px] font-bold text-amber-800 bg-amber-50 px-1 py-0.2 rounded border border-amber-200 shrink-0">
+                                Rx
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="font-bold text-xs text-slate-900 line-clamp-2 leading-snug mt-0.5">
+                            {product.name}
+                          </h3>
+                        </div>
                       </div>
-
-                      <h3 className="font-bold text-xs text-slate-900 line-clamp-2 leading-snug mt-1">
-                        {product.name}
-                      </h3>
-                      <p className="text-[10px] text-slate-500 truncate mt-0.5">
+                      <p className="text-[10px] text-slate-500 truncate mt-0.5 font-medium pl-0.5">
                         {product.genericName || product.presentation || 'Medicamento'}
                       </p>
                     </div>

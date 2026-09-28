@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { usePharmacy } from '../../contexts/PharmacyContext';
+import { ProductLogo } from '../common/ProductLogo';
 import { Product } from '../../types/pharmacy';
 
 interface InventoryViewProps {
@@ -642,18 +643,29 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry,
                       </td>
 
                       <td className="p-3 max-w-xs">
-                        <div className="font-bold text-slate-900 flex items-center gap-1.5">
-                          <span>{prod.name}</span>
-                          {prod.requiresPrescription && (
-                            <span className="text-[9px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                              Receta
-                            </span>
-                          )}
+                        <div className="flex items-center gap-2.5">
+                          <ProductLogo
+                            name={prod.name}
+                            laboratoryName={prod.laboratoryName}
+                            presentation={prod.presentation}
+                            categoryName={prod.categoryName}
+                            size="sm"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="font-bold text-slate-900 flex items-center gap-1.5 truncate">
+                              <span className="truncate">{prod.name}</span>
+                              {prod.requiresPrescription && (
+                                <span className="text-[8px] font-bold text-amber-700 bg-amber-50 px-1 py-0.2 rounded border border-amber-200 shrink-0">
+                                  Rx
+                                </span>
+                              )}
+                            </div>
+                            {prod.genericName && (
+                              <div className="text-[10px] text-slate-500 italic truncate">Gen: {prod.genericName}</div>
+                            )}
+                            <div className="text-[10px] text-slate-400 truncate">{prod.presentation}</div>
+                          </div>
                         </div>
-                        {prod.genericName && (
-                          <div className="text-[10px] text-slate-500 italic">Genérico: {prod.genericName}</div>
-                        )}
-                        <div className="text-[10px] text-slate-400 truncate">{prod.presentation}</div>
                       </td>
 
                       <td className="p-3">
