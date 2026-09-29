@@ -930,7 +930,7 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
               </p>
             </div>
 
-            <div className="p-4 space-y-3 text-xs max-h-72 overflow-y-auto font-mono">
+            <div id="receipt-print-area" className="p-4 space-y-3 text-xs max-h-72 overflow-y-auto font-mono">
               <div className="text-center pb-2 border-b border-dashed border-slate-200">
                 <div className="font-black text-slate-900 font-sans">
                   FARMACIA ESPÍRITU SANTO

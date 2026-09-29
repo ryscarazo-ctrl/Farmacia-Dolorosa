@@ -23,3 +23,43 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #16a34a;
 }
+
+
+/* =========================================================================
+   ESTILOS DE IMPRESIÓN DIRECTA PARA TICKETERAS TÉRMICAS (80mm / 58mm)
+   ========================================================================= */
+@media print {
+  @page {
+    size: 80mm auto;
+    margin: 0mm;
+  }
+  html, body {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 80mm !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  #receipt-print-area,
+  #receipt-print-area * {
+    visibility: visible !important;
+  }
+  #receipt-print-area {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 78mm !important;
+    margin: 0 !important;
+    padding: 4mm 2mm !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 11px !important;
+    line-height: 1.25 !important;
+  }
+  .no-print, header, nav, aside, button {
+    display: none !important;
+  }
+}
