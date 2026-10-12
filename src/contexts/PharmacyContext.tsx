@@ -191,12 +191,29 @@ interface PharmacyContextType {
   logout: () => void;
 }
 
+
+const CATALOG_REVISION = 'rev_122_medicamentos_oct12';
+
+if (typeof window !== 'undefined') {
+  try {
+    const currentRev = window.localStorage.getItem('farmacia_catalog_rev');
+    if (currentRev !== CATALOG_REVISION) {
+      Object.keys(window.localStorage).forEach((k) => {
+        if (k.startsWith('farmacia_v5_') || k.startsWith('farmacia_prod_')) {
+          window.localStorage.removeItem(k);
+        }
+      });
+      window.localStorage.setItem('farmacia_catalog_rev', CATALOG_REVISION);
+    }
+  } catch {}
+}
+
 const PharmacyContext = createContext<PharmacyContextType | undefined>(undefined);
 
 const loadStorage = <T,>(key: string, defaultValue: T): T => {
   if (typeof window === 'undefined') return defaultValue;
   try {
-    const item = window.localStorage.getItem(`farmacia_v5_${key}`);
+    const item = window.localStorage.getItem(`farmacia_v6_${key}`);
     if (item === null) return defaultValue;
     const parsed = JSON.parse(item);
     if (Array.isArray(parsed) && parsed.length === 0 && Array.isArray(defaultValue) && defaultValue.length > 0) {
@@ -211,7 +228,7 @@ const loadStorage = <T,>(key: string, defaultValue: T): T => {
 const saveStorage = <T,>(key: string, value: T) => {
   if (typeof window === 'undefined') return;
   try {
-    window.localStorage.setItem(`farmacia_v5_${key}`, JSON.stringify(value));
+    window.localStorage.setItem(`farmacia_v6_${key}`, JSON.stringify(value));
   } catch {
     // Ignore storage quota limits
   }

@@ -49,7 +49,7 @@ export default function RootLayout({
 
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js?v=15').then(function(reg) {
+                  navigator.serviceWorker.register('/sw.js?v=25').then(function(reg) {
                     reg.update();
                   }).catch(function(err) {
                     console.log('SW registration note:', err);
