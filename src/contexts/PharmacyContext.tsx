@@ -1,5 +1,5 @@
-import { uploadInventoryToCloud, downloadInventoryFromCloud, isSupabaseConfigured } from '../lib/supabaseClient';
-﻿'use client';
+'use client';
+import { uploadInventoryToCloud, downloadInventoryFromCloud, isSupabaseConfigured, getSupabaseCredentials } from '../lib/supabaseClient';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
@@ -84,6 +84,8 @@ interface PharmacyContextType {
   settings: Settings;
   updateSettings: (newSettings: Settings) => void;
   syncNow: () => Promise<void>;
+  uploadCurrentInventoryToCloud: () => Promise<{ success: boolean; message: string }>;
+  isCloudConfigured: boolean;
   isSyncing: boolean;
 
   // Carrito de Venta POS
@@ -309,9 +311,12 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   
   // Sincronización Automática en la Nube Multi-Dispositivo (Supabase Cloud Realtime)
   const isCloudSyncingRef = React.useRef(false);
+  const [isCloudConfigured, setIsCloudConfigured] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
+    const configured = isSupabaseConfigured();
+    setIsCloudConfigured(configured);
+    if (!configured) return;
 
     const syncFromCloud = async () => {
       if (isCloudSyncingRef.current) return;
@@ -1812,6 +1817,19 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     saveStorage('products', currentProds);
     saveStorage('batches', currentBatches);
 
+    if (isSupabaseConfigured()) {
+      uploadInventoryToCloud({
+        products: currentProds,
+        batches: currentBatches,
+        alerts: alerts,
+        updatedBy: (currentUser?.fullName || currentUser?.username || 'Usuario') || 'F?tima',
+      }).then((res) => {
+        if (res.success) {
+          console.log('[CLOUD SYNC]', res.message);
+        }
+      }).catch(console.error);
+    }
+
     if (typeof window !== 'undefined') {
       fetch('/api/sync', {
         method: 'POST',
@@ -2359,6 +2377,26 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     logAudit('UPDATE', 'Configuración', 'Settings', 'global', 'Configuración institucional actualizada');
   };
 
+  const uploadCurrentInventoryToCloud = async (): Promise<{ success: boolean; message: string }> => {
+    if (!isSupabaseConfigured()) {
+      return { success: false, message: 'Supabase no est? configurado a?n.' };
+    }
+    setIsSyncing(true);
+    try {
+      const res = await uploadInventoryToCloud({
+        products,
+        batches,
+        alerts,
+        updatedBy: (currentUser?.fullName || currentUser?.username || 'Usuario') || 'Usuario',
+      });
+      return res;
+    } catch (e: any) {
+      return { success: false, message: e.message || 'Error al subir a la nube' };
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   const syncNow = async () => {
     if (typeof window === 'undefined') return;
     setIsSyncing(true);
@@ -2461,6 +2499,8 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         settings,
         updateSettings,
         syncNow,
+        uploadCurrentInventoryToCloud,
+        isCloudConfigured,
         isSyncing,
         cart,
         addToCart,

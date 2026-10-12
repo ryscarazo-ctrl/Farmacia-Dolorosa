@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import {
+  Cloud,
   Settings,
   Building,
   Save,
@@ -21,9 +22,10 @@ import {
   Users,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
+import { getSupabaseCredentials, saveSupabaseConfig, testSupabaseConnection, uploadInventoryToCloud, downloadInventoryFromCloud, isSupabaseConfigured } from '../../lib/supabaseClient';
 import { initialUsers } from '../../data/mockData';
 
-export const AdminView: React.FC<{ initialTab?: 'branches' | 'users' | 'settings' | 'backup' }> = ({ initialTab = 'settings' }) => {
+export const AdminView: React.FC<{ initialTab?: 'branches' | 'users' | 'settings' | 'backup' | 'cloud' }> = ({ initialTab = 'settings' }) => {
   const {
     branches,
     settings,
@@ -40,8 +42,73 @@ export const AdminView: React.FC<{ initialTab?: 'branches' | 'users' | 'settings
     importBackupData,
   } = usePharmacy();
 
-  const [activeTab, setActiveTab] = useState<'branches' | 'users' | 'settings' | 'backup'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'branches' | 'users' | 'settings' | 'backup' | 'cloud'>(initialTab);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Estados de Sincronización en la Nube (Supabase)
+  const [supabaseUrl, setSupabaseUrl] = useState<string>('');
+  const [supabaseKey, setSupabaseKey] = useState<string>('');
+  const [cloudStatus, setCloudStatus] = useState<{ isTesting: boolean; message: string | null; type: 'success' | 'error' | 'info' | null }>({
+    isTesting: false,
+    message: null,
+    type: null,
+  });
+  const [cloudCount, setCloudCount] = useState<number | null>(null);
+
+  React.useEffect(() => {
+    const creds = getSupabaseCredentials();
+    setSupabaseUrl(creds.url);
+    setSupabaseKey(creds.key);
+    if (creds.url && creds.key) {
+      testSupabaseConnection().then((res) => {
+        if (res.success && res.rowCount !== undefined) {
+          setCloudCount(res.rowCount);
+        }
+      });
+    }
+  }, []);
+
+  const handleSaveCloudConfig = async () => {
+    saveSupabaseConfig(supabaseUrl, supabaseKey);
+    setCloudStatus({ isTesting: true, message: 'Verificando conexión con Supabase...', type: 'info' });
+    const res = await testSupabaseConnection();
+    if (res.success) {
+      setCloudStatus({ isTesting: false, message: 'Conexión exitosa: ' + res.message, type: 'success' });
+      if (res.rowCount !== undefined) setCloudCount(res.rowCount);
+    } else {
+      setCloudStatus({ isTesting: false, message: 'Error de conexión: ' + res.message, type: 'error' });
+    }
+  };
+
+  const handleUploadToCloud = async () => {
+    setCloudStatus({ isTesting: true, message: 'Subiendo inventario a la nube...', type: 'info' });
+    const res = await uploadInventoryToCloud({
+      products,
+      batches,
+      updatedBy: 'Administración',
+    });
+    if (res.success) {
+      setCloudStatus({ isTesting: false, message: 'Inventario sincronizado exitosamente: ' + res.message, type: 'success' });
+      setCloudCount(products.length);
+    } else {
+      setCloudStatus({ isTesting: false, message: 'Error al subir: ' + res.message, type: 'error' });
+    }
+  };
+
+  const handleDownloadFromCloud = async () => {
+    setCloudStatus({ isTesting: true, message: 'Descargando inventario desde la nube...', type: 'info' });
+    const res = await downloadInventoryFromCloud();
+    if (res.success && res.data && Array.isArray(res.data.products)) {
+      setCloudStatus({
+        isTesting: false,
+        message: 'Descargados ' + res.data.products.length + ' medicamentos desde la nube con éxito.',
+        type: 'success',
+      });
+      setCloudCount(res.data.products.length);
+    } else {
+      setCloudStatus({ isTesting: false, message: 'Error al descargar: ' + (res.error || 'Sin datos'), type: 'error' });
+    }
+  };
 
   React.useEffect(() => {
     setActiveTab(initialTab);
@@ -161,6 +228,17 @@ export const AdminView: React.FC<{ initialTab?: 'branches' | 'users' | 'settings
           >
             Configuración
           </button>
+                    <button
+            onClick={() => setActiveTab('cloud')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
+              activeTab === 'cloud'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-200'
+                : 'bg-white text-blue-800 hover:bg-blue-50 border border-blue-200'
+            }`}
+          >
+            <Cloud className="w-3.5 h-3.5 text-blue-600" />
+            <span>Nube Multi-Dispositivo</span>
+          </button>
           <button
             onClick={() => setActiveTab('backup')}
             className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all ${
@@ -194,6 +272,130 @@ export const AdminView: React.FC<{ initialTab?: 'branches' | 'users' | 'settings
           </button>
         </div>
       </div>
+
+            {/* PESTAÑA: NUBE MULTI-DISPOSITIVO (SUPABASE) */}
+      {activeTab === 'cloud' && (
+        <div className="space-y-6">
+          {/* Header Banner */}
+          <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-800 text-white rounded-3xl p-6 shadow-lg shadow-blue-950/20">
+            <div className="flex items-center gap-2 text-blue-300 text-xs font-bold uppercase tracking-wider mb-1">
+              <Cloud className="w-4 h-4 text-blue-400" />
+              <span>Base de Datos Centralizada en Internet (Supabase Realtime)</span>
+            </div>
+            <h2 className="text-xl font-black">Sincronización Automática entre Teléfonos y Computadoras 🌐</h2>
+            <p className="text-xs text-blue-100/90 mt-1 max-w-2xl leading-relaxed">
+              Cualquier cambio que Fátima o el personal suba o registre desde su teléfono se actualiza instantáneamente en todos los celulares y computadoras de Farmacia Espíritu Santo sin necesidad de cables ni descargas manuales.
+            </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4 pt-4 border-t border-blue-700/60">
+              <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2.5">
+                <div className="text-[11px] text-blue-200 font-semibold">Estado de la Nube</div>
+                <div className="text-sm font-black mt-0.5 flex items-center gap-1.5">
+                  <span className={`w-2.5 h-2.5 rounded-full ${isSupabaseConfigured() ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`}></span>
+                  <span>{isSupabaseConfigured() ? 'Conectado a Internet' : 'Pendiente de Configurar'}</span>
+                </div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2.5">
+                <div className="text-[11px] text-blue-200 font-semibold">En este Dispositivo</div>
+                <div className="text-xl font-black font-mono mt-0.5">{products.length} productos</div>
+              </div>
+              <div className="bg-white/10 backdrop-blur-xs rounded-xl p-2.5">
+                <div className="text-[11px] text-blue-200 font-semibold">En la Nube Global</div>
+                <div className="text-xl font-black font-mono mt-0.5">{cloudCount !== null ? `${cloudCount} productos` : 'Consultando...'}</div>
+              </div>
+            </div>
+          </div>
+
+          {cloudStatus.message && (
+            <div className={`p-4 rounded-2xl text-xs font-bold border ${
+              cloudStatus.type === 'success'
+                ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                : cloudStatus.type === 'error'
+                ? 'bg-rose-50 text-rose-800 border-rose-200'
+                : 'bg-blue-50 text-blue-800 border-blue-200'
+            }`}>
+              {cloudStatus.message}
+            </div>
+          )}
+
+          {/* Formulario de Credenciales */}
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+            <h3 className="font-extrabold text-slate-900 text-sm flex items-center gap-2">
+              <span>⚙️ Configuración de Conexión Supabase</span>
+            </h3>
+            <p className="text-xs text-slate-500">
+              Ingresa la URL y la Llave Pública (Anon Key) de tu proyecto en Supabase para habilitar la nube permanente:
+            </p>
+
+            <div className="space-y-3">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1">
+                  URL del Proyecto Supabase (NEXT_PUBLIC_SUPABASE_URL)
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://tu-proyecto.supabase.co"
+                  value={supabaseUrl}
+                  onChange={(e) => setSupabaseUrl(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-700 uppercase mb-1">
+                  Llave Anónima Pública (NEXT_PUBLIC_SUPABASE_ANON_KEY)
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  value={supabaseKey}
+                  onChange={(e) => setSupabaseKey(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono focus:outline-none focus:border-blue-500"
+                />
+              </div>
+
+              <div className="flex flex-wrap gap-2 pt-2">
+                <button
+                  onClick={handleSaveCloudConfig}
+                  disabled={cloudStatus.isTesting}
+                  className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black shadow-md shadow-blue-200 flex items-center gap-2"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>Guardar y Probar Conexión</span>
+                </button>
+
+                <button
+                  onClick={handleUploadToCloud}
+                  disabled={cloudStatus.isTesting || !isSupabaseConfigured()}
+                  className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-xl text-xs font-black shadow-md shadow-emerald-200 flex items-center gap-2"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Subir Inventario Local a la Nube ({products.length} productos)</span>
+                </button>
+
+                <button
+                  onClick={handleDownloadFromCloud}
+                  disabled={cloudStatus.isTesting || !isSupabaseConfigured()}
+                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-900 disabled:opacity-50 text-white rounded-xl text-xs font-black shadow-md flex items-center gap-2"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Descargar Inventario de la Nube</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Guía Rápida */}
+          <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 text-xs text-slate-600 space-y-3">
+            <h4 className="font-bold text-slate-900 text-sm">📋 ¿Cómo configurar Supabase en 2 minutos?</h4>
+            <ol className="list-decimal pl-5 space-y-2">
+              <li>Ingresa a <a href="https://app.supabase.com" target="_blank" rel="noreferrer" className="text-blue-600 font-bold underline">https://app.supabase.com</a> y crea un proyecto gratuito (o abre uno existente).</li>
+              <li>Abre el <strong>SQL Editor</strong> en Supabase y pega el script que guardamos en tu Escritorio: <code className="bg-white px-2 py-0.5 rounded border border-slate-300 font-mono text-[11px]">farmacia_supabase_schema.sql</code>. Presiona <strong>Run</strong>.</li>
+              <li>Ve a <strong>Project Settings ➔ API</strong>, copia la URL y la anon key, y pégalas en las casillas de arriba. ¡Listo! Todo queda sincronizado en tiempo real.</li>
+            </ol>
+          </div>
+        </div>
+      )}
 
       {/* PESTAÑA: COPIA DE SEGURIDAD (BACKUP) */}
       {activeTab === 'backup' && (
