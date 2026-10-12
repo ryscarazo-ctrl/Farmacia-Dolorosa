@@ -135,6 +135,8 @@ interface PharmacyContextType {
   deleteProduct: (productId: string) => void;
   clearAllProducts: () => void;
   bulkUpsertProducts: (importedRows: any[]) => { updatedCount: number; createdCount: number };
+  rectifyProductInventory: (params: { productId: string; newStock?: number; newBarcode?: string; newPrice?: number; notes?: string }) => { success: boolean; message: string };
+  bulkRectifyInventory: (items: Array<{ productId: string; newStock?: number; newBarcode?: string; newPrice?: number; notes?: string }>) => { success: boolean; count: number };
   addBatch: (batch: Omit<ProductBatch, 'id'>) => void;
   getProductBatches: (productId: string, branchId?: string) => ProductBatch[];
   getAvailableStock: (productId: string, branchId?: string) => number;
@@ -1860,6 +1862,164 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     logAudit('DELETE', 'Productos', 'Product', 'ALL', 'Limpieza total del catálogo de productos y lotes');
   };
 
+  const rectifyProductInventory = ({
+    productId,
+    newStock,
+    newBarcode,
+    newPrice,
+    notes,
+  }: {
+    productId: string;
+    newStock?: number;
+    newBarcode?: string;
+    newPrice?: number;
+    notes?: string;
+  }): { success: boolean; message: string } => {
+    const res = bulkRectifyInventory([{ productId, newStock, newBarcode, newPrice, notes }]);
+    return res.count > 0
+      ? { success: true, message: 'Producto rectificado con éxito.' }
+      : { success: false, message: 'No se encontraron cambios o producto no existe.' };
+  };
+
+  const bulkRectifyInventory = (
+    items: Array<{
+      productId: string;
+      newStock?: number;
+      newBarcode?: string;
+      newPrice?: number;
+      notes?: string;
+    }>
+  ): { success: boolean; count: number } => {
+    if (!items || items.length === 0) return { success: false, count: 0 };
+
+    let currentProds = [...products];
+    let currentBatches = [...batches];
+    let currentMovements = [...movements];
+    let modifiedCount = 0;
+
+    for (const item of items) {
+      const prodIndex = currentProds.findIndex((p) => p.id === item.productId);
+      if (prodIndex === -1) continue;
+
+      let prodChanged = false;
+      const targetProd = { ...currentProds[prodIndex] };
+
+      if (item.newBarcode !== undefined) {
+        const cleanBar = item.newBarcode.trim();
+        if (targetProd.barcode !== cleanBar) {
+          targetProd.barcode = cleanBar;
+          prodChanged = true;
+        }
+      }
+
+      if (item.newPrice !== undefined && item.newPrice >= 0) {
+        if (targetProd.salePrice !== item.newPrice) {
+          targetProd.salePrice = item.newPrice;
+          prodChanged = true;
+        }
+      }
+
+      if (prodChanged) {
+        currentProds[prodIndex] = targetProd;
+      }
+
+      if (item.newStock !== undefined && !isNaN(item.newStock) && item.newStock >= 0) {
+        const branchBatches = currentBatches.filter(
+          (b) => b.productId === item.productId && b.branchId === currentBranch.id
+        );
+        const oldStock = branchBatches.reduce((acc, b) => acc + b.currentQuantity, 0);
+        const diff = item.newStock - oldStock;
+
+        if (diff !== 0 || branchBatches.length === 0) {
+          let assigned = false;
+          currentBatches = currentBatches.map((b) => {
+            if (b.productId === item.productId && b.branchId === currentBranch.id) {
+              if (!assigned) {
+                assigned = true;
+                return {
+                  ...b,
+                  currentQuantity: item.newStock!,
+                  status: item.newStock! > 0 ? 'Available' : 'Depleted',
+                };
+              } else {
+                return {
+                  ...b,
+                  currentQuantity: 0,
+                  status: 'Depleted',
+                };
+              }
+            }
+            return b;
+          });
+
+          if (!assigned) {
+            currentBatches.push({
+              id: `bat-rec-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+              productId: item.productId,
+              branchId: currentBranch.id,
+              batchNumber: `LOT-REC-${new Date().getFullYear()}`,
+              expirationDate: '2028-12-31',
+              initialQuantity: item.newStock,
+              currentQuantity: item.newStock,
+              unitCost: targetProd.purchasePrice || 0,
+              status: item.newStock > 0 ? 'Available' : 'Depleted',
+            });
+          }
+
+          currentMovements.unshift({
+            id: `mov-${Date.now()}-${item.productId}-${Math.random().toString(36).substr(2, 3)}`,
+            movementType: 'AJUSTE',
+            productId: item.productId,
+            productName: targetProd.name,
+            branchId: currentBranch.id,
+            branchName: currentBranch.name,
+            quantity: Math.abs(diff),
+            previousStock: oldStock,
+            newStock: item.newStock,
+            unitCost: targetProd.purchasePrice || 0,
+            userName: (currentUser?.fullName || currentUser?.username || 'Usuario'),
+            notes: item.notes || `Rectificación de inventario: Stock ajustado de ${oldStock} a ${item.newStock} uds (${diff > 0 ? '+' : ''}${diff})`,
+            createdAt: new Date().toISOString(),
+          });
+
+          prodChanged = true;
+        }
+      }
+
+      if (prodChanged) {
+        modifiedCount++;
+      }
+    }
+
+    if (modifiedCount > 0) {
+      setProducts(currentProds);
+      setBatches(currentBatches);
+      setMovements(currentMovements);
+      saveStorage('products', currentProds);
+      saveStorage('batches', currentBatches);
+      saveStorage('movements', currentMovements);
+
+      if (isSupabaseConfigured()) {
+        uploadInventoryToCloud({
+          products: currentProds,
+          batches: currentBatches,
+          alerts,
+          updatedBy: (currentUser?.fullName || currentUser?.username || 'Usuario'),
+        }).catch(() => {});
+      }
+
+      logAudit(
+        'UPDATE',
+        'Inventario',
+        'Product',
+        'rectify-bulk',
+        `Rectificación de inventario: ${modifiedCount} medicamento(s) actualizados`
+      );
+    }
+
+    return { success: true, count: modifiedCount };
+  };
+
   const updateProduct = (updated: Product) => {
     setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
     logAudit('UPDATE', 'Productos', 'Product', updated.id, `Actualización de producto: ${updated.name}`);
@@ -2517,6 +2677,8 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     deleteProduct,
     clearAllProducts,
         bulkUpsertProducts,
+        rectifyProductInventory,
+        bulkRectifyInventory,
         addBatch,
         getProductBatches,
         getAvailableStock,
