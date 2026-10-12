@@ -9,6 +9,7 @@
     "start:3002": "next start -H 0.0.0.0 -p 3002"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.3",
     "@types/qrcode": "^1.5.6",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",

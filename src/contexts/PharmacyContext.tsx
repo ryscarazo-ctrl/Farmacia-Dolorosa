@@ -1,3 +1,4 @@
+import { uploadInventoryToCloud, downloadInventoryFromCloud, isSupabaseConfigured } from '../lib/supabaseClient';
 ﻿'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
@@ -305,6 +306,49 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   // Sincronización automática con almacenamiento local permanente
+  
+  // Sincronización Automática en la Nube Multi-Dispositivo (Supabase Cloud Realtime)
+  const isCloudSyncingRef = React.useRef(false);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) return;
+
+    const syncFromCloud = async () => {
+      if (isCloudSyncingRef.current) return;
+      try {
+        const res = await downloadInventoryFromCloud();
+        if (res.success && res.data && Array.isArray(res.data.products) && res.data.products.length > 0) {
+          isCloudSyncingRef.current = true;
+          setProducts(res.data.products);
+          if (Array.isArray(res.data.batches)) setBatches(res.data.batches);
+          if (Array.isArray(res.data.alerts)) setAlerts(res.data.alerts);
+          setTimeout(() => { isCloudSyncingRef.current = false; }, 800);
+        }
+      } catch (e) {
+        isCloudSyncingRef.current = false;
+      }
+    };
+
+    // Sincronización inicial
+    syncFromCloud();
+
+    // Sondeo periódico cada 8 segundos para celulares y PCs
+    const interval = setInterval(syncFromCloud, 8000);
+
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') syncFromCloud();
+    };
+    window.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('focus', syncFromCloud);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('focus', syncFromCloud);
+    };
+  }, []);
+
+
   useEffect(() => { saveStorage('products', products); }, [products]);
   useEffect(() => { saveStorage('batches', batches); }, [batches]);
   useEffect(() => { saveStorage('suppliers', suppliers); }, [suppliers]);
