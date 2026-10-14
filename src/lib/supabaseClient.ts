@@ -13,8 +13,8 @@ let cachedUrl = '';
 let cachedKey = '';
 
 export function getSupabaseCredentials(): { url: string; key: string } {
-  let url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  let key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+  let url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://qoukrzummifhphjxialn.supabase.co';
+  let key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_D_QpR5KDWUxIJBkCaRD7hQ_d2Y23_ml';
 
   if (typeof window !== 'undefined') {
     const storedUrl = localStorage.getItem('farmacia_supabase_url');
