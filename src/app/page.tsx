@@ -29,6 +29,7 @@ import { BankReconciliationView } from '../components/views/BankReconciliationVi
 import { ManualView } from '../components/views/ManualView';
 import { usePharmacy } from '../contexts/PharmacyContext';
 import { ProductDetailModal } from '../components/modals/ProductDetailModal';
+import { BroadcastModal } from '../components/common/BroadcastModal';
 import { LoginView } from '../components/auth/LoginView';
 
 export default function Home() {
@@ -137,6 +138,7 @@ export default function Home() {
         onNavigate={(view) => navigateTo(view)}
         onOpenMenu={() => setIsMobileMenuOpen(true)}
       />
+      <BroadcastModal />
       {selectedProductDetail && (
         <ProductDetailModal
           product={selectedProductDetail}
