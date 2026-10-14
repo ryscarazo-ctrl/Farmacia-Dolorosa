@@ -3,6 +3,10 @@
 import React, { useState } from 'react';
 import {
   History,
+  Trash2,
+  CheckCircle2,
+  AlertTriangle,
+  X,
   Search,
   ArrowDownLeft,
   ArrowUpRight,
@@ -16,7 +20,9 @@ import {
 import { usePharmacy } from '../../contexts/PharmacyContext';
 
 export const MovementsView: React.FC = () => {
-  const { movements, currentBranch, branches, syncNow, isSyncing } = usePharmacy();
+  const { movements, currentBranch, branches, syncNow, isSyncing, clearKardex } = usePharmacy();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('ALL');
   const [selectedBranchId, setSelectedBranchId] = useState<string>('ALL');
@@ -58,15 +64,76 @@ export const MovementsView: React.FC = () => {
           </p>
         </div>
 
-        <button
-          onClick={syncNow}
-          disabled={isSyncing}
-          className="px-3 py-1.5 bg-white border border-slate-200 hover:border-emerald-500 text-slate-700 hover:text-emerald-700 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-emerald-600' : ''}`} />
-          <span>{isSyncing ? 'Sincronizando...' : 'Actualizar Kardex'}</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowConfirmModal(true)}
+            className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5 active:scale-95 cursor-pointer"
+            title="Vaciar todo el historial de movimientos de inventario"
+          >
+            <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+            <span>Limpiar Kardex</span>
+          </button>
+
+          <button
+            onClick={syncNow}
+            disabled={isSyncing}
+            className="px-3 py-1.5 bg-white border border-slate-200 hover:border-emerald-500 text-slate-700 hover:text-emerald-700 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-emerald-600' : ''}`} />
+            <span>{isSyncing ? 'Sincronizando...' : 'Actualizar Kardex'}</span>
+          </button>
+        </div>
       </div>
+
+            {successMessage && (
+        <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-black flex items-center gap-2 shadow-sm animate-fadeIn">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{successMessage}</span>
+        </div>
+      )}
+
+      {/* MODAL DE CONFIRMACIÓN PARA LIMPIAR KARDEX */}
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4 animate-scaleUp">
+            <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+              <Trash2 className="w-6 h-6" />
+            </div>
+
+            <div className="text-center space-y-1">
+              <h3 className="text-lg font-black text-slate-900">¿Limpiar todo el Kardex?</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Esta acción eliminará todos los registros históricos de entradas, salidas y ventas del Kardex ({branchMovements.length} movimientos).
+              </p>
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-2xl text-[11px] font-semibold text-amber-800 text-left mt-3">
+                ℹ️ <strong>Nota:</strong> Las existencias (stock) actuales de tus medicamentos y lotes se mantendrán intactas; solo se reinicia el historial de movimientos.
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowConfirmModal(false)}
+                className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition-all cursor-pointer"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  clearKardex();
+                  setShowConfirmModal(false);
+                  setSuccessMessage('✅ El Kardex ha sido limpiado y reiniciado con éxito.');
+                  setTimeout(() => setSuccessMessage(null), 4000);
+                }}
+                className="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md shadow-rose-200 transition-all cursor-pointer"
+              >
+                Sí, Limpiar Kardex
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Tarjetas de Resumen */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

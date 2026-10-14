@@ -134,6 +134,7 @@ interface PharmacyContextType {
   updateProduct: (product: Product) => void;
   deleteProduct: (productId: string) => void;
   clearAllProducts: () => void;
+  clearKardex: () => void;
   bulkUpsertProducts: (importedRows: any[]) => { updatedCount: number; createdCount: number };
   rectifyProductInventory: (params: { productId: string; newStock?: number; newBarcode?: string; newPrice?: number; notes?: string }) => { success: boolean; message: string };
   bulkRectifyInventory: (items: Array<{ productId: string; newStock?: number; newBarcode?: string; newPrice?: number; notes?: string }>) => { success: boolean; count: number };
@@ -1854,6 +1855,22 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return { updatedCount, createdCount };
   };
 
+    const clearKardex = () => {
+    setMovements([]);
+    saveStorage('movements', []);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('farmacia_v5_movements', JSON.stringify([]));
+        fetch('/api/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ movements: [] }),
+        }).catch(() => {});
+      } catch (e) {}
+    }
+    logAudit('DELETE', 'Kardex', 'Movement', 'ALL', 'Limpieza y vaciado completo del Kardex');
+  };
+
   const clearAllProducts = () => {
     setProducts([]);
     setBatches([]);
@@ -2676,6 +2693,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updateProduct,
     deleteProduct,
     clearAllProducts,
+        clearKardex,
         bulkUpsertProducts,
         rectifyProductInventory,
         bulkRectifyInventory,
