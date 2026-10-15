@@ -325,12 +325,55 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (isCloudSyncingRef.current) return;
       try {
         const res = await downloadInventoryFromCloud();
-        if (res.success && res.data && Array.isArray(res.data.products) && res.data.products.length > 0) {
+        const remoteProducts = (res.success && res.data && Array.isArray(res.data.products)) ? res.data.products : [];
+        const remoteBatches = (res.success && res.data && Array.isArray(res.data.batches)) ? res.data.batches : [];
+        const remoteAlerts = (res.success && res.data && Array.isArray(res.data.alerts)) ? res.data.alerts : [];
+
+        // Leer inventario local actual
+        let localProducts = products;
+        if (typeof window !== 'undefined') {
+          try {
+            const raw = localStorage.getItem('farmacia_v5_products');
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              if (Array.isArray(parsed) && parsed.length > localProducts.length) {
+                localProducts = parsed;
+              }
+            }
+          } catch (e) {}
+        }
+
+        // CASO 1: La Nube tiene más productos (ej. 423 vs 122 en este teléfono) -> DESCARGAR Y ACTUALIZAR
+        if (remoteProducts.length > localProducts.length) {
+          console.log(`[CLOUD SYNC] Actualizando telǸfono/PC con ${remoteProducts.length} productos de la nube (antes: ${localProducts.length})`);
           isCloudSyncingRef.current = true;
-          setProducts(res.data.products);
-          if (Array.isArray(res.data.batches)) setBatches(res.data.batches);
-          if (Array.isArray(res.data.alerts)) setAlerts(res.data.alerts);
+          setProducts(remoteProducts);
+          if (remoteBatches.length > 0) setBatches(remoteBatches);
+          if (remoteAlerts.length > 0) setAlerts(remoteAlerts);
+          saveStorage('products', remoteProducts);
+          if (remoteBatches.length > 0) saveStorage('batches', remoteBatches);
           setTimeout(() => { isCloudSyncingRef.current = false; }, 800);
+          return;
+        }
+
+        // CASO 2: Este dispositivo tiene más productos que la nube (ej. Fátima o esta PC con 422/423 vs 0 o 122 en la nube)
+        // -> SUBIR AUTOMÁTICAMENTE A LA NUBE para que todos los demás teléfonos los reciban
+        if (localProducts.length > remoteProducts.length && localProducts.length > 122) {
+          console.log(`[CLOUD AUTO-UPLOAD] Dispositivo con catálogo mayor (${localProducts.length} productos). Subiendo a la nube...`);
+          isCloudSyncingRef.current = true;
+          await uploadInventoryToCloud({
+            products: localProducts,
+            batches: batches,
+            alerts: alerts,
+            updatedBy: (currentUser?.fullName || currentUser?.username || 'Usuario'),
+          });
+          setTimeout(() => { isCloudSyncingRef.current = false; }, 1000);
+          return;
+        }
+
+        // CASO 3: Solo sincronizar alertas o lotes si la cantidad de productos es igual
+        if (remoteProducts.length === localProducts.length && remoteAlerts.length > 0) {
+          setAlerts(remoteAlerts);
         }
       } catch (e) {
         isCloudSyncingRef.current = false;
