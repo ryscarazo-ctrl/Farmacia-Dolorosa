@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="novGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8d2600"/>
+      <stop offset="50%" stop-color="#d84315"/>
+      <stop offset="100%" stop-color="#ff6f00"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#novGrad)"/>
+  <rect x="8" y="8" width="184" height="184" rx="34" fill="none" stroke="#ffffff" stroke-width="3" stroke-opacity="0.3"/>
+  <!-- Novartis Flame/Flower Curve -->
+  <path d="M100 35 C115 50 135 60 135 80 C135 100 115 110 100 110 C85 110 65 100 65 80 C65 60 85 50 100 35 Z" fill="#ffffff" fill-opacity="0.25"/>
+  <circle cx="100" cy="75" r="18" fill="#ffffff"/>
+  <text x="100" y="145" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1.5">NOVARTIS</text>
+  <text x="100" y="170" font-family="Arial, Helvetica, sans-serif" font-size="9.5" font-weight="800" fill="#ffe0b2" text-anchor="middle" letter-spacing="1.5">REIMAGINING MEDICINE</text>
+</svg>

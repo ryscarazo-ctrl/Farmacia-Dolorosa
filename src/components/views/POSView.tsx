@@ -608,12 +608,21 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                 className="bg-white border border-slate-200 rounded-2xl p-3 flex flex-col gap-2 shadow-2xs"
               >
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-bold text-xs text-slate-900 truncate">
-                      {item.product.name}
-                    </h4>
-                    <div className="text-[11px] text-slate-500 font-mono">
-                      {settings.currencySymbol} {item.unitPrice.toFixed(2)} c/u
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <ProductLogo
+                      name={item.product.name}
+                      laboratoryName={item.product.laboratoryName}
+                      presentation={item.product.presentation}
+                      categoryName={item.product.categoryName}
+                      size="sm"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-bold text-xs text-slate-900 truncate">
+                        {item.product.name}
+                      </h4>
+                      <div className="text-[11px] text-slate-500 font-mono">
+                        {settings.currencySymbol} {item.unitPrice.toFixed(2)} c/u
+                      </div>
                     </div>
                   </div>
                   <button

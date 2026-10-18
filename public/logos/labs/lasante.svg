@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="santeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#005b60"/>
+      <stop offset="60%" stop-color="#00838f"/>
+      <stop offset="100%" stop-color="#00acc1"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#santeGrad)"/>
+  <rect x="8" y="8" width="184" height="184" rx="34" fill="none" stroke="#ffffff" stroke-width="3" stroke-opacity="0.3"/>
+  <!-- Leaf / Cross Emblem -->
+  <g transform="translate(100, 68)">
+    <circle r="36" fill="#ffffff" fill-opacity="0.2"/>
+    <path d="M-10,-24 C5,-24 24,-5 24,10 C24,25 5,24 -10,24 C-10,10 -24,-5 -24,-10 C-24,-24 -10,-24 -10,-24 Z" fill="#ffffff"/>
+    <rect x="-4" y="-16" width="8" height="32" rx="4" fill="#00838f"/>
+    <rect x="-16" y="-4" width="32" height="8" rx="4" fill="#00838f"/>
+  </g>
+  <text x="100" y="142" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2">LA SANTÉ</text>
+  <text x="100" y="165" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#b2ebf2" text-anchor="middle" letter-spacing="1.5">FARMACÉUTICA</text>
+</svg>

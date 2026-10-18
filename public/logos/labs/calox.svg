@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="caloxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b71c1c"/>
+      <stop offset="50%" stop-color="#d32f2f"/>
+      <stop offset="100%" stop-color="#f57c00"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#caloxGrad)"/>
+  <rect x="8" y="8" width="184" height="184" rx="34" fill="none" stroke="#ffffff" stroke-width="3" stroke-opacity="0.3"/>
+  <!-- Shield emblem -->
+  <path d="M100 26 L145 45 C145 85 125 108 100 118 C75 108 55 85 55 45 Z" fill="#ffffff" fill-opacity="0.22"/>
+  <path d="M100 34 L137 50 C137 82 120 100 100 108 C80 100 63 82 63 50 Z" fill="#ffffff"/>
+  <text x="100" y="88" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="900" fill="#d32f2f" text-anchor="middle">C</text>
+  <text x="100" y="152" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2">CALOX</text>
+  <text x="100" y="174" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="800" fill="#ffe0b2" text-anchor="middle" letter-spacing="2">INTERNATIONAL</text>
+</svg>

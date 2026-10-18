@@ -35,6 +35,7 @@ import {
 import * as XLSX from 'xlsx';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 import { Product } from '../../types/pharmacy';
+import { ProductLogo } from '../common/ProductLogo';
 
 interface PendingRowChange {
   productId: string;

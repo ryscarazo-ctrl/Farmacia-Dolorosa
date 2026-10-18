@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="defGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#defGrad)"/>
+  <rect x="8" y="8" width="184" height="184" rx="34" fill="none" stroke="#ffffff" stroke-width="3" stroke-opacity="0.35"/>
+  <!-- Official Medical Cross -->
+  <circle cx="100" cy="72" r="40" fill="#ffffff" fill-opacity="0.2"/>
+  <rect x="91" y="44" width="18" height="56" rx="5" fill="#ffffff"/>
+  <rect x="72" y="63" width="56" height="18" rx="5" fill="#ffffff"/>
+  <text x="100" y="145" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1.5">FARMACIA</text>
+  <text x="100" y="170" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="800" fill="#a7f3d0" text-anchor="middle" letter-spacing="2">ESPÍRITU SANTO</text>
+</svg>

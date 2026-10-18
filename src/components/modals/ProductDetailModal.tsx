@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
 import { Product, ProductBatch } from '../../types/pharmacy';
+import { ProductLogo } from '../common/ProductLogo';
 
 interface ProductDetailModalProps {
   product: Product | null;
