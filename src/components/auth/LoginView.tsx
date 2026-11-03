@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -10,17 +10,14 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  Download,
   CheckCircle2,
   Sparkles,
-  Smartphone
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
-import Link from 'next/link';
 
 export const LoginView: React.FC = () => {
   const { login, currentUser, currentBranch } = usePharmacy();
-  const [username, setUsername] = useState(currentUser?.username || 'maria');
+  const [username, setUsername] = useState(currentUser?.username || 'jonathan');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,7 +75,7 @@ export const LoginView: React.FC = () => {
     setTimeout(() => {
       const res = login(username, password);
       if (!res.success) {
-        setError(res.message || 'Contraseña incorrecta. Intenta nuevamente.');
+        setError(res.message || 'Contraseña o PIN incorrecto. Intenta nuevamente.');
         setLoading(false);
       }
     }, 200);
@@ -89,7 +86,7 @@ export const LoginView: React.FC = () => {
       {/* Glow Suave de Fondo */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07),transparent_70%)] pointer-events-none" />
 
-      {/* Tarjeta Central de Bloqueo / Autenticación */}
+      {/* Tarjeta Central de Autenticación */}
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-white/40 overflow-hidden relative z-10 animate-in fade-in zoom-in-95 duration-200">
         
         {/* Cabecera con Logo Institucional */}
@@ -109,7 +106,7 @@ export const LoginView: React.FC = () => {
 
           <div className="flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-100/90 border border-emerald-200 text-[10px] font-bold text-emerald-900 uppercase tracking-wider mb-1.5">
             <Lock className="w-3 h-3 text-emerald-700" />
-            <span>Bloqueo de Seguridad Activo</span>
+            <span>Inicio de Sesión Seguro</span>
           </div>
 
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
@@ -120,10 +117,10 @@ export const LoginView: React.FC = () => {
           </p>
         </div>
 
-        {/* Notificación de Seguridad Automática */}
+        {/* Notificación Informativa */}
         <div className="bg-emerald-50/70 border-b border-emerald-100 px-4 py-2 flex items-center gap-2 text-[11px] text-emerald-900 font-medium">
-          <Smartphone className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>Seguridad: María y Jonathan se bloquean al salir de pantalla. La Cajera permanece activa durante la jornada.</span>
+          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>Ingreso Oficial — Selecciona tu usuario e ingresa tu PIN para continuar.</span>
         </div>
 
         {/* Selector Rápido de Usuario */}
@@ -190,7 +187,7 @@ export const LoginView: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Ingresa tu contraseña o PIN"
+                placeholder="Ingresa tu PIN o contraseña"
                 className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl px-3.5 py-3 text-sm text-slate-800 font-medium transition-all outline-none pr-10 shadow-xs"
               />
               <button
@@ -214,22 +211,17 @@ export const LoginView: React.FC = () => {
           </button>
         </form>
 
-        {/* Acceso Directo a Portal de Descargas */}
-        <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 text-center flex items-center justify-between">
-          <span className="text-xs text-slate-500 font-medium">¿Aplicación Oficial?</span>
-          <Link
-            href="/descargar"
-            className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1"
-          >
-            <Download className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Descargar App</span>
-          </Link>
+        {/* Pie Informativo */}
+        <div className="px-5 py-2.5 bg-slate-50 border-t border-slate-100 text-center flex items-center justify-center">
+          <span className="text-[11px] text-slate-500 font-semibold">
+            Farmacia Espíritu Santo • Sucursal 19 de Julio
+          </span>
         </div>
 
       </div>
 
       <footer className="mt-4 text-center text-xs text-emerald-200/80 font-medium">
-        <span>© 2026 Farmacia Espíritu Santo • Sucursal 19 de Julio</span>
+        <span>© 2026 Farmacia Espíritu Santo — Todos los derechos reservados</span>
       </footer>
     </div>
   );
