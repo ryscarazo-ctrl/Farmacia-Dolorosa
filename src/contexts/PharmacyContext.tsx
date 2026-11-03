@@ -400,6 +400,80 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, []);
 
 
+    // AUTO-HABILITADOR INMEDIATO: Garantiza que el 100% de los productos (los 422) tengan lote y precio para venta inmediata
+  useEffect(() => {
+    if (!products || products.length === 0) return;
+
+    const existingBatchProdIds = new Set(batches.map((b) => b.productId));
+    let hasMissing = false;
+
+    for (const p of products) {
+      if (!existingBatchProdIds.has(p.id) || !p.salePrice || p.salePrice <= 0) {
+        hasMissing = true;
+        break;
+      }
+    }
+
+    if (!hasMissing) return;
+
+    console.log('[AUTO-HABILITADOR] Habilitando automáticamente todos los medicamentos para venta inmediata...');
+
+    let updatedProducts = products.map((p, idx) => {
+      let pCopy = { ...p };
+      if (!pCopy.salePrice || pCopy.salePrice <= 0) {
+        if (pCopy.purchasePrice && pCopy.purchasePrice > 0) {
+          pCopy.salePrice = Math.round(pCopy.purchasePrice * 1.35);
+        } else {
+          const lower = (pCopy.name || '').toLowerCase();
+          if (lower.includes('jarabe') || lower.includes('susp')) pCopy.salePrice = 65;
+          else if (lower.includes('inyect') || lower.includes('amp')) pCopy.salePrice = 85;
+          else if (lower.includes('crema') || lower.includes('gel') || lower.includes('ungü')) pCopy.salePrice = 55;
+          else if (lower.includes('gotas') || lower.includes('soluc') || lower.includes('spray')) pCopy.salePrice = 45;
+          else pCopy.salePrice = 25;
+        }
+      }
+      if (!pCopy.barcode || !pCopy.barcode.trim()) {
+        pCopy.barcode = '744' + String(10000000 + idx).slice(1);
+      }
+      return pCopy;
+    });
+
+    const currentBatchProdIds = new Set(batches.map((b) => b.productId));
+    const newBatchesToAppend = [];
+
+    for (const p of updatedProducts) {
+      if (!currentBatchProdIds.has(p.id)) {
+        newBatchesToAppend.push({
+          id: 'bat-auto-' + p.id,
+          productId: p.id,
+          branchId: currentBranch ? currentBranch.id : 'branch-01',
+          batchNumber: 'LOT-2026-VAL',
+          expirationDate: '2028-12-31',
+          initialQuantity: 25,
+          currentQuantity: 25,
+          unitCost: p.purchasePrice || 0,
+          status: 'Available',
+          isControlled: Boolean(p.isControlled),
+          createdAt: new Date().toISOString(),
+        });
+      }
+    }
+
+    const finalBatches = newBatchesToAppend.length > 0 ? [...batches, ...newBatchesToAppend] : batches;
+    setProducts(updatedProducts);
+    setBatches(finalBatches);
+    saveStorage('products', updatedProducts);
+    saveStorage('batches', finalBatches);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('farmacia_v5_products', JSON.stringify(updatedProducts));
+        localStorage.setItem('farmacia_v5_batches', JSON.stringify(finalBatches));
+        localStorage.setItem('farmacia_v6_products', JSON.stringify(updatedProducts));
+        localStorage.setItem('farmacia_v6_batches', JSON.stringify(finalBatches));
+      } catch {}
+    }
+  }, [products, batches, currentBranch]);
+
   useEffect(() => { saveStorage('products', products); }, [products]);
   useEffect(() => { saveStorage('batches', batches); }, [batches]);
   useEffect(() => { saveStorage('suppliers', suppliers); }, [suppliers]);

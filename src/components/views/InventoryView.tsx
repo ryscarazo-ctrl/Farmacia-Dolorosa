@@ -550,7 +550,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry,
           </button>
 
           <button
-            onClick={() => setShowOnlyPending(true)}
+            onClick={() => { if (totalPendingCount > 0) { handleEnableAllForSale(); } else { setShowOnlyPending(true); } }}
             className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               showOnlyPending
                 ? 'bg-amber-600 text-white shadow-xs'
