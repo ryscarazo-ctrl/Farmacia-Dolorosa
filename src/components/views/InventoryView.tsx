@@ -18,7 +18,8 @@ import {
   Upload,
   Download,
   Check,
-  AlertCircle
+  AlertCircle,
+  Sparkles
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { usePharmacy } from '../../contexts/PharmacyContext';
@@ -81,6 +82,7 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry,
     deleteProduct,
     clearAllProducts,
     bulkUpsertProducts,
+    bulkRectifyInventory,
     addProduct,
     getAvailableStock,
     getProductBatches,
@@ -96,6 +98,72 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry,
     const pBatches = getProductBatches(p.id);
     return !p.salePrice || p.salePrice <= 0 || pBatches.length === 0;
   }).length;
+  const handleEnableAllForSale = () => {
+    const pendingProducts = products.filter((p) => {
+      const pBatches = getProductBatches(p.id);
+      return !p.salePrice || p.salePrice <= 0 || pBatches.length === 0;
+    });
+
+    if (pendingProducts.length === 0) {
+      alert('¡Todos los medicamentos del catálogo ya están 100% listos para la venta!');
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `¿Deseas habilitar los ${pendingProducts.length} medicamentos pendientes para venta inmediata?\n\n` +
+      `Se configurará para cada uno:\n` +
+      `• Lote vigente activo (Vencimiento 2028)\n` +
+      `• Stock disponible (25 unidades por producto)\n` +
+      `• Precio de venta comercial sugerido\n\n` +
+      `Los ${products.length} medicamentos quedarán 100% listos para facturar en caja.`
+    );
+
+    if (!confirmed) return;
+
+    const itemsToRectify = pendingProducts.map((p, idx) => {
+      const pBatches = getProductBatches(p.id);
+      const currentStock = pBatches.reduce((acc, b) => acc + (b.currentQuantity || 0), 0);
+      const newStock = currentStock > 0 ? currentStock : (p.minStock ? Math.max(p.minStock * 2, 20) : 25);
+
+      let newPrice = p.salePrice;
+      if (!newPrice || newPrice <= 0) {
+        if (p.purchasePrice && p.purchasePrice > 0) {
+          newPrice = Math.round(p.purchasePrice * 1.35);
+        } else {
+          const lower = (p.name || '').toLowerCase();
+          if (lower.includes('jarabe') || lower.includes('susp')) newPrice = 65;
+          else if (lower.includes('inyect') || lower.includes('amp')) newPrice = 85;
+          else if (lower.includes('crema') || lower.includes('gel') || lower.includes('ungü')) newPrice = 55;
+          else if (lower.includes('gotas') || lower.includes('soluc') || lower.includes('spray')) newPrice = 45;
+          else newPrice = 25;
+        }
+      }
+
+      let newBarcode = p.barcode;
+      if (!newBarcode || !newBarcode.trim()) {
+        newBarcode = `744${String(10000000 + idx).slice(1)}`;
+      }
+
+      return {
+        productId: p.id,
+        newStock,
+        newPrice,
+        newBarcode,
+        notes: 'Habilitación masiva automática para venta 100% (Stock y Precio)',
+      };
+    });
+
+    const res = bulkRectifyInventory(itemsToRectify);
+    if (res.success) {
+      setShowOnlyPending(false);
+      setImportStatus({
+        count: res.count,
+        message: `¡Excelente! Se habilitaron con éxito los ${res.count} medicamentos. Los ${products.length} medicamentos del catálogo están listos para venta en caja.`,
+        type: 'success',
+      });
+    }
+  };
+
   const [modalOpen, setModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -468,29 +536,43 @@ export const InventoryView: React.FC<InventoryViewProps> = ({ onNavigateToEntry,
       )}
 
       {/* Filtros Rápidos de Estado */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 select-none">
-        <button
-          onClick={() => setShowOnlyPending(false)}
-          className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
-            !showOnlyPending
-              ? 'bg-slate-900 text-white shadow-xs'
-              : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
-          }`}
-        >
-          Todos los Fármacos ({products.length})
-        </button>
+      <div className="flex flex-wrap items-center justify-between gap-2 pb-1 select-none">
+        <div className="flex items-center gap-2 overflow-x-auto">
+          <button
+            onClick={() => setShowOnlyPending(false)}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+              !showOnlyPending
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+            }`}
+          >
+            Todos los Fármacos ({products.length})
+          </button>
 
-        <button
-          onClick={() => setShowOnlyPending(true)}
-          className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-            showOnlyPending
-              ? 'bg-amber-600 text-white shadow-xs'
-              : 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
-          }`}
-        >
-          <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
-          <span>⚠️ Pendientes de Venta ({totalPendingCount})</span>
-        </button>
+          <button
+            onClick={() => setShowOnlyPending(true)}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              showOnlyPending
+                ? 'bg-amber-600 text-white shadow-xs'
+                : 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
+            }`}
+          >
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+            <span>⚠️ Pendientes de Venta ({totalPendingCount})</span>
+          </button>
+        </div>
+
+        {totalPendingCount > 0 && (
+          <button
+            type="button"
+            onClick={handleEnableAllForSale}
+            className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-black shadow-md shadow-emerald-600/30 flex items-center gap-2 cursor-pointer transition-all active:scale-95 border border-emerald-500 animate-pulse"
+            title="Asignar lote activo, vencimiento 2028 y precio de venta a todos los medicamentos pendientes para dejarlos listos para vender inmediatamente"
+          >
+            <Sparkles className="w-4 h-4 text-amber-300" />
+            <span>⚡ Habilitar los {totalPendingCount} para Venta Inmediata</span>
+          </button>
+        )}
       </div>
 
       {/* Buscador y Filtros */}
