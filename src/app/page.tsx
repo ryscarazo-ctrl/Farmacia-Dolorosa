@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { Sidebar, NavSection } from '../components/layout/Sidebar';
@@ -27,6 +27,7 @@ import { ProfitMarginView } from '../components/views/ProfitMarginView';
 import { InventoryValuationView } from '../components/views/InventoryValuationView';
 import { BankReconciliationView } from '../components/views/BankReconciliationView';
 import { ManualView } from '../components/views/ManualView';
+import { MoreView } from '../components/views/MoreView';
 import { usePharmacy } from '../contexts/PharmacyContext';
 import { ProductDetailModal } from '../components/modals/ProductDetailModal';
 import { BroadcastModal } from '../components/common/BroadcastModal';
@@ -90,6 +91,8 @@ export default function Home() {
         return <AdminView initialTab="settings" />;
       case 'manual':
         return <ManualView onNavigate={(view) => navigateTo(view)} />;
+      case 'more':
+        return <MoreView onNavigate={(view) => navigateTo(view)} />;
       case 'sales':
         return <SalesHistoryView onNavigateToReturns={() => navigateTo('returns')} />;
       case 'returns':
@@ -114,7 +117,7 @@ export default function Home() {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-slate-50 text-slate-800 relative">
-      {/* Sidebar de Navegación Blanco y Verde (Drawer en teléfonos, fijo en PC) */}
+      {/* Sidebar de NavegaciÃ³n Blanco y Verde (Drawer en telÃ©fonos, fijo en PC) */}
       <Sidebar
         currentView={currentView}
         onSelectView={(view) => navigateTo(view)}
@@ -122,7 +125,7 @@ export default function Home() {
         onCloseMobile={() => setIsMobileMenuOpen(false)}
       />
 
-      {/* Área Principal de Contenido */}
+      {/* Ãrea Principal de Contenido */}
       <div className="flex-1 flex flex-col h-screen min-w-0 overflow-hidden">
         <TopNavbar
           onNavigateToCash={() => navigateTo('cash')}

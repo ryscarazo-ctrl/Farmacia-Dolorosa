@@ -64,7 +64,8 @@ export type NavSection =
   | 'admin-branches'
   | 'admin-settings'
   | 'admin-backup'
-  | 'manual';
+  | 'manual'
+  | 'more';
 
 interface SidebarProps {
   currentView: NavSection;
