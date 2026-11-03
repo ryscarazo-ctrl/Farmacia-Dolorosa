@@ -244,6 +244,8 @@ export interface CashSession {
   expectedBalance: number;
   actualBalance?: number;
   difference?: number;
+  retainedBase?: number;
+  withdrawnSales?: number;
   status: CashSessionStatus;
   notes?: string;
 }

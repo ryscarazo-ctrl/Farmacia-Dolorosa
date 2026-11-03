@@ -145,7 +145,7 @@ interface PharmacyContextType {
 
   // Caja
   openCashSession: (openingBalance: number, notes?: string) => void;
-  closeCashSession: (actualBalance: number, notes?: string) => void;
+  closeCashSession: (actualBalance: number, notes?: string, customRetainedBase?: number) => void;
   addCashMovement: (type: 'IN' | 'OUT', amount: number, reason: string) => void;
 
   // Transferencias y Ajustes
@@ -2224,9 +2224,14 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     logAudit('CASH_OPEN', 'Caja', 'CashSession', newSession.id, `Apertura de turno con ${settings.currencySymbol} ${openingBalance.toFixed(2)}`);
   };
 
-  const closeCashSession = (actualBalance: number, notes?: string) => {
+  const closeCashSession = (actualBalance: number, notes?: string, customRetainedBase: number = 510) => {
     if (!currentCashSession) return;
     const diff = actualBalance - currentCashSession.expectedBalance;
+    const retainedBase = Math.min(actualBalance, customRetainedBase);
+    const withdrawnSales = Math.max(0, actualBalance - customRetainedBase);
+
+    const closeSummaryNote = `Base fijada en gaveta: ${settings.currencySymbol} ${customRetainedBase.toFixed(2)} | Ventas retiradas: ${settings.currencySymbol} ${withdrawnSales.toFixed(2)}${notes ? ` (${notes})` : ''}`;
+
     const nextSessions = cashSessions.map((cs) => {
       if (cs.id === currentCashSession.id) {
         return {
@@ -2234,8 +2239,10 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           closedAt: new Date().toISOString(),
           actualBalance,
           difference: diff,
+          retainedBase: customRetainedBase,
+          withdrawnSales: withdrawnSales,
           status: 'Closed' as const,
-          notes: notes ? `${cs.notes || ''} - Cierre: ${notes}` : cs.notes,
+          notes: cs.notes ? `${cs.notes} | ${closeSummaryNote}` : closeSummaryNote,
         };
       }
       return cs;
