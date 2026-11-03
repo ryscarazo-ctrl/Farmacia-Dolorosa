@@ -198,14 +198,14 @@ interface PharmacyContextType {
 }
 
 
-const CATALOG_REVISION = 'rev_122_medicamentos_oct12';
+const CATALOG_REVISION = 'rev_421_espirirusanto_nov02_final';
 
 if (typeof window !== 'undefined') {
   try {
     const currentRev = window.localStorage.getItem('farmacia_catalog_rev');
     if (currentRev !== CATALOG_REVISION) {
       Object.keys(window.localStorage).forEach((k) => {
-        if (k.startsWith('farmacia_v5_') || k.startsWith('farmacia_prod_')) {
+        if (k.startsWith('farmacia_')) {
           window.localStorage.removeItem(k);
         }
       });
