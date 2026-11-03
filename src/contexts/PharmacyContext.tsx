@@ -996,10 +996,61 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     saveStorage('auth_logged_in', false);
   };
 
-  // Turno de caja actual para la sucursal activa
-  const currentCashSession = cashSessions.find(
-    (cs) => cs.branchId === currentBranch.id && cs.status === 'Open'
-  ) || null;
+  // Turno de caja actual para la sucursal activa sincronizado dinámicamente con ventas reales de hoy
+  const currentCashSession = React.useMemo(() => {
+    const session = cashSessions.find(
+      (cs) => cs.branchId === currentBranch.id && cs.status === 'Open'
+    );
+    if (!session) return null;
+
+    const isTodayDate = (dateStr: string) => {
+      try {
+        const d = new Date(dateStr);
+        const now = new Date();
+        return (
+          d.getDate() === now.getDate() &&
+          d.getMonth() === now.getMonth() &&
+          d.getFullYear() === now.getFullYear()
+        );
+      } catch {
+        return false;
+      }
+    };
+
+    // Recopilar todas las ventas de la jornada de hoy para esta sucursal
+    const branchSales = (sales || []).filter((s) => {
+      const isBranch = !s.branchId || s.branchId === currentBranch.id;
+      if (!isBranch) return false;
+      return s.cashSessionId === session.id || isTodayDate(s.createdAt);
+    });
+
+    const realCashSales = branchSales
+      .filter((s) => !s.paymentMethod || s.paymentMethod === 'Cash')
+      .reduce((sum, s) => sum + (s.totalAmount || 0), 0);
+
+    const realCardSales = branchSales
+      .filter((s) => s.paymentMethod === 'Card')
+      .reduce((sum, s) => sum + (s.totalAmount || 0), 0);
+
+    const realTransferSales = branchSales
+      .filter((s) => s.paymentMethod === 'Transfer')
+      .reduce((sum, s) => sum + (s.totalAmount || 0), 0);
+
+    // Base oficial: Si la sesión tenía 500 o no tenía base, normalizar a la base oficial de 510
+    const fixedBase = (session.openingBalance === 500 || !session.openingBalance) ? 510 : session.openingBalance;
+
+    // Saldo esperado total en gaveta = Base (510) + Ventas Efectivo + Ingresos Extra - Gastos Extra
+    const expected = fixedBase + realCashSales + (session.cashIn || 0) - (session.cashOut || 0);
+
+    return {
+      ...session,
+      openingBalance: fixedBase,
+      cashSales: realCashSales,
+      cardSales: realCardSales,
+      transferSales: realTransferSales,
+      expectedBalance: expected,
+    };
+  }, [cashSessions, currentBranch.id, sales]);
 
   // Función de registro en auditoría
   const logAudit = (action: string, module: string, entityName: string, entityId: string, details: string) => {
@@ -2236,6 +2287,11 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (cs.id === currentCashSession.id) {
         return {
           ...cs,
+          openingBalance: currentCashSession.openingBalance,
+          cashSales: currentCashSession.cashSales,
+          cardSales: currentCashSession.cardSales,
+          transferSales: currentCashSession.transferSales,
+          expectedBalance: currentCashSession.expectedBalance,
           closedAt: new Date().toISOString(),
           actualBalance,
           difference: diff,
