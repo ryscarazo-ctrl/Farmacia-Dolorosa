@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -19,8 +19,10 @@ import {
   Check,
   ShieldAlert,
   RefreshCw,
+  Download,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
+import { InstallAppModal } from '../modals/InstallAppModal';
 
 interface TopNavbarProps {
   onNavigateToCash?: () => void;
@@ -56,6 +58,9 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
   const [showAlerts, setShowAlerts] = useState<boolean>(false);
   const [showBranchMenu, setShowBranchMenu] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstalledApp, setIsInstalledApp] = useState<boolean>(false);
 
   // Cálculo de ventas de HOY para el monitor en vivo de Jonathan & María
   const isToday = (dateString?: string) => {
@@ -83,6 +88,17 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       window.addEventListener('online', handleOnline);
       window.addEventListener('offline', handleOffline);
 
+      const isApp =
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as any).standalone === true;
+      setIsInstalledApp(isApp);
+
+      const handleBeforeInstall = (e: any) => {
+        e.preventDefault();
+        setDeferredPrompt(e);
+      };
+      window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+
       const updateClock = () => {
         const now = new Date();
         setTime(
@@ -101,6 +117,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
       return () => {
         window.removeEventListener('online', handleOnline);
         window.removeEventListener('offline', handleOffline);
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
         clearInterval(clockInterval);
       };
     }
@@ -207,7 +224,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           </div>
         </div>
 
-        {/* DERECHA: Monitor en Vivo, Refresh, Manual, Caja, Alertas, Avatar, Salir */}
+        {/* DERECHA: Monitor en Vivo, Refresh, Instalar App, Manual, Caja, Alertas, Avatar, Salir */}
         <div className="flex items-center h-full px-1 sm:px-2 gap-1.5 shrink-0">
           {/* Monitor de Ventas en Vivo para Jonathan & María */}
           <button
@@ -229,7 +246,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             </div>
           </button>
 
-          {/* Botón Refrescar / Sincronizar Manual (Sin reiniciar caja ni afectar venta) */}
+          {/* Botón Refrescar / Sincronizar Manual */}
           <button
             type="button"
             onClick={() => syncNow()}
@@ -238,6 +255,23 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
             title="Actualizar datos e inventario desde la nube en tiempo real (Sin afectar la caja ni la venta actual)"
           >
             <RefreshCw className={`w-3.5 h-3.5 text-emerald-700 shrink-0 ${isSyncing ? 'animate-spin text-emerald-600' : ''}`} />
+          </button>
+
+          {/* Botón Instalar Aplicación */}
+          <button
+            type="button"
+            onClick={() => {
+              if (deferredPrompt) {
+                deferredPrompt.prompt();
+              } else {
+                setShowInstallModal(true);
+              }
+            }}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs rounded-xl shadow-xs hover:shadow transition-all cursor-pointer active:scale-95 group shrink-0"
+            title="Instalar Farmacia Espíritu Santo como App en tu Computadora o Celular"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-200 group-hover:translate-y-0.5 transition-transform" />
+            <span className="hidden md:inline">Instalar App</span>
           </button>
 
           {/* Manual */}
@@ -301,6 +335,13 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
           </button>
         </div>
       </header>
+
+      {/* MODAL INSTALAR APP */}
+      <InstallAppModal
+        isOpen={showInstallModal}
+        onClose={() => setShowInstallModal(false)}
+        deferredPrompt={deferredPrompt}
+      />
 
       {/* MODAL ALERTAS */}
       {showAlerts && (
@@ -388,7 +429,7 @@ export const TopNavbar: React.FC<TopNavbarProps> = ({
                         className="flex-1 py-2.5 px-3 bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-800 hover:to-teal-900 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-98"
                       >
                         <Wrench className="w-3.5 h-3.5 text-emerald-200" />
-                        <span>🛠️ Rectificar Error</span>
+                        <span>Rectificar Error</span>
                         <ArrowUpRight className="w-3.5 h-3.5 text-emerald-300" />
                       </button>
                       <button

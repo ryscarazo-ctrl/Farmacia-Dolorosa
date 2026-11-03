@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard,
   Wrench,
@@ -29,8 +29,11 @@ import {
   Power,
   HardDrive,
   BookOpen,
+  Download,
+  Smartphone,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
+import { InstallAppModal } from '../modals/InstallAppModal';
 
 export type NavSection =
   | 'dashboard'
@@ -77,6 +80,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onCloseMobile,
 }) => {
   const { currentBranch, settings, currentUser, logout } = usePharmacy();
+  const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleBeforeInstall = (e: any) => {
+        e.preventDefault();
+        setDeferredPrompt(e);
+      };
+      window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+      return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+    }
+  }, []);
 
   const handleItemClick = (id: NavSection) => {
     onSelectView(id);
@@ -207,7 +223,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-2.5 py-2.5 space-y-4 text-xs font-semibold scrollbar-thin">
+        {/* BOTÓN DESTACADO: INSTALAR COMO APP */}
+        <div className="px-3 pt-3 pb-1">
+          <button
+            type="button"
+            onClick={() => {
+              if (onCloseMobile) onCloseMobile();
+              setShowInstallModal(true);
+            }}
+            className="w-full flex items-center justify-between px-3 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-800 hover:from-emerald-700 hover:to-teal-800 text-white font-black text-xs shadow-md shadow-emerald-700/20 transition-all cursor-pointer active:scale-98 group border border-emerald-400/30"
+            title="Instalar Farmacia Espíritu Santo como App oficial en tu PC o Celular"
+          >
+            <div className="flex items-center gap-2">
+              <div className="p-1 rounded-lg bg-white/20">
+                <Download className="w-3.5 h-3.5 text-white group-hover:translate-y-0.5 transition-transform" />
+              </div>
+              <span className="tracking-tight">📲 Instalar como App</span>
+            </div>
+            <span className="px-1.5 py-0.5 rounded-full bg-white/25 text-[9px] uppercase font-black tracking-wider text-emerald-50">
+              Gratis
+            </span>
+          </button>
+        </div>
+
+        <nav className="flex-1 overflow-y-auto px-2.5 py-2 space-y-4 text-xs font-semibold scrollbar-thin">
           {/* Dashboard Principal */}
           <div>
             <button
@@ -298,6 +337,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
       </aside>
+
+      {/* MODAL INSTALAR APP */}
+      <InstallAppModal
+        isOpen={showInstallModal}
+        onClose={() => setShowInstallModal(false)}
+        deferredPrompt={deferredPrompt}
+      />
     </>
   );
 };

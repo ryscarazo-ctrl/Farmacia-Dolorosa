@@ -1,12 +1,15 @@
-{
+﻿{
   "name": "Farmacia Espíritu Santo",
-  "short_name": "Farmacia",
-  "description": "Sistema Oficial Farmacia Espíritu Santo — Sucursal 19 de Julio.",
+  "short_name": "Espíritu Santo",
+  "id": "/",
+  "description": "Sistema Oficial Farmacia Espíritu Santo — Sucursal 19 de Julio. Control de Ventas, Inventario FEFO y Caja.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#ffffff",
   "theme_color": "#059669",
+  "categories": ["health", "business", "productivity"],
   "icons": [
     {
       "src": "/icon-192.png",

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+﻿import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { PharmacyProvider } from '../contexts/PharmacyContext';
 
@@ -7,15 +7,29 @@ export const metadata: Metadata = {
   description: 'Sistema empresarial de administración de farmacias con control de lotes FEFO, POS, kardex y auditoría.',
   manifest: '/manifest.json',
   icons: {
-    icon: '/icon-192.png',
+    icon: [
+      { url: '/favicon-64.png', sizes: '64x64', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
     shortcut: '/icon-192.png',
-    apple: '/apple-touch-icon.png',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Farmacia',
+    title: 'Espíritu Santo',
   },
+  applicationName: 'Farmacia Espíritu Santo',
+};
+
+export const viewport: Viewport = {
+  themeColor: '#059669',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -49,7 +63,7 @@ export default function RootLayout({
 
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js?v=26').then(function(reg) {
+                  navigator.serviceWorker.register('/sw.js?v=27').then(function(reg) {
                     reg.update();
                   }).catch(function(err) {
                     console.log('SW registration note:', err);
