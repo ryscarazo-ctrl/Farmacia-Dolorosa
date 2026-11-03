@@ -53,6 +53,38 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [selectedPresentationFilter, setSelectedPresentationFilter] = useState<'ALL' | 'JARABE' | 'TABLETA' | 'INYECTABLE' | 'CREMA' | 'GOTA'>('ALL');
+
+  const getPresentationBadgeStyle = (pres?: string) => {
+    const p = (pres || '').toLowerCase();
+    if (p.includes('jarabe') || p.includes('susp')) {
+      return 'bg-amber-100 text-amber-900 border-amber-300 font-black shadow-2xs';
+    }
+    if (p.includes('tab') || p.includes('cap') || p.includes('grag') || p.includes('comp')) {
+      return 'bg-emerald-100 text-emerald-900 border-emerald-300 font-black shadow-2xs';
+    }
+    if (p.includes('amp') || p.includes('inyect')) {
+      return 'bg-purple-100 text-purple-900 border-purple-300 font-black shadow-2xs';
+    }
+    if (p.includes('crema') || p.includes('gel') || p.includes('pomad') || p.includes('ungü')) {
+      return 'bg-rose-100 text-rose-900 border-rose-300 font-black shadow-2xs';
+    }
+    if (p.includes('gota') || p.includes('soluc') || p.includes('spray') || p.includes('oftalm')) {
+      return 'bg-cyan-100 text-cyan-900 border-cyan-300 font-black shadow-2xs';
+    }
+    return 'bg-slate-100 text-slate-800 border-slate-200 font-black shadow-2xs';
+  };
+
+  const getPresentationIcon = (pres?: string) => {
+    const p = (pres || '').toLowerCase();
+    if (p.includes('jarabe') || p.includes('susp')) return '🍯';
+    if (p.includes('tab') || p.includes('comp')) return '💊';
+    if (p.includes('cap')) return '💊';
+    if (p.includes('amp') || p.includes('inyect')) return '💉';
+    if (p.includes('crema') || p.includes('gel') || p.includes('pomad') || p.includes('ungü')) return '🧴';
+    if (p.includes('gota') || p.includes('oftalm')) return '💧';
+    return '📦';
+  };
   const [customerName, setCustomerName] = useState('');
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Cash');
@@ -211,6 +243,15 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
       return false;
     }
 
+    if (selectedPresentationFilter !== 'ALL') {
+      const pres = (p.presentation || '').toLowerCase();
+      if (selectedPresentationFilter === 'JARABE' && !pres.includes('jarabe') && !pres.includes('susp')) return false;
+      if (selectedPresentationFilter === 'TABLETA' && !pres.includes('tab') && !pres.includes('cap') && !pres.includes('comp') && !pres.includes('grag')) return false;
+      if (selectedPresentationFilter === 'INYECTABLE' && !pres.includes('amp') && !pres.includes('inyect')) return false;
+      if (selectedPresentationFilter === 'CREMA' && !pres.includes('crema') && !pres.includes('gel') && !pres.includes('pomad') && !pres.includes('ungü')) return false;
+      if (selectedPresentationFilter === 'GOTA' && !pres.includes('gota') && !pres.includes('soluc') && !pres.includes('spray')) return false;
+    }
+
     if (!searchQuery || !searchQuery.trim()) {
       return true;
     }
@@ -225,13 +266,15 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
     const labNorm = normalize(p.laboratoryName);
     const presNorm = normalize(p.presentation);
 
-    return (
-      nameNorm.includes(queryNorm) ||
-      genericNorm.includes(queryNorm) ||
-      skuNorm.includes(queryNorm) ||
-      barcodeRaw.includes(rawQuery) ||
-      labNorm.includes(queryNorm) ||
-      presNorm.includes(queryNorm)
+    // Multi-word intelligent search: e.g. "paracetamol jarabe" matches both paracetamol and jarabe
+    const queryWords = queryNorm.split(/\s+/).filter(Boolean);
+    return queryWords.every((word) =>
+      nameNorm.includes(word) ||
+      genericNorm.includes(word) ||
+      presNorm.includes(word) ||
+      labNorm.includes(word) ||
+      skuNorm.includes(word) ||
+      barcodeRaw.includes(word)
     );
   });
 
@@ -365,6 +408,33 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
             )}
           </div>
 
+
+          {/* Filtros Rápidos de Presentación (Jarabe, Tabletas, Inyectables, Cremas) */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin select-none">
+            {[
+              { id: 'ALL', label: 'Todas las Formas', icon: '📦' },
+              { id: 'JARABE', label: 'Jarabes / Suspensiones', icon: '🍯' },
+              { id: 'TABLETA', label: 'Tabletas / Cápsulas', icon: '💊' },
+              { id: 'INYECTABLE', label: 'Inyectables', icon: '💉' },
+              { id: 'CREMA', label: 'Cremas / Geles', icon: '🧴' },
+              { id: 'GOTA', label: 'Gotas / Soluciones', icon: '💧' },
+            ].map((chip) => (
+              <button
+                key={chip.id}
+                type="button"
+                onClick={() => setSelectedPresentationFilter(chip.id as any)}
+                className={`px-2.5 py-1 rounded-lg font-black text-[11px] flex items-center gap-1 shrink-0 transition-all cursor-pointer ${
+                  selectedPresentationFilter === chip.id
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'bg-white text-slate-700 hover:bg-amber-50 border border-slate-200'
+                }`}
+              >
+                <span>{chip.icon}</span>
+                <span>{chip.label}</span>
+              </button>
+            ))}
+          </div>
+
           {/* Categorías Dinámicas */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin">
             <button
@@ -480,9 +550,17 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                           </h3>
                         </div>
                       </div>
-                      <p className="text-[10px] text-slate-500 truncate mt-0.5 font-medium pl-0.5">
-                        {product.genericName || product.presentation || 'Medicamento'}
-                      </p>
+                      <div className="flex items-center gap-1.5 mt-1 flex-wrap pl-0.5">
+                        <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-md border flex items-center gap-1 ${getPresentationBadgeStyle(product.presentation)}`}>
+                          <span>{getPresentationIcon(product.presentation)}</span>
+                          <span>{product.presentation || 'Tabletas'}</span>
+                        </span>
+                        {product.genericName && product.genericName !== product.name && (
+                          <span className="text-[10px] text-slate-500 truncate font-medium max-w-[130px]">
+                            {product.genericName}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     <div className="mt-2.5 pt-2 border-t border-slate-100">
@@ -620,8 +698,13 @@ export const POSView: React.FC<{ onNavigate?: (view: any) => void }> = ({ onNavi
                       <h4 className="font-bold text-xs text-slate-900 truncate">
                         {item.product.name}
                       </h4>
-                      <div className="text-[11px] text-slate-500 font-mono">
-                        {settings.currencySymbol} {item.unitPrice.toFixed(2)} c/u
+                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                        <span className={`text-[9px] font-black uppercase px-1.5 py-0.2 rounded border ${getPresentationBadgeStyle(item.product.presentation)}`}>
+                          {getPresentationIcon(item.product.presentation)} {item.product.presentation || 'Tabletas'}
+                        </span>
+                        <span className="text-[11px] text-slate-500 font-mono">
+                          {settings.currencySymbol} {item.unitPrice.toFixed(2)} c/u
+                        </span>
                       </div>
                     </div>
                   </div>
