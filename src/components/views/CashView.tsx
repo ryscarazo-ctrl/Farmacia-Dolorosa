@@ -42,10 +42,33 @@ export const CashView: React.FC = () => {
   const [openingBalance, setOpeningBalance] = useState('510.00');
   const [retainedBase, setRetainedBase] = useState('510.00');
   const [actualBalance, setActualBalance] = useState('');
+  const [showBillCounter, setShowBillCounter] = useState(false);
+  const [denomCounts, setDenomCounts] = useState<Record<string, string>>({
+    '1000': '',
+    '500': '',
+    '200': '',
+    '100': '',
+    '50': '',
+    '20': '',
+    '10': '',
+    '5': '',
+    '1': '',
+    '0.5': '',
+  });
   const [movementType, setMovementType] = useState<'IN' | 'OUT'>('OUT');
   const [movementAmount, setMovementAmount] = useState('');
   const [movementReason, setMovementReason] = useState('');
   const [notes, setNotes] = useState('');
+
+  const handleDenomChange = (denom: string, val: string) => {
+    const next = { ...denomCounts, [denom]: val };
+    setDenomCounts(next);
+    const total = Object.entries(next).reduce((sum, [d, countStr]) => {
+      const c = parseFloat(countStr) || 0;
+      return sum + parseFloat(d) * c;
+    }, 0);
+    setActualBalance(total.toFixed(2));
+  };
 
   const handleOpen = (e: React.FormEvent) => {
     e.preventDefault();
@@ -181,7 +204,7 @@ export const CashView: React.FC = () => {
           </div>
 
           {/* Desglose de Caja */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
             <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-center">
               <span className="text-[10px] text-slate-500 uppercase font-bold flex items-center justify-center gap-1">
                 <Lock className="w-3 h-3 text-slate-400" />
@@ -195,6 +218,14 @@ export const CashView: React.FC = () => {
               <span className="text-[10px] text-emerald-800 uppercase font-bold">Ventas Efectivo</span>
               <div className="text-sm font-black text-emerald-700 font-mono mt-0.5">
                 +{settings.currencySymbol} {currentCashSession.cashSales.toFixed(2)}
+              </div>
+            </div>
+            <div className="bg-rose-50/60 p-3.5 rounded-2xl border border-rose-100 text-center">
+              <span className="text-[10px] text-rose-800 uppercase font-bold">Ingresos / Retiros</span>
+              <div className="text-xs font-black font-mono mt-0.5 flex items-center justify-center gap-1.5">
+                <span className="text-emerald-700">+{ (currentCashSession.cashIn || 0).toFixed(0) }</span>
+                <span className="text-slate-300">/</span>
+                <span className="text-rose-700">-{ (currentCashSession.cashOut || 0).toFixed(2) }</span>
               </div>
             </div>
             <div className="bg-blue-50/60 p-3.5 rounded-2xl border border-blue-100 text-center">
@@ -221,7 +252,7 @@ export const CashView: React.FC = () => {
             <div className="bg-teal-50/60 p-3.5 rounded-2xl border border-teal-200 text-center">
               <span className="text-[10px] text-teal-800 uppercase font-bold flex items-center justify-center gap-1">
                 <ArrowDownRight className="w-3 h-3 text-teal-600" />
-                <span>Ventas a Sacar</span>
+                <span>Efectivo a Sacar</span>
               </span>
               <div className="text-sm font-black text-teal-900 font-mono mt-0.5">
                 {settings.currencySymbol} {Math.max(0, (currentCashSession.expectedBalance || 0) - 510).toFixed(2)}
@@ -461,9 +492,55 @@ export const CashView: React.FC = () => {
 
             <form onSubmit={handleClose} className="space-y-4 text-xs">
               <div>
-                <label className="text-slate-700 font-black block mb-1">
-                  Monto Total Físico Contado en Gaveta ({settings.currencySymbol}) *
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-slate-700 font-black">
+                    Monto Total Físico Contado en Gaveta ({settings.currencySymbol}) *
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowBillCounter(!showBillCounter)}
+                    className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 flex items-center gap-1 cursor-pointer"
+                  >
+                    <Coins className="w-3.5 h-3.5" />
+                    <span>{showBillCounter ? 'Ocultar Conteo Billetes' : 'Contar Billetes/Monedas'}</span>
+                  </button>
+                </div>
+
+                {showBillCounter && (
+                  <div className="mb-3 p-3 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+                    <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase">
+                      <span>Calculadora de Arqueo por Denominación (C$)</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDenomCounts({
+                            '1000': '', '500': '', '200': '', '100': '', '50': '',
+                            '20': '', '10': '', '5': '', '1': '', '0.5': '',
+                          });
+                        }}
+                        className="text-rose-600 hover:underline cursor-pointer"
+                      >
+                        Limpiar conteo
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-5 gap-1.5">
+                      {['1000', '500', '200', '100', '50', '20', '10', '5', '1', '0.5'].map((denom) => (
+                        <div key={denom} className="bg-white border border-slate-200 rounded-lg p-1.5 text-center">
+                          <span className="text-[10px] font-black text-emerald-800 block">C$ {denom}</span>
+                          <input
+                            type="number"
+                            min="0"
+                            placeholder="0"
+                            value={denomCounts[denom] || ''}
+                            onChange={(e) => handleDenomChange(denom, e.target.value)}
+                            className="w-full text-center font-mono font-bold text-xs bg-slate-50 border border-slate-200 rounded mt-0.5 py-0.5 text-slate-900 focus:outline-none focus:border-emerald-500"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <input
                   type="number"
                   step="0.01"
@@ -659,9 +736,21 @@ export const CashView: React.FC = () => {
                 <span>Ventas en Efectivo:</span>
                 <span className="font-black">+{settings.currencySymbol} {corteModalSession.cashSales.toFixed(2)}</span>
               </div>
+              {(corteModalSession.cashIn || 0) > 0 && (
+                <div className="flex justify-between text-emerald-700">
+                  <span>Ingresos Extra de Caja:</span>
+                  <span>+{settings.currencySymbol} {(corteModalSession.cashIn || 0).toFixed(2)}</span>
+                </div>
+              )}
+              {(corteModalSession.cashOut || 0) > 0 && (
+                <div className="flex justify-between text-rose-700">
+                  <span>Gastos / Reembolsos Caja:</span>
+                  <span>-{settings.currencySymbol} {(corteModalSession.cashOut || 0).toFixed(2)}</span>
+                </div>
+              )}
               {corteModalSession.cardSales > 0 && (
                 <div className="flex justify-between text-blue-700">
-                  <span>Ventas Tarjeta:</span>
+                  <span>Ventas Tarjeta (POS):</span>
                   <span>{settings.currencySymbol} {corteModalSession.cardSales.toFixed(2)}</span>
                 </div>
               )}
@@ -671,9 +760,34 @@ export const CashView: React.FC = () => {
                   <span>{settings.currencySymbol} {corteModalSession.transferSales.toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between border-t border-slate-200 pt-1 font-black text-slate-900">
-                <span>Total Contado en Gaveta:</span>
+              <div className="flex justify-between border-t border-slate-200 pt-1 text-slate-600">
+                <span>Efectivo Esperado Gaveta:</span>
+                <span>{settings.currencySymbol} {(corteModalSession.expectedBalance || 0).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between font-black text-slate-900">
+                <span>Efectivo Físico Contado:</span>
                 <span>{settings.currencySymbol} {(corteModalSession.actualBalance || 0).toFixed(2)}</span>
+              </div>
+              {corteModalSession.difference !== undefined && (
+                <div className="flex justify-between font-bold">
+                  <span>Diferencia de Arqueo:</span>
+                  <span className={Math.abs(corteModalSession.difference) < 0.01 ? 'text-emerald-700' : 'text-red-600'}>
+                    {Math.abs(corteModalSession.difference) < 0.01
+                      ? 'CUADRE EXACTO (0.00)'
+                      : `${corteModalSession.difference > 0 ? '+' : ''}${settings.currencySymbol} ${corteModalSession.difference.toFixed(2)}`}
+                  </span>
+                </div>
+              )}
+              <div className="flex justify-between border-t border-dashed border-slate-200 pt-1 font-bold text-slate-800">
+                <span>Total Facturado Turno (Todos medios):</span>
+                <span>
+                  {settings.currencySymbol}{' '}
+                  {(
+                    (corteModalSession.cashSales || 0) +
+                    (corteModalSession.cardSales || 0) +
+                    (corteModalSession.transferSales || 0)
+                  ).toFixed(2)}
+                </span>
               </div>
             </div>
 
@@ -684,8 +798,19 @@ export const CashView: React.FC = () => {
                 <span>{settings.currencySymbol} {(corteModalSession.retainedBase || 510).toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-black text-teal-800 pt-1 border-t border-emerald-200">
-                <span>💰 Total Retirado de Ventas:</span>
+                <span>💰 Efectivo Neto Retirado (Entrega):</span>
                 <span>{settings.currencySymbol} {(corteModalSession.withdrawnSales || Math.max(0, (corteModalSession.actualBalance || 0) - 510)).toFixed(2)}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 pt-5 text-[9px] text-center text-slate-400">
+              <div>
+                <div className="border-b border-slate-300 mb-1 mx-2" />
+                <span>Entregado por ({corteModalSession.userName})</span>
+              </div>
+              <div>
+                <div className="border-b border-slate-300 mb-1 mx-2" />
+                <span>Recibido Conforme (Admin)</span>
               </div>
             </div>
 

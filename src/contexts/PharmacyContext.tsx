@@ -175,7 +175,10 @@ interface PharmacyContextType {
 
   // Gastos Operativos (OPEX)
   operationalExpenses: OperationalExpense[];
-  addOperationalExpense: (expense: Omit<OperationalExpense, 'id' | 'expenseNumber' | 'createdAt'>) => void;
+  addOperationalExpense: (
+    expense: Omit<OperationalExpense, 'id' | 'expenseNumber' | 'createdAt'>,
+    deductFromCashRegister?: boolean
+  ) => void;
 
   // Conciliación Bancaria
   bankAccounts: BankAccount[];
@@ -630,6 +633,40 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
               return Array.from(sessionMap.values());
             });
           }
+          if (Array.isArray(json.data.operationalExpenses) && json.data.operationalExpenses.length > 0) {
+            setOperationalExpenses((prevExp) => {
+              const expMap = new Map<string, OperationalExpense>();
+              prevExp.forEach((e) => { if (e && e.id) expMap.set(e.id, e); });
+              json.data.operationalExpenses.forEach((e: OperationalExpense) => { if (e && e.id) expMap.set(e.id, e); });
+              return Array.from(expMap.values()).sort(
+                (a, b) => new Date(b.expenseDate || b.createdAt).getTime() - new Date(a.expenseDate || a.createdAt).getTime()
+              );
+            });
+          }
+          if (Array.isArray(json.data.purchases) && json.data.purchases.length > 0) {
+            setPurchases((prevPur) => {
+              const purMap = new Map<string, PurchaseInvoice>();
+              prevPur.forEach((p) => { if (p && p.id) purMap.set(p.id, p); });
+              json.data.purchases.forEach((p: PurchaseInvoice) => { if (p && p.id) purMap.set(p.id, p); });
+              return Array.from(purMap.values());
+            });
+          }
+          if (Array.isArray(json.data.returns) && json.data.returns.length > 0) {
+            setReturns((prevRet) => {
+              const retMap = new Map<string, SaleReturn>();
+              prevRet.forEach((r) => { if (r && r.id) retMap.set(r.id, r); });
+              json.data.returns.forEach((r: SaleReturn) => { if (r && r.id) retMap.set(r.id, r); });
+              return Array.from(retMap.values());
+            });
+          }
+          if (Array.isArray(json.data.barcodeReturns) && json.data.barcodeReturns.length > 0) {
+            setBarcodeReturns((prevBcRet) => {
+              const bcRetMap = new Map<string, BarcodeReturn>();
+              prevBcRet.forEach((r) => { if (r && r.id) bcRetMap.set(r.id, r); });
+              json.data.barcodeReturns.forEach((r: BarcodeReturn) => { if (r && r.id) bcRetMap.set(r.id, r); });
+              return Array.from(bcRetMap.values());
+            });
+          }
           setLastSyncTime(serverUpdated);
         }
       } catch (err) {
@@ -679,6 +716,10 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           batches,
           customers,
           sales,
+          purchases,
+          operationalExpenses,
+          returns,
+          barcodeReturns,
           movements,
           alerts,
           settings,
@@ -701,7 +742,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [products, batches, customers, sales, movements, alerts, settings, cashSessions]);
+  }, [products, batches, customers, sales, purchases, operationalExpenses, returns, barcodeReturns, movements, alerts, settings, cashSessions]);
 
   // 3. Bloqueo Automático de Seguridad: María y Jonathan se bloquean al salir de la pantalla.
   // EXCEPCIÓN: La Cajera (Fátima / Rol Cajera) mantiene su sesión abierta durante la jornada, cerrando solo con Cierre de Turno o Manual.
@@ -975,32 +1016,26 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     saveStorage('auth_logged_in', false);
   };
 
-  // Turno de caja actual para la sucursal activa sincronizado dinámicamente con ventas reales de hoy
+  // Turno de caja actual para la sucursal activa sincronizado dinámicamente con las ventas del turno abierto
   const currentCashSession = React.useMemo(() => {
     const session = cashSessions.find(
       (cs) => cs.branchId === currentBranch.id && cs.status === 'Open'
     );
     if (!session) return null;
 
-    const isTodayDate = (dateStr: string) => {
-      try {
-        const d = new Date(dateStr);
-        const now = new Date();
-        return (
-          d.getDate() === now.getDate() &&
-          d.getMonth() === now.getMonth() &&
-          d.getFullYear() === now.getFullYear()
-        );
-      } catch {
-        return false;
-      }
-    };
+    const sessionOpenedTime = new Date(session.openedAt).getTime();
 
-    // Recopilar todas las ventas de la jornada de hoy para esta sucursal
+    // Recopilar las ventas exclusivas de este turno abierto (sin mezclar con turnos ya cerrados hoy)
     const branchSales = (sales || []).filter((s) => {
+      if (s.status === 'Cancelled') return false;
       const isBranch = !s.branchId || s.branchId === currentBranch.id;
       if (!isBranch) return false;
-      return s.cashSessionId === session.id || isTodayDate(s.createdAt);
+      if (s.cashSessionId) {
+        return s.cashSessionId === session.id;
+      }
+      // Si se cobró desde otro dispositivo sin cashSessionId asignado, verificar que haya ocurrido después de abrir este turno
+      const saleTime = new Date(s.createdAt).getTime();
+      return !isNaN(saleTime) && !isNaN(sessionOpenedTime) && saleTime >= sessionOpenedTime;
     });
 
     const realCashSales = branchSales
@@ -2560,7 +2595,8 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const addOperationalExpense = (
-    expenseData: Omit<OperationalExpense, 'id' | 'expenseNumber' | 'createdAt'>
+    expenseData: Omit<OperationalExpense, 'id' | 'expenseNumber' | 'createdAt'>,
+    deductFromCashRegister: boolean = true
   ) => {
     const numStr = String(operationalExpenses.length + 1).padStart(3, '0');
     const newExpense: OperationalExpense = {
@@ -2569,13 +2605,33 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       expenseNumber: `GTO-2026-${numStr}`,
       createdAt: new Date().toISOString(),
     };
-    setOperationalExpenses((prev) => [newExpense, ...prev]);
+    const nextExpenses = [newExpense, ...operationalExpenses];
+    setOperationalExpenses(nextExpenses);
+    saveStorage('operationalExpenses', nextExpenses);
+
+    // Si el gasto se pagó en efectivo de la caja del turno activo, descontarlo de la gaveta automáticamente
+    if (expenseData.paymentMethod === 'Cash' && deductFromCashRegister && currentCashSession) {
+      addCashMovement(
+        'OUT',
+        newExpense.amount,
+        `Gasto Operativo ${newExpense.expenseNumber}: ${newExpense.description}`
+      );
+    }
+
+    if (typeof window !== 'undefined') {
+      fetch('/api/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ operationalExpenses: nextExpenses }),
+      }).catch(() => {});
+    }
+
     logAudit(
       'EXPENSE_REGISTERED',
       'Gastos Operativos',
       'OperationalExpense',
       newExpense.id,
-      `Gasto operativo ${newExpense.expenseNumber} registrado por $${newExpense.amount.toFixed(2)} (${newExpense.description})`
+      `Gasto operativo ${newExpense.expenseNumber} registrado por ${settings.currencySymbol} ${newExpense.amount.toFixed(2)} (${newExpense.description})`
     );
   };
 

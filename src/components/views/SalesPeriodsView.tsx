@@ -8,34 +8,32 @@ import {
   TrendingUp,
   DollarSign,
   Receipt,
-  Download,
   Printer,
   CheckCircle2,
   Lock,
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-  Filter,
   BarChart3,
   CreditCard,
   Banknote,
   Smartphone,
   Pill,
   Award,
-  Sparkles,
   ShieldCheck,
   AlertCircle,
+  TrendingDown,
 } from 'lucide-react';
 import { usePharmacy } from '../../contexts/PharmacyContext';
-import { Sale } from '../../types/pharmacy';
 
 interface MonthlyClosingRecord {
   id: string;
   monthKey: string;
   monthName: string;
   totalSales: number;
+  totalReturns?: number;
+  netSales?: number;
   totalCost: number;
   grossProfit: number;
+  totalExpenses?: number;
+  netProfit?: number;
   salesCount: number;
   avgTicket: number;
   cashAmount: number;
@@ -48,7 +46,15 @@ interface MonthlyClosingRecord {
 }
 
 export const SalesPeriodsView: React.FC = () => {
-  const { sales, products, currentBranch, settings, currentUser } = usePharmacy();
+  const {
+    sales,
+    returns,
+    barcodeReturns,
+    operationalExpenses,
+    currentBranch,
+    settings,
+    currentUser,
+  } = usePharmacy();
 
   const [activeTab, setActiveTab] = useState<'day' | 'week' | 'month'>('month');
 
@@ -77,6 +83,25 @@ export const SalesPeriodsView: React.FC = () => {
       } catch (e) {
         console.error('Error cargando cierres mensuales:', e);
       }
+
+      // Sincronizar cierres mensuales desde la nube
+      fetch('/api/sync', { cache: 'no-store' })
+        .then((r) => r.json())
+        .then((json) => {
+          if (json?.success && Array.isArray(json.data?.monthlyClosings) && json.data.monthlyClosings.length > 0) {
+            setMonthlyClosings((prev) => {
+              const map = new Map<string, MonthlyClosingRecord>();
+              prev.forEach((c) => map.set(c.monthKey || c.id, c));
+              json.data.monthlyClosings.forEach((c: MonthlyClosingRecord) => map.set(c.monthKey || c.id, c));
+              const merged = Array.from(map.values());
+              try {
+                localStorage.setItem('farmacia_monthly_closings', JSON.stringify(merged));
+              } catch {}
+              return merged;
+            });
+          }
+        })
+        .catch(() => {});
     }
   }, []);
 
@@ -85,6 +110,11 @@ export const SalesPeriodsView: React.FC = () => {
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('farmacia_monthly_closings', JSON.stringify(updated));
+        fetch('/api/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ monthlyClosings: updated }),
+        }).catch(() => {});
       } catch (e) {
         console.error('Error guardando cierres:', e);
       }
@@ -92,14 +122,16 @@ export const SalesPeriodsView: React.FC = () => {
   };
 
   const branchSales = useMemo(() => {
-    return (sales || []).filter((s) => !s.branchId || s.branchId === currentBranch.id);
+    return (sales || []).filter(
+      (s) => (!s.branchId || s.branchId === currentBranch.id) && s.status !== 'Cancelled'
+    );
   }, [sales, currentBranch.id]);
 
   const getMonthName = (monthKey: string) => {
     const [year, month] = monthKey.split('-');
     const months = [
       'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
     ];
     const mIndex = parseInt(month, 10) - 1;
     return `${months[mIndex] || month} ${year}`;
@@ -132,7 +164,7 @@ export const SalesPeriodsView: React.FC = () => {
     });
 
     const daysSummary: { dateStr: string; dayName: string; total: number; count: number }[] = [];
-    const dayNames = ['Lunes', 'Martes', 'MiÃ©rcoles', 'Jueves', 'Viernes', 'SÃ¡bado', 'Domingo'];
+    const dayNames = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
     for (let i = 0; i < 7; i++) {
       const d = new Date(monday);
@@ -163,18 +195,53 @@ export const SalesPeriodsView: React.FC = () => {
     });
   }, [branchSales, selectedMonth]);
 
-  const currentFilteredSales = activeTab === 'day' ? daySales : activeTab === 'week' ? weekData.sales : monthSales;
+  const currentFilteredSales =
+    activeTab === 'day' ? daySales : activeTab === 'week' ? weekData.sales : monthSales;
+
+  // Filtrar devoluciones y gastos del mismo período activo
+  const isDateInActivePeriod = (dateStr?: string) => {
+    if (!dateStr) return false;
+    const dPart = dateStr.split('T')[0];
+    if (activeTab === 'day') return dPart === selectedDate;
+    if (activeTab === 'week') return dPart >= weekData.mondayStr && dPart <= weekData.sundayStr;
+    return dateStr.startsWith(selectedMonth);
+  };
 
   const stats = useMemo(() => {
     const totalAmount = currentFilteredSales.reduce((sum, s) => sum + (s.totalAmount || 0), 0);
-    const costAmount = currentFilteredSales.reduce((sum, s) => sum + (s.costAmount || 0), 0);
-    const grossProfit = totalAmount - costAmount;
-    const profitMargin = totalAmount > 0 ? ((grossProfit / totalAmount) * 100).toFixed(1) : '0';
+    const costAmount = currentFilteredSales.reduce((sum, s) => {
+      const c =
+        s.costAmount && s.costAmount > 0
+          ? s.costAmount
+          : (s.items || []).reduce((acc, it) => acc + (it.unitCost > 0 ? it.unitCost : it.unitPrice * 0.7) * it.quantity, 0) ||
+            (s.totalAmount || 0) * 0.7;
+      return sum + c;
+    }, 0);
+
+    // Devoluciones del período
+    const periodReturns =
+      (returns || [])
+        .filter((r) => (!r.branchId || r.branchId === currentBranch.id) && isDateInActivePeriod(r.createdAt))
+        .reduce((sum, r) => sum + (r.totalRefundAmount || 0), 0) +
+      (barcodeReturns || [])
+        .filter((r) => (!r.branchId || r.branchId === currentBranch.id) && isDateInActivePeriod(r.createdAt))
+        .reduce((sum, r) => sum + (r.totalRefundAmount || 0), 0);
+
+    // Gastos operativos del período
+    const periodExpenses = (operationalExpenses || [])
+      .filter((e) => (!e.branchId || e.branchId === currentBranch.id) && isDateInActivePeriod(e.expenseDate || e.createdAt))
+      .reduce((sum, e) => sum + (e.amount || 0), 0);
+
+    const netSales = Math.max(0, totalAmount - periodReturns);
+    const grossProfit = netSales - costAmount;
+    const netProfit = grossProfit - periodExpenses;
+    const profitMargin = netSales > 0 ? ((grossProfit / netSales) * 100).toFixed(1) : '0';
+    const netMargin = netSales > 0 ? ((netProfit / netSales) * 100).toFixed(1) : '0';
     const salesCount = currentFilteredSales.length;
     const avgTicket = salesCount > 0 ? totalAmount / salesCount : 0;
 
     const cashAmount = currentFilteredSales
-      .filter((s) => s.paymentMethod === 'Cash')
+      .filter((s) => !s.paymentMethod || s.paymentMethod === 'Cash')
       .reduce((sum, s) => sum + (s.totalAmount || 0), 0);
 
     const cardAmount = currentFilteredSales
@@ -205,9 +272,14 @@ export const SalesPeriodsView: React.FC = () => {
 
     return {
       totalAmount,
+      periodReturns,
+      netSales,
       costAmount,
       grossProfit,
+      periodExpenses,
+      netProfit,
       profitMargin,
+      netMargin,
       salesCount,
       avgTicket,
       cashAmount,
@@ -215,7 +287,7 @@ export const SalesPeriodsView: React.FC = () => {
       transferAmount,
       topItems,
     };
-  }, [currentFilteredSales]);
+  }, [currentFilteredSales, returns, barcodeReturns, operationalExpenses, currentBranch.id, activeTab, selectedDate, selectedMonth, weekData]);
 
   const isCurrentMonthClosed = useMemo(() => {
     return monthlyClosings.some((c) => c.monthKey === selectedMonth);
@@ -227,8 +299,12 @@ export const SalesPeriodsView: React.FC = () => {
       monthKey: selectedMonth,
       monthName: getMonthName(selectedMonth),
       totalSales: stats.totalAmount,
+      totalReturns: stats.periodReturns,
+      netSales: stats.netSales,
       totalCost: stats.costAmount,
       grossProfit: stats.grossProfit,
+      totalExpenses: stats.periodExpenses,
+      netProfit: stats.netProfit,
       salesCount: stats.salesCount,
       avgTicket: stats.avgTicket,
       cashAmount: stats.cashAmount,
@@ -236,7 +312,7 @@ export const SalesPeriodsView: React.FC = () => {
       transferAmount: stats.transferAmount,
       closedAt: new Date().toISOString(),
       closedBy: `${currentUser?.firstName || 'Jonathan'} ${currentUser?.lastName || 'Rojas'}`,
-      notes: closingNotes.trim() || 'Cierre mensual consolidado de ventas e inventario.',
+      notes: closingNotes.trim() || 'Cierre mensual consolidado de ventas, gastos e inventario.',
       branchName: currentBranch.name,
     };
 
@@ -250,7 +326,7 @@ export const SalesPeriodsView: React.FC = () => {
 
   return (
     <div className="flex-1 bg-slate-50 min-h-screen pb-24 select-none">
-      {/* Encabezado Tecnomax */}
+      {/* Encabezado Institucional */}
       <div className="bg-[#0B1E2E] text-white px-4 sm:px-6 pt-5 pb-6 shadow-md relative overflow-hidden">
         <div className="absolute top-0 right-0 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -259,17 +335,17 @@ export const SalesPeriodsView: React.FC = () => {
             <div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black uppercase tracking-wider mb-1">
                 <BarChart3 className="w-3 h-3 text-emerald-400" />
-                <span>AuditorÃ­a & AnÃ¡lisis Financiero</span>
+                <span>Auditoría & Análisis Financiero</span>
               </div>
               <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                Cierre y Resumen de Ventas
+                Cierres Contables por Día, Semana y Mes
               </h1>
               <p className="text-xs text-slate-300 font-medium">
-                Ventas por DÃ­a, Semana y Mes con Cierre Mensual Consolidado â€¢ {currentBranch.name}
+                Ventas netas, costos FEFO, gastos operativos y cierre mensual consolidado • {currentBranch.name}
               </p>
             </div>
 
-            {/* PestaÃ±as Principales */}
+            {/* Pestañas Principales */}
             <div className="inline-flex bg-white/10 p-1 rounded-2xl border border-white/15 shrink-0">
               <button
                 type="button"
@@ -279,7 +355,7 @@ export const SalesPeriodsView: React.FC = () => {
                 }`}
               >
                 <Calendar className="w-3.5 h-3.5" />
-                <span>Por DÃ­a</span>
+                <span>Por Día</span>
               </button>
 
               <button
@@ -306,11 +382,11 @@ export const SalesPeriodsView: React.FC = () => {
             </div>
           </div>
 
-          {/* Selector de PerÃ­odo */}
+          {/* Selector de Período */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/15 flex flex-wrap items-center justify-between gap-3 text-xs">
             {activeTab === 'day' && (
               <div className="flex items-center gap-2">
-                <span className="font-bold text-slate-300">Seleccionar DÃ­a:</span>
+                <span className="font-bold text-slate-300">Seleccionar Día:</span>
                 <input
                   type="date"
                   value={selectedDate}
@@ -320,7 +396,7 @@ export const SalesPeriodsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedDate(new Date().toISOString().split('T')[0])}
-                  className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white transition-colors"
+                  className="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white transition-colors cursor-pointer"
                 >
                   Hoy
                 </button>
@@ -357,87 +433,104 @@ export const SalesPeriodsView: React.FC = () => {
               </div>
             )}
 
-            {activeTab === 'month' && (
-              <div className="flex items-center gap-2">
-                {isCurrentMonthClosed ? (
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/30 border border-emerald-400 text-emerald-200 font-bold text-xs">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                    <span>Mes Cerrado Oficialmente</span>
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setShowCloseModal(true)}
-                    className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs shadow-md flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all"
-                  >
-                    <Lock className="w-3.5 h-3.5 text-emerald-100" />
-                    <span>Realizar Cierre de Mes</span>
-                  </button>
-                )}
+            <div className="flex items-center gap-2">
+              {activeTab === 'month' && (
+                <>
+                  {isCurrentMonthClosed ? (
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/30 border border-emerald-400 text-emerald-200 font-bold text-xs">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <span>Mes Cerrado Oficialmente</span>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setShowCloseModal(true)}
+                      className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs shadow-md flex items-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+                    >
+                      <Lock className="w-3.5 h-3.5 text-emerald-100" />
+                      <span>Realizar Cierre de Mes</span>
+                    </button>
+                  )}
+                </>
+              )}
 
-                <button
-                  type="button"
-                  onClick={() => window.print()}
-                  className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-colors"
-                >
-                  <Printer className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Imprimir Resumen</span>
-                </button>
-              </div>
-            )}
+              <button
+                type="button"
+                onClick={() => window.print()}
+                className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs flex items-center gap-1.5 cursor-pointer transition-colors"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Imprimir Resumen</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Contenido KPI */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
           <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-xs">
-            <span className="text-xs text-slate-500 font-bold">Total Facturado</span>
-            <div className="text-xl sm:text-2xl font-black text-slate-900 font-mono mt-1 tracking-tight">
-              {settings.currencySymbol} {stats.totalAmount.toFixed(2)}
+            <span className="text-xs text-slate-500 font-bold">Ventas Netas</span>
+            <div className="text-xl font-black text-slate-900 font-mono mt-1 tracking-tight">
+              {settings.currencySymbol} {stats.netSales.toFixed(2)}
             </div>
             <div className="text-[11px] text-emerald-700 font-semibold mt-1">
-              {stats.salesCount} {stats.salesCount === 1 ? 'venta registrada' : 'ventas registradas'}
+              {stats.salesCount} {stats.salesCount === 1 ? 'factura' : 'facturas'}
+              {stats.periodReturns > 0 ? ` (Dev: -${stats.periodReturns.toFixed(0)})` : ''}
             </div>
           </div>
 
           <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-xs">
-            <span className="text-xs text-slate-500 font-bold">Costo MercaderÃ­a (FEFO)</span>
-            <div className="text-xl sm:text-2xl font-black text-slate-700 font-mono mt-1 tracking-tight">
+            <span className="text-xs text-slate-500 font-bold">Costo Mercadería (FEFO)</span>
+            <div className="text-xl font-black text-slate-700 font-mono mt-1 tracking-tight">
               {settings.currencySymbol} {stats.costAmount.toFixed(2)}
             </div>
             <div className="text-[11px] text-slate-400 font-medium mt-1">
-              Costo de adquisiciÃ³n de lotes
+              Costo de reposición
             </div>
           </div>
 
-          <div className="bg-emerald-50/70 rounded-2xl p-4 border-2 border-emerald-300/80 shadow-xs">
-            <span className="text-xs text-emerald-900 font-black">Ganancia Neta Bruta</span>
-            <div className="text-xl sm:text-2xl font-black text-emerald-700 font-mono mt-1 tracking-tight">
+          <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-xs">
+            <span className="text-xs text-emerald-800 font-bold">Utilidad Bruta</span>
+            <div className="text-xl font-black text-emerald-700 font-mono mt-1 tracking-tight">
               {settings.currencySymbol} {stats.grossProfit.toFixed(2)}
             </div>
-            <div className="text-[11px] text-emerald-800 font-bold mt-1">
+            <div className="text-[11px] text-emerald-700 font-bold mt-1">
               Margen bruto: {stats.profitMargin}%
             </div>
           </div>
 
           <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-xs">
-            <span className="text-xs text-slate-500 font-bold">Ticket Promedio</span>
-            <div className="text-xl sm:text-2xl font-black text-slate-900 font-mono mt-1 tracking-tight">
-              {settings.currencySymbol} {stats.avgTicket.toFixed(2)}
+            <span className="text-xs text-rose-700 font-bold">Gastos Operativos</span>
+            <div className="text-xl font-black text-rose-700 font-mono mt-1 tracking-tight">
+              -{settings.currencySymbol} {stats.periodExpenses.toFixed(2)}
             </div>
             <div className="text-[11px] text-slate-400 font-medium mt-1">
-              Promedio por factura emitida
+              Egresos OPEX del período
+            </div>
+          </div>
+
+          <div className="bg-emerald-50/70 rounded-2xl p-4 border-2 border-emerald-400/80 shadow-xs col-span-2 lg:col-span-1">
+            <span className="text-xs text-emerald-950 font-black">Ganancia Neta Real</span>
+            <div
+              className={`text-xl font-black font-mono mt-1 tracking-tight ${
+                stats.netProfit >= 0 ? 'text-emerald-800' : 'text-rose-700'
+              }`}
+            >
+              {settings.currencySymbol} {stats.netProfit.toFixed(2)}
+            </div>
+            <div className="text-[11px] text-emerald-900 font-bold mt-1">
+              Margen neto: {stats.netMargin}%
             </div>
           </div>
         </div>
 
-        {/* Desglose de MÃ©todos de Pago */}
+        {/* Desglose de Métodos de Pago */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs space-y-3">
           <h3 className="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-2">
             <Banknote className="w-4 h-4 text-emerald-600" />
-            <span>Desglose por MÃ©todo de Pago ({activeTab === 'day' ? 'DÃ­a' : activeTab === 'week' ? 'Semana' : 'Mes'})</span>
+            <span>Desglose por Método de Pago ({activeTab === 'day' ? 'Día' : activeTab === 'week' ? 'Semana' : 'Mes'})</span>
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -464,7 +557,7 @@ export const SalesPeriodsView: React.FC = () => {
                   <CreditCard className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-700">Tarjeta POS / POS MÃ³vil</div>
+                  <div className="text-xs font-bold text-slate-700">Tarjeta POS / POS Móvil</div>
                   <div className="text-sm font-black text-blue-900 font-mono">
                     {settings.currencySymbol} {stats.cardAmount.toFixed(2)}
                   </div>
@@ -494,12 +587,12 @@ export const SalesPeriodsView: React.FC = () => {
           </div>
         </div>
 
-        {/* GrÃ¡fico Semanal si estÃ¡ en pestaÃ±a semana */}
+        {/* Gráfico Semanal si está en pestaña semana */}
         {activeTab === 'week' && (
           <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs space-y-3">
             <h3 className="text-xs font-black uppercase tracking-wider text-slate-600 flex items-center gap-2">
               <CalendarDays className="w-4 h-4 text-emerald-600" />
-              <span>Ventas DÃ­a por DÃ­a de la Semana</span>
+              <span>Ventas Día por Día de la Semana</span>
             </h3>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
@@ -527,12 +620,12 @@ export const SalesPeriodsView: React.FC = () => {
           </div>
         )}
 
-        {/* Top Medicamentos MÃ¡s Vendidos */}
+        {/* Top Medicamentos Más Vendidos */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-black uppercase tracking-wider text-slate-700 flex items-center gap-2">
               <Award className="w-4 h-4 text-amber-500" />
-              <span>Top Medicamentos MÃ¡s Vendidos del PerÃ­odo</span>
+              <span>Top Medicamentos Más Vendidos del Período</span>
             </h3>
             <span className="text-[11px] text-slate-400 font-semibold">
               Ranking por ingreso total
@@ -540,7 +633,9 @@ export const SalesPeriodsView: React.FC = () => {
           </div>
 
           {stats.topItems.length === 0 ? (
-            <p className="text-xs text-slate-400 py-4 text-center">No hay productos vendidos en este perÃ­odo seleccionado.</p>
+            <p className="text-xs text-slate-400 py-4 text-center">
+              No hay productos vendidos en este período seleccionado.
+            </p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
@@ -556,7 +651,7 @@ export const SalesPeriodsView: React.FC = () => {
                   {stats.topItems.map((item, index) => (
                     <tr key={index} className="hover:bg-emerald-50/40">
                       <td className="p-3 font-bold text-slate-400">
-                        {index + 1 === 1 ? 'ðŸ¥‡' : index + 1 === 2 ? 'ðŸ¥ˆ' : index + 1 === 3 ? 'ðŸ¥‰' : `${index + 1}`}
+                        {index + 1 === 1 ? '🥇' : index + 1 === 2 ? '🥈' : index + 1 === 3 ? '🥉' : `${index + 1}`}
                       </td>
                       <td className="p-3 font-extrabold text-slate-800 flex items-center gap-2">
                         <Pill className="w-3.5 h-3.5 text-emerald-600" />
@@ -592,9 +687,9 @@ export const SalesPeriodsView: React.FC = () => {
             {monthlyClosings.length === 0 ? (
               <div className="p-6 text-center bg-slate-50 rounded-xl border border-slate-200/60">
                 <AlertCircle className="w-8 h-8 mx-auto text-slate-400 mb-1.5 opacity-60" />
-                <p className="font-bold text-xs text-slate-700">AÃºn no hay cierres mensuales registrados</p>
+                <p className="font-bold text-xs text-slate-700">Aún no hay cierres mensuales registrados</p>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  Cuando finalice el mes, haz clic en "Realizar Cierre de Mes" para generar el comprobante oficial.
+                  Cuando finalice el mes, haz clic en &quot;Realizar Cierre de Mes&quot; para generar el comprobante oficial.
                 </p>
               </div>
             ) : (
@@ -618,16 +713,16 @@ export const SalesPeriodsView: React.FC = () => {
 
                     <div className="flex items-center gap-4">
                       <div className="text-right">
-                        <div className="text-[10px] text-slate-400 font-bold uppercase">Total Ventas</div>
-                        <div className="text-sm font-black text-emerald-900 font-mono">
-                          {settings.currencySymbol} {cierre.totalSales.toFixed(2)}
+                        <div className="text-[10px] text-slate-400 font-bold uppercase">Ventas Netas</div>
+                        <div className="text-sm font-black text-slate-900 font-mono">
+                          {settings.currencySymbol} {(cierre.netSales ?? cierre.totalSales).toFixed(2)}
                         </div>
                       </div>
 
                       <div className="text-right">
-                        <div className="text-[10px] text-slate-400 font-bold uppercase">Ganancia Neta</div>
+                        <div className="text-[10px] text-slate-400 font-bold uppercase">Utilidad Neta</div>
                         <div className="text-sm font-black text-emerald-700 font-mono">
-                          {settings.currencySymbol} {cierre.grossProfit.toFixed(2)}
+                          {settings.currencySymbol} {(cierre.netProfit ?? cierre.grossProfit).toFixed(2)}
                         </div>
                       </div>
 
@@ -658,38 +753,54 @@ export const SalesPeriodsView: React.FC = () => {
               </div>
               <div>
                 <h3 className="font-black text-base text-slate-900">
-                  Cierre Oficial de Ventas: {getMonthName(selectedMonth)}
+                  Cierre Contable Oficial: {getMonthName(selectedMonth)}
                 </h3>
                 <p className="text-xs text-emerald-700 font-semibold">
-                  GeneraciÃ³n de Balance Mensual Consolidado
+                  Generación de Balance Mensual Consolidado
                 </p>
               </div>
             </div>
 
             <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs space-y-2 font-medium text-slate-700">
               <div className="flex justify-between">
-                <span>Ventas Totales del Mes:</span>
-                <strong className="font-mono text-slate-900 text-sm">
+                <span>Ventas Brutas del Mes ({stats.salesCount}):</span>
+                <strong className="font-mono text-slate-900">
                   {settings.currencySymbol} {stats.totalAmount.toFixed(2)}
                 </strong>
               </div>
+              {stats.periodReturns > 0 && (
+                <div className="flex justify-between text-amber-800">
+                  <span>(-) Devoluciones del Mes:</span>
+                  <strong className="font-mono">
+                    -{settings.currencySymbol} {stats.periodReturns.toFixed(2)}
+                  </strong>
+                </div>
+              )}
               <div className="flex justify-between">
-                <span>Costo Total MercaderÃ­a:</span>
+                <span>(-) Costo Mercadería (FEFO):</span>
                 <strong className="font-mono text-slate-600">
-                  {settings.currencySymbol} {stats.costAmount.toFixed(2)}
+                  -{settings.currencySymbol} {stats.costAmount.toFixed(2)}
                 </strong>
               </div>
-              <div className="flex justify-between border-t border-slate-200 pt-2 text-emerald-800">
-                <span className="font-bold">Ganancia Neta Calculada:</span>
-                <strong className="font-mono text-sm font-black">
+              <div className="flex justify-between border-t border-slate-200 pt-1.5">
+                <span className="font-bold">(=) Utilidad Bruta en Ventas:</span>
+                <strong className="font-mono text-emerald-700">
                   {settings.currencySymbol} {stats.grossProfit.toFixed(2)} ({stats.profitMargin}%)
                 </strong>
               </div>
-              <div className="flex justify-between">
-                <span>Facturas emitidas:</span>
-                <strong className="font-mono">{stats.salesCount} ventas</strong>
+              <div className="flex justify-between text-rose-700">
+                <span>(-) Gastos Operativos (OPEX):</span>
+                <strong className="font-mono">
+                  -{settings.currencySymbol} {stats.periodExpenses.toFixed(2)}
+                </strong>
               </div>
-              <div className="flex justify-between">
+              <div className="flex justify-between border-t border-slate-200 pt-2 text-emerald-900">
+                <span className="font-black">(=) Ganancia Neta Final del Mes:</span>
+                <strong className="font-mono text-sm font-black">
+                  {settings.currencySymbol} {stats.netProfit.toFixed(2)} ({stats.netMargin}%)
+                </strong>
+              </div>
+              <div className="flex justify-between pt-1">
                 <span>Supervisor Responsable:</span>
                 <strong className="text-slate-900">{currentUser?.firstName} {currentUser?.lastName}</strong>
               </div>
@@ -702,7 +813,7 @@ export const SalesPeriodsView: React.FC = () => {
               <textarea
                 value={closingNotes}
                 onChange={(e) => setClosingNotes(e.target.value)}
-                placeholder="Ejemplo: Cierre mensual verificado sin discrepancias en caja..."
+                placeholder="Ejemplo: Cierre mensual verificado con arqueos y conciliación bancaria..."
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs outline-none focus:border-emerald-500 focus:bg-white resize-none h-20 shadow-xs"
               />
             </div>
@@ -735,15 +846,15 @@ export const SalesPeriodsView: React.FC = () => {
           <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200 space-y-4">
             <div id="receipt-print-area" className="p-4 bg-slate-50 rounded-2xl border border-slate-300 text-slate-800 text-xs font-mono space-y-3">
               <div className="text-center pb-2 border-b border-dashed border-slate-400">
-                <h4 className="font-black text-sm uppercase">FARMACIA ESPÃRITU SANTO</h4>
-                <p className="text-[10px]">COMPROBANTE OFICIAL DE CIERRE MENSUAL</p>
+                <h4 className="font-black text-sm uppercase">FARMACIA ESPÍRITU SANTO</h4>
+                <p className="text-[10px]">ACTA OFICIAL DE CIERRE CONTABLE MENSUAL</p>
                 <p className="text-[10px]">{printClosingRecord.branchName}</p>
                 <p className="text-[9px] text-slate-500 mt-1">ID: {printClosingRecord.id}</p>
               </div>
 
               <div className="space-y-1 text-[11px]">
                 <div className="flex justify-between">
-                  <span>PerÃ­odo:</span>
+                  <span>Período:</span>
                   <span className="font-bold">{printClosingRecord.monthName}</span>
                 </div>
                 <div className="flex justify-between">
@@ -757,17 +868,33 @@ export const SalesPeriodsView: React.FC = () => {
               </div>
 
               <div className="border-t border-b border-dashed border-slate-400 py-2 space-y-1.5 text-xs">
-                <div className="flex justify-between font-black text-sm">
-                  <span>VENTAS TOTALES:</span>
+                <div className="flex justify-between font-bold">
+                  <span>VENTAS BRUTAS:</span>
                   <span>{settings.currencySymbol} {printClosingRecord.totalSales.toFixed(2)}</span>
                 </div>
+                {(printClosingRecord.totalReturns || 0) > 0 && (
+                  <div className="flex justify-between text-amber-800">
+                    <span>(-) Devoluciones:</span>
+                    <span>-{settings.currencySymbol} {(printClosingRecord.totalReturns || 0).toFixed(2)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-slate-600">
-                  <span>Costo FEFO:</span>
-                  <span>{settings.currencySymbol} {printClosingRecord.totalCost.toFixed(2)}</span>
+                  <span>(-) Costo FEFO:</span>
+                  <span>-{settings.currencySymbol} {printClosingRecord.totalCost.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between font-black text-emerald-800">
-                  <span>GANANCIA NETA:</span>
+                <div className="flex justify-between font-bold text-slate-800">
+                  <span>(=) UTILIDAD BRUTA:</span>
                   <span>{settings.currencySymbol} {printClosingRecord.grossProfit.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-rose-700">
+                  <span>(-) Gastos OPEX:</span>
+                  <span>-{settings.currencySymbol} {(printClosingRecord.totalExpenses || 0).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between font-black text-emerald-800 text-sm border-t border-slate-300 pt-1">
+                  <span>(=) GANANCIA NETA:</span>
+                  <span>
+                    {settings.currencySymbol} {(printClosingRecord.netProfit ?? printClosingRecord.grossProfit).toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-[11px] pt-1">
                   <span>Transacciones:</span>
@@ -780,24 +907,24 @@ export const SalesPeriodsView: React.FC = () => {
               </div>
 
               <div className="space-y-1 text-[10px]">
-                <div className="font-bold">DESGLOSE DE CAJA:</div>
+                <div className="font-bold">DESGLOSE POR MEDIO DE COBRO:</div>
                 <div className="flex justify-between">
-                  <span>â€¢ Efectivo:</span>
+                  <span>• Efectivo:</span>
                   <span>{settings.currencySymbol} {printClosingRecord.cashAmount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>â€¢ Tarjeta:</span>
+                  <span>• Tarjeta POS:</span>
                   <span>{settings.currencySymbol} {printClosingRecord.cardAmount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>â€¢ Transferencia:</span>
+                  <span>• Transferencia:</span>
                   <span>{settings.currencySymbol} {printClosingRecord.transferAmount.toFixed(2)}</span>
                 </div>
               </div>
 
               {printClosingRecord.notes && (
                 <div className="text-[10px] text-slate-600 pt-1 border-t border-slate-200">
-                  <em>"{printClosingRecord.notes}"</em>
+                  <em>&quot;{printClosingRecord.notes}&quot;</em>
                 </div>
               )}
 

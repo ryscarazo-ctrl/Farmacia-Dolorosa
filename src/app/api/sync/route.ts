@@ -11,6 +11,10 @@ let cloudDatabase: any = {
   suppliers: [],
   sales: [],
   purchases: [],
+  operationalExpenses: [],
+  returns: [],
+  barcodeReturns: [],
+  monthlyClosings: [],
   movements: [],
   alerts: [],
   settings: initialSettings,
@@ -160,6 +164,56 @@ export async function POST(request: Request) {
           }
         });
         cloudDatabase.cashSessions = Array.from(sessionMap.values());
+      }
+
+      // Fusión de gastos operativos (OPEX)
+      if (Array.isArray(body.operationalExpenses) && body.operationalExpenses.length > 0) {
+        const expMap = new Map((cloudDatabase.operationalExpenses || []).map((e: any) => [e.id, e]));
+        body.operationalExpenses.forEach((e: any) => {
+          if (e && e.id) {
+            expMap.set(e.id, e);
+          }
+        });
+        cloudDatabase.operationalExpenses = Array.from(expMap.values()).sort(
+          (a: any, b: any) => new Date(b.expenseDate || b.createdAt).getTime() - new Date(a.expenseDate || a.createdAt).getTime()
+        );
+      }
+
+      // Fusión de compras y facturas de proveedores
+      if (Array.isArray(body.purchases) && body.purchases.length > 0) {
+        const purMap = new Map((cloudDatabase.purchases || []).map((p: any) => [p.id, p]));
+        body.purchases.forEach((p: any) => {
+          if (p && p.id) {
+            purMap.set(p.id, p);
+          }
+        });
+        cloudDatabase.purchases = Array.from(purMap.values());
+      }
+
+      // Fusión de devoluciones
+      if (Array.isArray(body.returns) && body.returns.length > 0) {
+        const retMap = new Map((cloudDatabase.returns || []).map((r: any) => [r.id, r]));
+        body.returns.forEach((r: any) => {
+          if (r && r.id) retMap.set(r.id, r);
+        });
+        cloudDatabase.returns = Array.from(retMap.values());
+      }
+
+      if (Array.isArray(body.barcodeReturns) && body.barcodeReturns.length > 0) {
+        const bcRetMap = new Map((cloudDatabase.barcodeReturns || []).map((r: any) => [r.id, r]));
+        body.barcodeReturns.forEach((r: any) => {
+          if (r && r.id) bcRetMap.set(r.id, r);
+        });
+        cloudDatabase.barcodeReturns = Array.from(bcRetMap.values());
+      }
+
+      // Fusión de cierres mensuales
+      if (Array.isArray(body.monthlyClosings) && body.monthlyClosings.length > 0) {
+        const closeMap = new Map((cloudDatabase.monthlyClosings || []).map((c: any) => [c.monthKey || c.id, c]));
+        body.monthlyClosings.forEach((c: any) => {
+          if (c && (c.monthKey || c.id)) closeMap.set(c.monthKey || c.id, c);
+        });
+        cloudDatabase.monthlyClosings = Array.from(closeMap.values());
       }
 
       cloudDatabase.lastUpdated = Date.now();

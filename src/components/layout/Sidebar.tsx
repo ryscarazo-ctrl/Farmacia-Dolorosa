@@ -147,13 +147,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
       category: 'GESTIÓN DE CAJA',
       items: [
         { id: 'cash', label: 'Arqueo & Cierre de Caja', icon: Vault },
+        { id: 'sales-periods', label: 'Cierres Día / Semana / Mes', icon: Calendar },
         { id: 'bank-reconciliation', label: 'Conciliación Bancaria', icon: Building2 },
       ],
     },
     {
       category: 'REPORTES & FINANZAS',
       items: [
-        { id: 'operational-expenses', label: 'Gastos Operativos & Ganancias', icon: DollarSign },
+        { id: 'operational-expenses', label: 'Estado de Resultados & Gastos', icon: DollarSign },
         { id: 'reports-profit', label: 'Rentabilidad y Margen', icon: TrendingUp },
         { id: 'reports-inventory', label: 'Valorización Inventario', icon: Boxes },
         { id: 'reports-audit', label: 'Auditoría Global (Logs)', icon: ShieldAlert },
