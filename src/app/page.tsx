@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState } from 'react';
 import { Sidebar, NavSection } from '../components/layout/Sidebar';
@@ -28,6 +28,7 @@ import { InventoryValuationView } from '../components/views/InventoryValuationVi
 import { BankReconciliationView } from '../components/views/BankReconciliationView';
 import { ManualView } from '../components/views/ManualView';
 import { MoreView } from '../components/views/MoreView';
+import { SalesPeriodsView } from '../components/views/SalesPeriodsView';
 import { usePharmacy } from '../contexts/PharmacyContext';
 import { ProductDetailModal } from '../components/modals/ProductDetailModal';
 import { BroadcastModal } from '../components/common/BroadcastModal';
@@ -93,6 +94,8 @@ export default function Home() {
         return <ManualView onNavigate={(view) => navigateTo(view)} />;
       case 'more':
         return <MoreView onNavigate={(view) => navigateTo(view)} />;
+      case 'sales-periods':
+        return <SalesPeriodsView />;
       case 'sales':
         return <SalesHistoryView onNavigateToReturns={() => navigateTo('returns')} />;
       case 'returns':
