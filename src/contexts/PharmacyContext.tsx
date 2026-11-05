@@ -201,7 +201,43 @@ interface PharmacyContextType {
 }
 
 
-const CATALOG_REVISION = 'rev_421_espirirusanto_nov02_final';
+const CATALOG_REVISION = 'rev_422_espirirusanto_nov04_stock_fixed';
+
+export const normalizeBranchId = (branchId?: string): string => {
+  if (!branchId) return 'br-01';
+  const clean = String(branchId).trim().toLowerCase();
+  if (
+    clean === 'branch-01' ||
+    clean === 'br-01' ||
+    clean === '19-jul' ||
+    clean === 'central' ||
+    clean === 'sucursal 19 de julio' ||
+    clean === 'sucursal central'
+  ) {
+    return 'br-01';
+  }
+  if (clean === 'branch-02' || clean === 'br-02' || clean === 'jardin' || clean === 'ciudad jardin') {
+    return 'br-02';
+  }
+  if (clean === 'branch-03' || clean === 'br-03' || clean === 'lindavista' || clean === 'linda vista') {
+    return 'br-03';
+  }
+  return branchId;
+};
+
+export const isMatchingBranch = (a?: string, b?: string): boolean => {
+  if (!a || !b) return true;
+  return normalizeBranchId(a) === normalizeBranchId(b);
+};
+
+export const sanitizeBatches = (batchList: ProductBatch[]): ProductBatch[] => {
+  if (!Array.isArray(batchList)) return [];
+  return batchList.map((batch) => ({
+    ...batch,
+    branchId: normalizeBranchId(batch.branchId),
+  }));
+};
+
 
 if (typeof window !== 'undefined') {
   try {
@@ -253,7 +289,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     // Carga con persistencia en localStorage o datos de prueba completos por defecto
     // Estados en Blanco para Producción Real (0 medicamentos demo, listo para ingresar inventario real)
   const [products, setProducts] = useState<Product[]>(() => loadStorage('products', initialProducts));
-  const [batches, setBatches] = useState<ProductBatch[]>(() => loadStorage('batches', initialBatches));
+  const [batches, setBatches] = useState<ProductBatch[]>(() => sanitizeBatches(loadStorage('batches', initialBatches)));
   const [suppliers, setSuppliers] = useState<Supplier[]>(() => loadStorage('suppliers', initialSuppliers));
   const [customers, setCustomers] = useState<Customer[]>(() => loadStorage('customers', []));
   const [purchases, setPurchases] = useState<PurchaseInvoice[]>(() => loadStorage('purchases', initialPurchases));
@@ -351,10 +387,10 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           console.log(`[CLOUD SYNC] Actualizando telǸfono/PC con ${remoteProducts.length} productos de la nube (antes: ${localProducts.length})`);
           isCloudSyncingRef.current = true;
           setProducts(remoteProducts);
-          if (remoteBatches.length > 0) setBatches(remoteBatches);
+          if (remoteBatches.length > 0) setBatches(sanitizeBatches(remoteBatches));
           if (remoteAlerts.length > 0) setAlerts(remoteAlerts);
           saveStorage('products', remoteProducts);
-          if (remoteBatches.length > 0) saveStorage('batches', remoteBatches);
+          if (remoteBatches.length > 0) saveStorage('batches', sanitizeBatches(remoteBatches));
           setTimeout(() => { isCloudSyncingRef.current = false; }, 800);
           return;
         }
@@ -449,7 +485,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         newBatchesToAppend.push({
           id: 'bat-auto-' + p.id,
           productId: p.id,
-          branchId: currentBranch ? currentBranch.id : 'branch-01',
+          branchId: normalizeBranchId(currentBranch ? currentBranch.id : 'br-01'),
           batchNumber: 'LOT-2026-VAL',
           expirationDate: '2028-12-31',
           initialQuantity: 25,
@@ -1019,7 +1055,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Turno de caja actual para la sucursal activa sincronizado dinámicamente con las ventas del turno abierto
   const currentCashSession = React.useMemo(() => {
     const session = cashSessions.find(
-      (cs) => cs.branchId === currentBranch.id && cs.status === 'Open'
+      (cs) => isMatchingBranch(cs.branchId, currentBranch.id) && cs.status === 'Open'
     );
     if (!session) return null;
 
@@ -1028,7 +1064,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     // Recopilar las ventas exclusivas de este turno abierto (sin mezclar con turnos ya cerrados hoy)
     const branchSales = (sales || []).filter((s) => {
       if (s.status === 'Cancelled') return false;
-      const isBranch = !s.branchId || s.branchId === currentBranch.id;
+      const isBranch = !s.branchId || isMatchingBranch(s.branchId, currentBranch.id);
       if (!isBranch) return false;
       if (s.cashSessionId) {
         return s.cashSessionId === session.id;
@@ -1085,7 +1121,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   // Obtener lotes disponibles por FEFO
   const getProductBatches = (productId: string, branchId: string = currentBranch.id) => {
     return batches
-      .filter((b) => b.productId === productId && b.branchId === branchId)
+      .filter((b) => b.productId === productId && isMatchingBranch(b.branchId, branchId))
       .sort((a, b) => new Date(a.expirationDate).getTime() - new Date(b.expirationDate).getTime());
   };
 
@@ -1093,7 +1129,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const validBatches = batches.filter(
       (b) =>
         b.productId === productId &&
-        b.branchId === branchId &&
+        isMatchingBranch(b.branchId, branchId) &&
         b.status === 'Available' &&
         new Date(b.expirationDate) > new Date() &&
         b.currentQuantity > 0
@@ -1106,7 +1142,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       .filter(
         (b) =>
           b.productId === productId &&
-          b.branchId === branchId &&
+          isMatchingBranch(b.branchId, branchId) &&
           b.status === 'Available' &&
           new Date(b.expirationDate) > new Date() &&
           b.currentQuantity > 0
@@ -1257,7 +1293,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         .filter(
           (b) =>
             b.productId === item.product.id &&
-            b.branchId === currentBranch.id &&
+            isMatchingBranch(b.branchId, currentBranch.id) &&
             b.status === 'Available' &&
             b.currentQuantity > 0
         )
@@ -1315,7 +1351,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       // Si no había lote o faltó cantidad, generar lote activo para que NUNCA falte en Kardex ni en la factura
       if (needed > 0) {
         let fallbackBatch = updatedBatches.find(
-          (b) => b.productId === item.product.id && b.branchId === currentBranch.id
+          (b) => b.productId === item.product.id && isMatchingBranch(b.branchId, currentBranch.id)
         );
 
         if (!fallbackBatch) {
@@ -1678,7 +1714,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
 
     const qty = Math.max(1, params.quantity || 1);
-    const productBatches = batches.filter((b) => b.productId === product.id && b.branchId === currentBranch.id);
+    const productBatches = batches.filter((b) => b.productId === product.id && isMatchingBranch(b.branchId, currentBranch.id));
     const matchedBatch = params.batchNumber
       ? productBatches.find((b) => b.batchNumber === params.batchNumber)
       : productBatches[0];
@@ -1969,7 +2005,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (row.batch && row.batch.quantity > 0) {
         const normBatchNum = row.batch.batchNumber.trim().toLowerCase();
         const existingBatchIdx = currentBatches.findIndex(
-          (b) => b.productId === targetProductId && b.batchNumber.trim().toLowerCase() === normBatchNum && b.branchId === currentBranch.id
+          (b) => b.productId === targetProductId && b.batchNumber.trim().toLowerCase() === normBatchNum && isMatchingBranch(b.branchId, currentBranch.id)
         );
 
         if (existingBatchIdx !== -1) {
@@ -2124,7 +2160,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       if (item.newStock !== undefined && !isNaN(item.newStock) && item.newStock >= 0) {
         const branchBatches = currentBatches.filter(
-          (b) => b.productId === item.productId && b.branchId === currentBranch.id
+          (b) => b.productId === item.productId && isMatchingBranch(b.branchId, currentBranch.id)
         );
         const oldStock = branchBatches.reduce((acc, b) => acc + b.currentQuantity, 0);
         const diff = item.newStock - oldStock;
@@ -2132,7 +2168,7 @@ export const PharmacyProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         if (diff !== 0 || branchBatches.length === 0) {
           let assigned = false;
           currentBatches = currentBatches.map((b) => {
-            if (b.productId === item.productId && b.branchId === currentBranch.id) {
+            if (b.productId === item.productId && isMatchingBranch(b.branchId, currentBranch.id)) {
               if (!assigned) {
                 assigned = true;
                 return {

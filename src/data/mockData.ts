@@ -8548,7 +8548,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-001",
     "productId": "prod-real-001",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-001",
     "expirationDate": "2028-06-01",
     "initialQuantity": 58,
@@ -8559,7 +8559,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-002",
     "productId": "prod-real-002",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-002",
     "expirationDate": "2027-07-01",
     "initialQuantity": 205,
@@ -8570,7 +8570,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-003",
     "productId": "prod-real-003",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-003",
     "expirationDate": "2028-09-01",
     "initialQuantity": 30,
@@ -8581,7 +8581,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-004",
     "productId": "prod-real-004",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-004",
     "expirationDate": "2028-12-01",
     "initialQuantity": 104,
@@ -8592,7 +8592,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-005",
     "productId": "prod-real-005",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-005",
     "expirationDate": "2028-11-01",
     "initialQuantity": 84,
@@ -8603,7 +8603,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-006",
     "productId": "prod-real-006",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-006",
     "expirationDate": "2028-04-01",
     "initialQuantity": 173,
@@ -8614,7 +8614,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-007",
     "productId": "prod-real-007",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-007",
     "expirationDate": "2029-06-01",
     "initialQuantity": 39,
@@ -8625,7 +8625,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-008",
     "productId": "prod-real-008",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-008",
     "expirationDate": "2027-02-01",
     "initialQuantity": 135,
@@ -8636,7 +8636,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-009",
     "productId": "prod-real-009",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-009",
     "expirationDate": "2028-08-01",
     "initialQuantity": 42,
@@ -8647,7 +8647,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-010",
     "productId": "prod-real-010",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-010",
     "expirationDate": "2027-05-01",
     "initialQuantity": 13,
@@ -8658,7 +8658,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-011",
     "productId": "prod-real-011",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-011",
     "expirationDate": "2027-05-01",
     "initialQuantity": 13,
@@ -8669,7 +8669,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-012",
     "productId": "prod-real-012",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-012",
     "expirationDate": "2028-11-01",
     "initialQuantity": 335,
@@ -8680,7 +8680,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-013",
     "productId": "prod-real-013",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-013",
     "expirationDate": "2028-10-01",
     "initialQuantity": 31,
@@ -8691,7 +8691,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-014",
     "productId": "prod-real-014",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-014",
     "expirationDate": "2028-07-01",
     "initialQuantity": 30,
@@ -8702,7 +8702,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-015",
     "productId": "prod-real-015",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-015",
     "expirationDate": "2027-04-01",
     "initialQuantity": 18,
@@ -8713,7 +8713,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-016",
     "productId": "prod-real-016",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-016",
     "expirationDate": "2027-02-01",
     "initialQuantity": 38,
@@ -8724,7 +8724,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-017",
     "productId": "prod-real-017",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-017",
     "expirationDate": "2028-03-01",
     "initialQuantity": 26,
@@ -8735,7 +8735,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-018",
     "productId": "prod-real-018",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-018",
     "expirationDate": "2028-02-01",
     "initialQuantity": 36,
@@ -8746,7 +8746,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-019",
     "productId": "prod-real-019",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-019",
     "expirationDate": "2027-04-01",
     "initialQuantity": 8,
@@ -8757,7 +8757,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-020",
     "productId": "prod-real-020",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-020",
     "expirationDate": "2027-07-01",
     "initialQuantity": 41,
@@ -8768,7 +8768,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-021",
     "productId": "prod-real-021",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-021",
     "expirationDate": "2028-07-01",
     "initialQuantity": 17,
@@ -8779,7 +8779,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-022",
     "productId": "prod-real-022",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-022",
     "expirationDate": "2028-10-01",
     "initialQuantity": 85,
@@ -8790,7 +8790,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-023",
     "productId": "prod-real-023",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-023",
     "expirationDate": "2027-11-01",
     "initialQuantity": 49,
@@ -8801,7 +8801,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-024",
     "productId": "prod-real-024",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-024",
     "expirationDate": "2028-07-01",
     "initialQuantity": 60,
@@ -8812,7 +8812,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-025",
     "productId": "prod-real-025",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-025",
     "expirationDate": "2027-09-01",
     "initialQuantity": 10,
@@ -8823,7 +8823,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-026",
     "productId": "prod-real-026",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-026",
     "expirationDate": "2029-03-01",
     "initialQuantity": 50,
@@ -8834,7 +8834,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-027",
     "productId": "prod-real-027",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-027",
     "expirationDate": "2027-04-01",
     "initialQuantity": 75,
@@ -8845,7 +8845,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-028",
     "productId": "prod-real-028",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-028",
     "expirationDate": "2026-11-01",
     "initialQuantity": 57,
@@ -8856,7 +8856,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-029",
     "productId": "prod-real-029",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-029",
     "expirationDate": "2028-09-01",
     "initialQuantity": 24,
@@ -8867,7 +8867,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-030",
     "productId": "prod-real-030",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-030",
     "expirationDate": "2028-10-01",
     "initialQuantity": 58,
@@ -8878,7 +8878,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-031",
     "productId": "prod-real-031",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-031",
     "expirationDate": "2027-08-01",
     "initialQuantity": 31,
@@ -8889,7 +8889,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-032",
     "productId": "prod-real-032",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-032",
     "expirationDate": "2028-12-01",
     "initialQuantity": 152,
@@ -8900,7 +8900,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-033",
     "productId": "prod-real-033",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-033",
     "expirationDate": "2027-07-01",
     "initialQuantity": 9,
@@ -8911,7 +8911,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-034",
     "productId": "prod-real-034",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-034",
     "expirationDate": "2029-11-01",
     "initialQuantity": 111,
@@ -8922,7 +8922,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-035",
     "productId": "prod-real-035",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-035",
     "expirationDate": "2027-03-01",
     "initialQuantity": 56,
@@ -8933,7 +8933,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-036",
     "productId": "prod-real-036",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-036",
     "expirationDate": "2029-03-01",
     "initialQuantity": 98,
@@ -8944,7 +8944,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-037",
     "productId": "prod-real-037",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-037",
     "expirationDate": "2028-02-01",
     "initialQuantity": 96,
@@ -8955,7 +8955,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-038",
     "productId": "prod-real-038",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-038",
     "expirationDate": "2028-03-01",
     "initialQuantity": 118,
@@ -8966,7 +8966,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-039",
     "productId": "prod-real-039",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-039",
     "expirationDate": "2027-10-01",
     "initialQuantity": 120,
@@ -8977,7 +8977,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-040",
     "productId": "prod-real-040",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-040",
     "expirationDate": "2028-08-01",
     "initialQuantity": 40,
@@ -8988,7 +8988,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-041",
     "productId": "prod-real-041",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-041",
     "expirationDate": "2027-09-01",
     "initialQuantity": 9,
@@ -8999,7 +8999,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-042",
     "productId": "prod-real-042",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-042",
     "expirationDate": "2029-03-01",
     "initialQuantity": 81,
@@ -9010,7 +9010,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-043",
     "productId": "prod-real-043",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-043",
     "expirationDate": "2028-01-01",
     "initialQuantity": 115,
@@ -9021,7 +9021,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-044",
     "productId": "prod-real-044",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-044",
     "expirationDate": "2029-05-01",
     "initialQuantity": 43,
@@ -9032,7 +9032,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-045",
     "productId": "prod-real-045",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-045",
     "expirationDate": "2028-08-01",
     "initialQuantity": 62,
@@ -9043,7 +9043,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-046",
     "productId": "prod-real-046",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-046",
     "expirationDate": "2027-02-01",
     "initialQuantity": 71,
@@ -9054,7 +9054,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-047",
     "productId": "prod-real-047",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-047",
     "expirationDate": "2027-01-01",
     "initialQuantity": 82,
@@ -9065,7 +9065,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-048",
     "productId": "prod-real-048",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-048",
     "expirationDate": "2027-08-01",
     "initialQuantity": 20,
@@ -9076,7 +9076,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-049",
     "productId": "prod-real-049",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-049",
     "expirationDate": "2028-08-01",
     "initialQuantity": 42,
@@ -9087,7 +9087,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-050",
     "productId": "prod-real-050",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-050",
     "expirationDate": "2026-07-01",
     "initialQuantity": 7,
@@ -9098,7 +9098,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-051",
     "productId": "prod-real-051",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-051",
     "expirationDate": "2029-02-01",
     "initialQuantity": 27,
@@ -9109,7 +9109,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-052",
     "productId": "prod-real-052",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-052",
     "expirationDate": "2028-01-01",
     "initialQuantity": 32,
@@ -9120,7 +9120,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-053",
     "productId": "prod-real-053",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-053",
     "expirationDate": "2029-01-01",
     "initialQuantity": 203,
@@ -9131,7 +9131,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-054",
     "productId": "prod-real-054",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-054",
     "expirationDate": "2029-01-01",
     "initialQuantity": 80,
@@ -9142,7 +9142,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-055",
     "productId": "prod-real-055",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-055",
     "expirationDate": "2026-11-01",
     "initialQuantity": 83,
@@ -9153,7 +9153,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-056",
     "productId": "prod-real-056",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-056",
     "expirationDate": "2029-02-01",
     "initialQuantity": 56,
@@ -9164,7 +9164,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-057",
     "productId": "prod-real-057",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-057",
     "expirationDate": "2028-11-01",
     "initialQuantity": 45,
@@ -9175,7 +9175,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-058",
     "productId": "prod-real-058",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-058",
     "expirationDate": "2026-10-01",
     "initialQuantity": 17,
@@ -9186,7 +9186,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-059",
     "productId": "prod-real-059",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-059",
     "expirationDate": "2028-07-01",
     "initialQuantity": 43,
@@ -9197,7 +9197,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-060",
     "productId": "prod-real-060",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-060",
     "expirationDate": "2027-12-01",
     "initialQuantity": 108,
@@ -9208,7 +9208,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-061",
     "productId": "prod-real-061",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-061",
     "expirationDate": "2028-05-01",
     "initialQuantity": 35,
@@ -9219,7 +9219,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-062",
     "productId": "prod-real-062",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-062",
     "expirationDate": "2027-03-01",
     "initialQuantity": 1,
@@ -9230,7 +9230,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-063",
     "productId": "prod-real-063",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-063",
     "expirationDate": "2027-04-01",
     "initialQuantity": 19,
@@ -9241,7 +9241,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-064",
     "productId": "prod-real-064",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-064",
     "expirationDate": "2027-08-01",
     "initialQuantity": 24,
@@ -9252,7 +9252,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-065",
     "productId": "prod-real-065",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-065",
     "expirationDate": "2027-06-01",
     "initialQuantity": 35,
@@ -9263,7 +9263,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-066",
     "productId": "prod-real-066",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-066",
     "expirationDate": "2027-02-01",
     "initialQuantity": 41,
@@ -9274,7 +9274,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-067",
     "productId": "prod-real-067",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-067",
     "expirationDate": "2028-07-01",
     "initialQuantity": 400,
@@ -9285,7 +9285,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-068",
     "productId": "prod-real-068",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-068",
     "expirationDate": "2027-01-01",
     "initialQuantity": 95,
@@ -9296,7 +9296,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-069",
     "productId": "prod-real-069",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-069",
     "expirationDate": "2028-09-01",
     "initialQuantity": 85,
@@ -9307,7 +9307,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-070",
     "productId": "prod-real-070",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-070",
     "expirationDate": "2027-12-01",
     "initialQuantity": 16,
@@ -9318,7 +9318,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-071",
     "productId": "prod-real-071",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-071",
     "expirationDate": "2028-04-01",
     "initialQuantity": 10,
@@ -9329,7 +9329,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-072",
     "productId": "prod-real-072",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-072",
     "expirationDate": "2027-11-01",
     "initialQuantity": 432,
@@ -9340,7 +9340,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-073",
     "productId": "prod-real-073",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-073",
     "expirationDate": "2029-04-01",
     "initialQuantity": 86,
@@ -9351,7 +9351,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-074",
     "productId": "prod-real-074",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-074",
     "expirationDate": "2029-02-01",
     "initialQuantity": 108,
@@ -9362,7 +9362,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-075",
     "productId": "prod-real-075",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-075",
     "expirationDate": "2028-12-01",
     "initialQuantity": 36,
@@ -9373,7 +9373,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-076",
     "productId": "prod-real-076",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-076",
     "expirationDate": "2028-04-01",
     "initialQuantity": 123,
@@ -9384,7 +9384,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-077",
     "productId": "prod-real-077",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-077",
     "expirationDate": "2027-05-01",
     "initialQuantity": 84,
@@ -9395,7 +9395,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-078",
     "productId": "prod-real-078",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-078",
     "expirationDate": "2027-12-01",
     "initialQuantity": 92,
@@ -9406,7 +9406,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-079",
     "productId": "prod-real-079",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-079",
     "expirationDate": "2028-06-01",
     "initialQuantity": 40,
@@ -9417,7 +9417,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-080",
     "productId": "prod-real-080",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-080",
     "expirationDate": "2029-11-01",
     "initialQuantity": 34,
@@ -9428,7 +9428,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-081",
     "productId": "prod-real-081",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-081",
     "expirationDate": "2029-05-01",
     "initialQuantity": 50,
@@ -9439,7 +9439,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-082",
     "productId": "prod-real-082",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-082",
     "expirationDate": "2026-10-01",
     "initialQuantity": 8,
@@ -9450,7 +9450,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-083",
     "productId": "prod-real-083",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-083",
     "expirationDate": "2026-09-01",
     "initialQuantity": 1,
@@ -9461,7 +9461,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-084",
     "productId": "prod-real-084",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-084",
     "expirationDate": "2026-11-01",
     "initialQuantity": 48,
@@ -9472,7 +9472,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-085",
     "productId": "prod-real-085",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-085",
     "expirationDate": "2027-05-01",
     "initialQuantity": 3,
@@ -9483,7 +9483,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-086",
     "productId": "prod-real-086",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-086",
     "expirationDate": "2027-06-01",
     "initialQuantity": 86,
@@ -9494,7 +9494,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-087",
     "productId": "prod-real-087",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-087",
     "expirationDate": "2028-08-01",
     "initialQuantity": 126,
@@ -9505,7 +9505,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-088",
     "productId": "prod-real-088",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-088",
     "expirationDate": "2028-04-01",
     "initialQuantity": 85,
@@ -9516,7 +9516,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-089",
     "productId": "prod-real-089",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-089",
     "expirationDate": "2028-10-01",
     "initialQuantity": 10,
@@ -9527,7 +9527,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-090",
     "productId": "prod-real-090",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-090",
     "expirationDate": "2028-11-01",
     "initialQuantity": 92,
@@ -9538,7 +9538,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-091",
     "productId": "prod-real-091",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-091",
     "expirationDate": "2028-04-01",
     "initialQuantity": 170,
@@ -9549,7 +9549,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-092",
     "productId": "prod-real-092",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-092",
     "expirationDate": "2027-11-01",
     "initialQuantity": 90,
@@ -9560,7 +9560,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-093",
     "productId": "prod-real-093",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-093",
     "expirationDate": "2027-11-01",
     "initialQuantity": 15,
@@ -9571,7 +9571,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-094",
     "productId": "prod-real-094",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-094",
     "expirationDate": "2027-04-01",
     "initialQuantity": 6,
@@ -9582,7 +9582,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-095",
     "productId": "prod-real-095",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-095",
     "expirationDate": "2027-12-01",
     "initialQuantity": 62,
@@ -9593,7 +9593,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-096",
     "productId": "prod-real-096",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-096",
     "expirationDate": "2026-10-01",
     "initialQuantity": 12,
@@ -9604,7 +9604,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-097",
     "productId": "prod-real-097",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-097",
     "expirationDate": "2027-03-01",
     "initialQuantity": 115,
@@ -9615,7 +9615,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-098",
     "productId": "prod-real-098",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-098",
     "expirationDate": "2028-03-01",
     "initialQuantity": 25,
@@ -9626,7 +9626,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-099",
     "productId": "prod-real-099",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-099",
     "expirationDate": "2027-02-01",
     "initialQuantity": 8,
@@ -9637,7 +9637,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-100",
     "productId": "prod-real-100",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-100",
     "expirationDate": "2027-03-01",
     "initialQuantity": 8,
@@ -9648,7 +9648,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-101",
     "productId": "prod-real-101",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-101",
     "expirationDate": "2027-10-01",
     "initialQuantity": 12,
@@ -9659,7 +9659,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-102",
     "productId": "prod-real-102",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-102",
     "expirationDate": "2029-02-01",
     "initialQuantity": 139,
@@ -9670,7 +9670,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-103",
     "productId": "prod-real-103",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-103",
     "expirationDate": "2027-12-01",
     "initialQuantity": 227,
@@ -9681,7 +9681,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-104",
     "productId": "prod-real-104",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-104",
     "expirationDate": "2029-04-01",
     "initialQuantity": 18,
@@ -9692,7 +9692,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-105",
     "productId": "prod-real-105",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-105",
     "expirationDate": "2027-10-01",
     "initialQuantity": 39,
@@ -9703,7 +9703,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-106",
     "productId": "prod-real-106",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-106",
     "expirationDate": "2026-11-01",
     "initialQuantity": 26,
@@ -9714,7 +9714,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-107",
     "productId": "prod-real-107",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-107",
     "expirationDate": "2027-07-01",
     "initialQuantity": 84,
@@ -9725,7 +9725,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-108",
     "productId": "prod-real-108",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-108",
     "expirationDate": "2027-03-01",
     "initialQuantity": 70,
@@ -9736,7 +9736,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-109",
     "productId": "prod-real-109",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-109",
     "expirationDate": "2026-11-01",
     "initialQuantity": 88,
@@ -9747,7 +9747,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-110",
     "productId": "prod-real-110",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-110",
     "expirationDate": "2027-03-01",
     "initialQuantity": 89,
@@ -9758,7 +9758,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-111",
     "productId": "prod-real-111",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-111",
     "expirationDate": "2028-11-01",
     "initialQuantity": 300,
@@ -9769,7 +9769,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-112",
     "productId": "prod-real-112",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-112",
     "expirationDate": "2028-08-01",
     "initialQuantity": 32,
@@ -9780,7 +9780,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-113",
     "productId": "prod-real-113",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-113",
     "expirationDate": "2028-09-01",
     "initialQuantity": 100,
@@ -9791,7 +9791,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-114",
     "productId": "prod-real-114",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-114",
     "expirationDate": "2028-07-01",
     "initialQuantity": 39,
@@ -9802,7 +9802,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-115",
     "productId": "prod-real-115",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-115",
     "expirationDate": "2026-11-01",
     "initialQuantity": 22,
@@ -9813,7 +9813,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-116",
     "productId": "prod-real-116",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-116",
     "expirationDate": "2029-12-01",
     "initialQuantity": 27,
@@ -9824,7 +9824,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-117",
     "productId": "prod-real-117",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-117",
     "expirationDate": "2029-06-01",
     "initialQuantity": 47,
@@ -9835,7 +9835,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-118",
     "productId": "prod-real-118",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-118",
     "expirationDate": "2027-02-01",
     "initialQuantity": 12,
@@ -9846,7 +9846,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-119",
     "productId": "prod-real-119",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-119",
     "expirationDate": "2028-12-31",
     "initialQuantity": 57,
@@ -9857,7 +9857,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-120",
     "productId": "prod-real-120",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-120",
     "expirationDate": "2028-12-31",
     "initialQuantity": 144,
@@ -9868,7 +9868,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-121",
     "productId": "prod-real-121",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-121",
     "expirationDate": "2028-12-31",
     "initialQuantity": 21,
@@ -9879,7 +9879,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-122",
     "productId": "prod-real-122",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-122",
     "expirationDate": "2027-01-09",
     "initialQuantity": 11,
@@ -9890,7 +9890,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-123",
     "productId": "prod-real-123",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-123",
     "expirationDate": "2027-04-01",
     "initialQuantity": 67,
@@ -9901,7 +9901,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-124",
     "productId": "prod-real-124",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-124",
     "expirationDate": "2028-01-01",
     "initialQuantity": 79,
@@ -9912,7 +9912,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-125",
     "productId": "prod-real-125",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-125",
     "expirationDate": "2028-04-01",
     "initialQuantity": 75,
@@ -9923,7 +9923,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-126",
     "productId": "prod-real-126",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-126",
     "expirationDate": "2029-11-01",
     "initialQuantity": 141,
@@ -9934,7 +9934,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-127",
     "productId": "prod-real-127",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-127",
     "expirationDate": "2028-01-01",
     "initialQuantity": 23,
@@ -9945,7 +9945,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-128",
     "productId": "prod-real-128",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-128",
     "expirationDate": "2027-01-01",
     "initialQuantity": 55,
@@ -9956,7 +9956,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-129",
     "productId": "prod-real-129",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-129",
     "expirationDate": "2029-02-01",
     "initialQuantity": 182,
@@ -9967,7 +9967,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-130",
     "productId": "prod-real-130",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-130",
     "expirationDate": "2026-11-01",
     "initialQuantity": 6,
@@ -9978,7 +9978,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-131",
     "productId": "prod-real-131",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-131",
     "expirationDate": "2029-10-01",
     "initialQuantity": 83,
@@ -9989,7 +9989,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-132",
     "productId": "prod-real-132",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-132",
     "expirationDate": "2027-01-01",
     "initialQuantity": 59,
@@ -10000,7 +10000,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-133",
     "productId": "prod-real-133",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-133",
     "expirationDate": "2028-02-01",
     "initialQuantity": 155,
@@ -10011,7 +10011,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-134",
     "productId": "prod-real-134",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-134",
     "expirationDate": "2029-12-01",
     "initialQuantity": 49,
@@ -10022,7 +10022,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-135",
     "productId": "prod-real-135",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-135",
     "expirationDate": "2029-01-01",
     "initialQuantity": 119,
@@ -10033,7 +10033,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-136",
     "productId": "prod-real-136",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-136",
     "expirationDate": "2028-04-01",
     "initialQuantity": 40,
@@ -10044,7 +10044,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-137",
     "productId": "prod-real-137",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-137",
     "expirationDate": "2028-09-01",
     "initialQuantity": 44,
@@ -10055,7 +10055,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-138",
     "productId": "prod-real-138",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-138",
     "expirationDate": "2029-02-01",
     "initialQuantity": 109,
@@ -10066,7 +10066,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-139",
     "productId": "prod-real-139",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-139",
     "expirationDate": "2028-05-01",
     "initialQuantity": 57,
@@ -10077,7 +10077,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-140",
     "productId": "prod-real-140",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-140",
     "expirationDate": "2029-01-01",
     "initialQuantity": 53,
@@ -10088,7 +10088,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-141",
     "productId": "prod-real-141",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-141",
     "expirationDate": "2028-09-01",
     "initialQuantity": 136,
@@ -10099,7 +10099,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-142",
     "productId": "prod-real-142",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-142",
     "expirationDate": "2028-04-01",
     "initialQuantity": 94,
@@ -10110,7 +10110,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-143",
     "productId": "prod-real-143",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-143",
     "expirationDate": "2028-12-01",
     "initialQuantity": 92,
@@ -10121,7 +10121,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-144",
     "productId": "prod-real-144",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-144",
     "expirationDate": "2027-04-01",
     "initialQuantity": 0,
@@ -10132,7 +10132,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-145",
     "productId": "prod-real-145",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-145",
     "expirationDate": "2027-12-01",
     "initialQuantity": 0,
@@ -10143,7 +10143,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-146",
     "productId": "prod-real-146",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-146",
     "expirationDate": "2027-01-01",
     "initialQuantity": 0,
@@ -10154,7 +10154,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-147",
     "productId": "prod-real-147",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-147",
     "expirationDate": "2028-04-01",
     "initialQuantity": 0,
@@ -10165,7 +10165,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-148",
     "productId": "prod-real-148",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-148",
     "expirationDate": "2026-12-01",
     "initialQuantity": 0,
@@ -10176,7 +10176,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-149",
     "productId": "prod-real-149",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-149",
     "expirationDate": "2027-05-01",
     "initialQuantity": 0,
@@ -10187,7 +10187,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-150",
     "productId": "prod-real-150",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-150",
     "expirationDate": "2029-01-01",
     "initialQuantity": 0,
@@ -10198,7 +10198,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-151",
     "productId": "prod-real-151",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-151",
     "expirationDate": "2028-10-01",
     "initialQuantity": 0,
@@ -10209,7 +10209,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-152",
     "productId": "prod-real-152",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-152",
     "expirationDate": "2028-02-01",
     "initialQuantity": 0,
@@ -10220,7 +10220,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-153",
     "productId": "prod-real-153",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-153",
     "expirationDate": "2027-01-01",
     "initialQuantity": 0,
@@ -10231,7 +10231,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-154",
     "productId": "prod-real-154",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-154",
     "expirationDate": "2027-12-01",
     "initialQuantity": 0,
@@ -10242,7 +10242,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-155",
     "productId": "prod-real-155",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-155",
     "expirationDate": "2027-08-01",
     "initialQuantity": 0,
@@ -10253,7 +10253,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-156",
     "productId": "prod-real-156",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-156",
     "expirationDate": "2027-11-01",
     "initialQuantity": 0,
@@ -10264,7 +10264,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-157",
     "productId": "prod-real-157",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-157",
     "expirationDate": "2027-12-01",
     "initialQuantity": 0,
@@ -10275,7 +10275,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-158",
     "productId": "prod-real-158",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-158",
     "expirationDate": "2027-05-01",
     "initialQuantity": 0,
@@ -10286,7 +10286,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-159",
     "productId": "prod-real-159",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-159",
     "expirationDate": "2027-06-01",
     "initialQuantity": 0,
@@ -10297,7 +10297,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-160",
     "productId": "prod-real-160",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-160",
     "expirationDate": "2027-10-01",
     "initialQuantity": 0,
@@ -10308,7 +10308,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-161",
     "productId": "prod-real-161",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-161",
     "expirationDate": "2028-03-01",
     "initialQuantity": 0,
@@ -10319,7 +10319,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-162",
     "productId": "prod-real-162",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-162",
     "expirationDate": "2028-03-01",
     "initialQuantity": 0,
@@ -10330,7 +10330,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-163",
     "productId": "prod-real-163",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-163",
     "expirationDate": "2027-09-01",
     "initialQuantity": 0,
@@ -10341,7 +10341,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-164",
     "productId": "prod-real-164",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-164",
     "expirationDate": "2027-05-01",
     "initialQuantity": 0,
@@ -10352,7 +10352,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-165",
     "productId": "prod-real-165",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-165",
     "expirationDate": "2027-03-01",
     "initialQuantity": 0,
@@ -10363,7 +10363,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-166",
     "productId": "prod-real-166",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-166",
     "expirationDate": "2027-08-01",
     "initialQuantity": 0,
@@ -10374,7 +10374,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-167",
     "productId": "prod-real-167",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-167",
     "expirationDate": "2028-12-31",
     "initialQuantity": 0,
@@ -10385,7 +10385,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-168",
     "productId": "prod-real-168",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-168",
     "expirationDate": "2029-04-01",
     "initialQuantity": 0,
@@ -10396,7 +10396,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-169",
     "productId": "prod-real-169",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-169",
     "expirationDate": "2028-03-01",
     "initialQuantity": 0,
@@ -10407,7 +10407,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-170",
     "productId": "prod-real-170",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-170",
     "expirationDate": "2028-01-01",
     "initialQuantity": 0,
@@ -10418,7 +10418,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-171",
     "productId": "prod-real-171",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-171",
     "expirationDate": "2028-02-01",
     "initialQuantity": 0,
@@ -10429,7 +10429,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-172",
     "productId": "prod-real-172",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-172",
     "expirationDate": "2027-11-01",
     "initialQuantity": 0,
@@ -10440,7 +10440,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-173",
     "productId": "prod-real-173",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-173",
     "expirationDate": "2028-11-01",
     "initialQuantity": 0,
@@ -10451,7 +10451,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-174",
     "productId": "prod-real-174",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-174",
     "expirationDate": "2028-08-01",
     "initialQuantity": 0,
@@ -10462,7 +10462,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-175",
     "productId": "prod-real-175",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-175",
     "expirationDate": "2029-01-01",
     "initialQuantity": 0,
@@ -10473,7 +10473,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-176",
     "productId": "prod-real-176",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-176",
     "expirationDate": "2028-11-01",
     "initialQuantity": 0,
@@ -10484,7 +10484,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-177",
     "productId": "prod-real-177",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-177",
     "expirationDate": "2028-05-01",
     "initialQuantity": 0,
@@ -10495,7 +10495,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-178",
     "productId": "prod-real-178",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-178",
     "expirationDate": "2028-05-01",
     "initialQuantity": 0,
@@ -10506,7 +10506,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-179",
     "productId": "prod-real-179",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-179",
     "expirationDate": "2028-08-01",
     "initialQuantity": 0,
@@ -10517,7 +10517,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-180",
     "productId": "prod-real-180",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-180",
     "expirationDate": "2027-12-01",
     "initialQuantity": 2,
@@ -10528,7 +10528,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-181",
     "productId": "prod-real-181",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-181",
     "expirationDate": "2028-12-01",
     "initialQuantity": 0,
@@ -10539,7 +10539,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-182",
     "productId": "prod-real-182",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-182",
     "expirationDate": "2028-07-01",
     "initialQuantity": 2,
@@ -10550,7 +10550,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-183",
     "productId": "prod-real-183",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-183",
     "expirationDate": "2026-12-01",
     "initialQuantity": 1,
@@ -10561,7 +10561,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-184",
     "productId": "prod-real-184",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-184",
     "expirationDate": "2027-06-01",
     "initialQuantity": 4,
@@ -10572,7 +10572,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-185",
     "productId": "prod-real-185",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-185",
     "expirationDate": "2028-10-01",
     "initialQuantity": 2,
@@ -10583,7 +10583,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-186",
     "productId": "prod-real-186",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-186",
     "expirationDate": "2027-03-01",
     "initialQuantity": 2,
@@ -10594,7 +10594,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-187",
     "productId": "prod-real-187",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-187",
     "expirationDate": "2028-07-01",
     "initialQuantity": 2,
@@ -10605,7 +10605,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-188",
     "productId": "prod-real-188",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-188",
     "expirationDate": "2028-01-01",
     "initialQuantity": 1,
@@ -10616,7 +10616,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-189",
     "productId": "prod-real-189",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-189",
     "expirationDate": "2028-01-01",
     "initialQuantity": 1,
@@ -10627,7 +10627,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-190",
     "productId": "prod-real-190",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-190",
     "expirationDate": "2028-06-01",
     "initialQuantity": 1,
@@ -10638,7 +10638,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-191",
     "productId": "prod-real-191",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-191",
     "expirationDate": "2029-07-01",
     "initialQuantity": 1,
@@ -10649,7 +10649,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-192",
     "productId": "prod-real-192",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-192",
     "expirationDate": "2028-12-31",
     "initialQuantity": 2,
@@ -10660,7 +10660,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-193",
     "productId": "prod-real-193",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-193",
     "expirationDate": "2028-10-01",
     "initialQuantity": 4,
@@ -10671,7 +10671,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-194",
     "productId": "prod-real-194",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-194",
     "expirationDate": "2027-04-01",
     "initialQuantity": 2,
@@ -10682,7 +10682,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-195",
     "productId": "prod-real-195",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-195",
     "expirationDate": "2027-01-01",
     "initialQuantity": 2,
@@ -10693,7 +10693,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-196",
     "productId": "prod-real-196",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-196",
     "expirationDate": "2028-04-01",
     "initialQuantity": 4,
@@ -10704,7 +10704,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-197",
     "productId": "prod-real-197",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-197",
     "expirationDate": "2028-03-01",
     "initialQuantity": 2,
@@ -10715,7 +10715,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-198",
     "productId": "prod-real-198",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-198",
     "expirationDate": "2028-12-31",
     "initialQuantity": 0,
@@ -10726,7 +10726,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-199",
     "productId": "prod-real-199",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-199",
     "expirationDate": "2027-03-01",
     "initialQuantity": 1,
@@ -10737,7 +10737,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-200",
     "productId": "prod-real-200",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-200",
     "expirationDate": "2028-01-01",
     "initialQuantity": 6,
@@ -10748,7 +10748,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-201",
     "productId": "prod-real-201",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-201",
     "expirationDate": "2027-03-01",
     "initialQuantity": 1,
@@ -10759,7 +10759,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-202",
     "productId": "prod-real-202",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-202",
     "expirationDate": "2028-04-01",
     "initialQuantity": 1,
@@ -10770,7 +10770,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-203",
     "productId": "prod-real-203",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-203",
     "expirationDate": "2029-02-01",
     "initialQuantity": 2,
@@ -10781,7 +10781,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-204",
     "productId": "prod-real-204",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-204",
     "expirationDate": "2029-01-01",
     "initialQuantity": 5,
@@ -10792,7 +10792,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-205",
     "productId": "prod-real-205",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-205",
     "expirationDate": "2027-12-01",
     "initialQuantity": 1,
@@ -10803,7 +10803,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-206",
     "productId": "prod-real-206",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-206",
     "expirationDate": "2028-11-01",
     "initialQuantity": 2,
@@ -10814,7 +10814,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-207",
     "productId": "prod-real-207",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-207",
     "expirationDate": "2026-12-01",
     "initialQuantity": 1,
@@ -10825,7 +10825,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-208",
     "productId": "prod-real-208",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-208",
     "expirationDate": "2028-05-01",
     "initialQuantity": 3,
@@ -10836,7 +10836,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-209",
     "productId": "prod-real-209",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-209",
     "expirationDate": "2027-01-01",
     "initialQuantity": 3,
@@ -10847,7 +10847,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-210",
     "productId": "prod-real-210",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-210",
     "expirationDate": "2027-02-01",
     "initialQuantity": 2,
@@ -10858,7 +10858,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-211",
     "productId": "prod-real-211",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-211",
     "expirationDate": "2027-08-01",
     "initialQuantity": 4,
@@ -10869,7 +10869,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-212",
     "productId": "prod-real-212",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-212",
     "expirationDate": "2028-03-01",
     "initialQuantity": 1,
@@ -10880,7 +10880,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-213",
     "productId": "prod-real-213",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-213",
     "expirationDate": "2028-05-01",
     "initialQuantity": 1,
@@ -10891,7 +10891,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-214",
     "productId": "prod-real-214",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-214",
     "expirationDate": "2028-04-01",
     "initialQuantity": 2,
@@ -10902,7 +10902,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-215",
     "productId": "prod-real-215",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-215",
     "expirationDate": "2029-04-01",
     "initialQuantity": 51,
@@ -10913,7 +10913,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-216",
     "productId": "prod-real-216",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-216",
     "expirationDate": "2029-04-01",
     "initialQuantity": 102,
@@ -10924,7 +10924,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-217",
     "productId": "prod-real-217",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-217",
     "expirationDate": "2029-01-01",
     "initialQuantity": 25,
@@ -10935,7 +10935,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-218",
     "productId": "prod-real-218",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-218",
     "expirationDate": "2028-05-01",
     "initialQuantity": 26,
@@ -10946,7 +10946,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-219",
     "productId": "prod-real-219",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-219",
     "expirationDate": "2028-08-01",
     "initialQuantity": 38,
@@ -10957,7 +10957,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-220",
     "productId": "prod-real-220",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-220",
     "expirationDate": "2028-09-01",
     "initialQuantity": 2,
@@ -10968,7 +10968,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-221",
     "productId": "prod-real-221",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-221",
     "expirationDate": "2027-10-01",
     "initialQuantity": 4,
@@ -10979,7 +10979,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-222",
     "productId": "prod-real-222",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-222",
     "expirationDate": "2027-09-01",
     "initialQuantity": 1,
@@ -10990,7 +10990,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-223",
     "productId": "prod-real-223",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-223",
     "expirationDate": "2028-07-01",
     "initialQuantity": 10,
@@ -11001,7 +11001,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-224",
     "productId": "prod-real-224",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-224",
     "expirationDate": "2029-02-01",
     "initialQuantity": 8,
@@ -11012,7 +11012,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-225",
     "productId": "prod-real-225",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-225",
     "expirationDate": "2027-05-01",
     "initialQuantity": 41,
@@ -11023,7 +11023,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-226",
     "productId": "prod-real-226",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-226",
     "expirationDate": "2027-01-01",
     "initialQuantity": 12,
@@ -11034,7 +11034,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-227",
     "productId": "prod-real-227",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-227",
     "expirationDate": "2027-12-01",
     "initialQuantity": 1,
@@ -11045,7 +11045,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-228",
     "productId": "prod-real-228",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-228",
     "expirationDate": "2029-11-01",
     "initialQuantity": 13,
@@ -11056,7 +11056,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-229",
     "productId": "prod-real-229",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-229",
     "expirationDate": "2028-04-01",
     "initialQuantity": 3,
@@ -11067,7 +11067,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-230",
     "productId": "prod-real-230",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-230",
     "expirationDate": "2029-02-01",
     "initialQuantity": 97,
@@ -11078,7 +11078,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-231",
     "productId": "prod-real-231",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-231",
     "expirationDate": "2028-12-31",
     "initialQuantity": 9,
@@ -11089,7 +11089,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-232",
     "productId": "prod-real-232",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-232",
     "expirationDate": "2028-12-31",
     "initialQuantity": 24,
@@ -11100,7 +11100,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-233",
     "productId": "prod-real-233",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-233",
     "expirationDate": "2028-05-01",
     "initialQuantity": 17,
@@ -11111,7 +11111,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-234",
     "productId": "prod-real-234",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-234",
     "expirationDate": "2028-10-01",
     "initialQuantity": 4,
@@ -11122,7 +11122,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-235",
     "productId": "prod-real-235",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-235",
     "expirationDate": "2027-01-01",
     "initialQuantity": 6,
@@ -11133,7 +11133,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-236",
     "productId": "prod-real-236",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-236",
     "expirationDate": "2027-02-01",
     "initialQuantity": 5,
@@ -11144,7 +11144,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-237",
     "productId": "prod-real-237",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-237",
     "expirationDate": "2027-01-01",
     "initialQuantity": 2,
@@ -11155,7 +11155,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-238",
     "productId": "prod-real-238",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-238",
     "expirationDate": "2028-12-01",
     "initialQuantity": 1,
@@ -11166,7 +11166,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-239",
     "productId": "prod-real-239",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-239",
     "expirationDate": "2029-05-01",
     "initialQuantity": 14,
@@ -11177,7 +11177,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-240",
     "productId": "prod-real-240",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-240",
     "expirationDate": "2029-02-01",
     "initialQuantity": 12,
@@ -11188,7 +11188,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-241",
     "productId": "prod-real-241",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-241",
     "expirationDate": "2028-10-01",
     "initialQuantity": 2,
@@ -11199,7 +11199,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-242",
     "productId": "prod-real-242",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-242",
     "expirationDate": "2027-12-01",
     "initialQuantity": 2,
@@ -11210,7 +11210,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-243",
     "productId": "prod-real-243",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-243",
     "expirationDate": "2028-08-01",
     "initialQuantity": 2,
@@ -11221,7 +11221,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-244",
     "productId": "prod-real-244",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-244",
     "expirationDate": "2028-06-01",
     "initialQuantity": 5,
@@ -11232,7 +11232,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-245",
     "productId": "prod-real-245",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-245",
     "expirationDate": "2027-09-01",
     "initialQuantity": 4,
@@ -11243,7 +11243,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-246",
     "productId": "prod-real-246",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-246",
     "expirationDate": "2027-03-01",
     "initialQuantity": 5,
@@ -11254,7 +11254,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-247",
     "productId": "prod-real-247",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-247",
     "expirationDate": "2028-09-01",
     "initialQuantity": 7,
@@ -11265,7 +11265,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-248",
     "productId": "prod-real-248",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-248",
     "expirationDate": "2027-06-01",
     "initialQuantity": 38,
@@ -11276,7 +11276,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-249",
     "productId": "prod-real-249",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-249",
     "expirationDate": "2029-04-01",
     "initialQuantity": 61,
@@ -11287,7 +11287,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-250",
     "productId": "prod-real-250",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-250",
     "expirationDate": "2027-09-01",
     "initialQuantity": 7,
@@ -11298,7 +11298,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-251",
     "productId": "prod-real-251",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-251",
     "expirationDate": "2027-03-01",
     "initialQuantity": 11,
@@ -11309,7 +11309,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-252",
     "productId": "prod-real-252",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-252",
     "expirationDate": "2027-07-01",
     "initialQuantity": 2,
@@ -11320,7 +11320,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-253",
     "productId": "prod-real-253",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-253",
     "expirationDate": "2028-12-31",
     "initialQuantity": 0,
@@ -11331,7 +11331,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-254",
     "productId": "prod-real-254",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-254",
     "expirationDate": "2028-09-01",
     "initialQuantity": 10,
@@ -11342,7 +11342,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-255",
     "productId": "prod-real-255",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-255",
     "expirationDate": "2027-11-01",
     "initialQuantity": 9,
@@ -11353,7 +11353,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-256",
     "productId": "prod-real-256",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-256",
     "expirationDate": "2027-08-01",
     "initialQuantity": 2,
@@ -11364,7 +11364,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-257",
     "productId": "prod-real-257",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-257",
     "expirationDate": "2027-12-01",
     "initialQuantity": 2,
@@ -11375,7 +11375,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-258",
     "productId": "prod-real-258",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-258",
     "expirationDate": "2029-08-01",
     "initialQuantity": 2,
@@ -11386,7 +11386,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-259",
     "productId": "prod-real-259",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-259",
     "expirationDate": "2028-01-01",
     "initialQuantity": 1,
@@ -11397,7 +11397,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-260",
     "productId": "prod-real-260",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-260",
     "expirationDate": "2027-05-01",
     "initialQuantity": 1,
@@ -11408,7 +11408,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-261",
     "productId": "prod-real-261",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-261",
     "expirationDate": "2028-04-01",
     "initialQuantity": 4,
@@ -11419,7 +11419,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-262",
     "productId": "prod-real-262",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-262",
     "expirationDate": "2027-07-01",
     "initialQuantity": 2,
@@ -11430,7 +11430,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-263",
     "productId": "prod-real-263",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-263",
     "expirationDate": "2029-02-01",
     "initialQuantity": 4,
@@ -11441,7 +11441,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-264",
     "productId": "prod-real-264",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-264",
     "expirationDate": "2027-07-01",
     "initialQuantity": 4,
@@ -11452,7 +11452,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-265",
     "productId": "prod-real-265",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-265",
     "expirationDate": "2027-02-01",
     "initialQuantity": 7,
@@ -11463,7 +11463,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-266",
     "productId": "prod-real-266",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-266",
     "expirationDate": "2028-02-01",
     "initialQuantity": 3,
@@ -11474,7 +11474,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-267",
     "productId": "prod-real-267",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-267",
     "expirationDate": "2029-01-01",
     "initialQuantity": 6,
@@ -11485,7 +11485,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-268",
     "productId": "prod-real-268",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-268",
     "expirationDate": "2027-09-01",
     "initialQuantity": 17,
@@ -11496,7 +11496,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-269",
     "productId": "prod-real-269",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-269",
     "expirationDate": "2027-11-01",
     "initialQuantity": 1,
@@ -11507,7 +11507,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-270",
     "productId": "prod-real-270",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-270",
     "expirationDate": "2028-07-01",
     "initialQuantity": 18,
@@ -11518,7 +11518,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-271",
     "productId": "prod-real-271",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-271",
     "expirationDate": "2029-09-01",
     "initialQuantity": 2,
@@ -11529,7 +11529,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-272",
     "productId": "prod-real-272",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-272",
     "expirationDate": "2029-05-01",
     "initialQuantity": 2,
@@ -11540,7 +11540,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-273",
     "productId": "prod-real-273",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-273",
     "expirationDate": "2029-12-01",
     "initialQuantity": 1,
@@ -11551,7 +11551,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-274",
     "productId": "prod-real-274",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-274",
     "expirationDate": "2027-01-01",
     "initialQuantity": 1,
@@ -11562,7 +11562,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-275",
     "productId": "prod-real-275",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-275",
     "expirationDate": "2028-12-31",
     "initialQuantity": 0,
@@ -11573,7 +11573,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-276",
     "productId": "prod-real-276",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-276",
     "expirationDate": "2027-07-01",
     "initialQuantity": 2,
@@ -11584,7 +11584,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-277",
     "productId": "prod-real-277",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-277",
     "expirationDate": "2028-08-01",
     "initialQuantity": 1,
@@ -11595,7 +11595,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-278",
     "productId": "prod-real-278",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-278",
     "expirationDate": "2027-01-01",
     "initialQuantity": 1,
@@ -11606,7 +11606,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-279",
     "productId": "prod-real-279",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-279",
     "expirationDate": "2027-10-01",
     "initialQuantity": 1,
@@ -11617,7 +11617,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-280",
     "productId": "prod-real-280",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-280",
     "expirationDate": "2029-03-01",
     "initialQuantity": 1,
@@ -11628,7 +11628,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-281",
     "productId": "prod-real-281",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-281",
     "expirationDate": "2028-12-31",
     "initialQuantity": 10,
@@ -11639,7 +11639,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-282",
     "productId": "prod-real-282",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-282",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -11650,7 +11650,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-283",
     "productId": "prod-real-283",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-283",
     "expirationDate": "2028-01-01",
     "initialQuantity": 3,
@@ -11661,7 +11661,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-284",
     "productId": "prod-real-284",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-284",
     "expirationDate": "2029-02-01",
     "initialQuantity": 2,
@@ -11672,7 +11672,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-285",
     "productId": "prod-real-285",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-285",
     "expirationDate": "2027-02-01",
     "initialQuantity": 3,
@@ -11683,7 +11683,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-286",
     "productId": "prod-real-286",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-286",
     "expirationDate": "2027-11-01",
     "initialQuantity": 1,
@@ -11694,7 +11694,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-287",
     "productId": "prod-real-287",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-287",
     "expirationDate": "2028-12-01",
     "initialQuantity": 12,
@@ -11705,7 +11705,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-288",
     "productId": "prod-real-288",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-288",
     "expirationDate": "2028-12-01",
     "initialQuantity": 1,
@@ -11716,7 +11716,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-289",
     "productId": "prod-real-289",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-289",
     "expirationDate": "2027-01-01",
     "initialQuantity": 8,
@@ -11727,7 +11727,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-290",
     "productId": "prod-real-290",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-290",
     "expirationDate": "2029-05-01",
     "initialQuantity": 7,
@@ -11738,7 +11738,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-291",
     "productId": "prod-real-291",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-291",
     "expirationDate": "2028-12-31",
     "initialQuantity": 53,
@@ -11749,7 +11749,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-292",
     "productId": "prod-real-292",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-292",
     "expirationDate": "2028-12-31",
     "initialQuantity": 4,
@@ -11760,7 +11760,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-293",
     "productId": "prod-real-293",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-293",
     "expirationDate": "2028-12-31",
     "initialQuantity": 32,
@@ -11771,7 +11771,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-294",
     "productId": "prod-real-294",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-294",
     "expirationDate": "24-30",
     "initialQuantity": 2,
@@ -11782,7 +11782,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-295",
     "productId": "prod-real-295",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-295",
     "expirationDate": "2029-02-01",
     "initialQuantity": 12,
@@ -11793,7 +11793,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-296",
     "productId": "prod-real-296",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-296",
     "expirationDate": "2029-03-01",
     "initialQuantity": 3,
@@ -11804,7 +11804,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-297",
     "productId": "prod-real-297",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-297",
     "expirationDate": "2027-06-01",
     "initialQuantity": 4,
@@ -11815,7 +11815,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-298",
     "productId": "prod-real-298",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-298",
     "expirationDate": "2028-08-01",
     "initialQuantity": 2,
@@ -11826,7 +11826,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-299",
     "productId": "prod-real-299",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-299",
     "expirationDate": "2027-10-01",
     "initialQuantity": 1,
@@ -11837,7 +11837,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-300",
     "productId": "prod-real-300",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-300",
     "expirationDate": "2028-11-01",
     "initialQuantity": 3,
@@ -11848,7 +11848,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-301",
     "productId": "prod-real-301",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-301",
     "expirationDate": "2029-07-01",
     "initialQuantity": 3,
@@ -11859,7 +11859,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-302",
     "productId": "prod-real-302",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-302",
     "expirationDate": "2027-11-01",
     "initialQuantity": 2,
@@ -11870,7 +11870,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-303",
     "productId": "prod-real-303",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-303",
     "expirationDate": "2027-08-01",
     "initialQuantity": 1,
@@ -11881,7 +11881,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-304",
     "productId": "prod-real-304",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-304",
     "expirationDate": "2026-12-01",
     "initialQuantity": 4,
@@ -11892,7 +11892,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-305",
     "productId": "prod-real-305",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-305",
     "expirationDate": "2027-03-01",
     "initialQuantity": 4,
@@ -11903,7 +11903,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-306",
     "productId": "prod-real-306",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-306",
     "expirationDate": "2028-02-01",
     "initialQuantity": 1,
@@ -11914,7 +11914,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-307",
     "productId": "prod-real-307",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-307",
     "expirationDate": "2027-03-01",
     "initialQuantity": 1,
@@ -11925,7 +11925,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-308",
     "productId": "prod-real-308",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-308",
     "expirationDate": "2029-04-01",
     "initialQuantity": 5,
@@ -11936,7 +11936,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-309",
     "productId": "prod-real-309",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-309",
     "expirationDate": "2028-08-01",
     "initialQuantity": 2,
@@ -11947,7 +11947,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-310",
     "productId": "prod-real-310",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-310",
     "expirationDate": "2028-12-31",
     "initialQuantity": 90,
@@ -11958,7 +11958,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-311",
     "productId": "prod-real-311",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-311",
     "expirationDate": "2028-12-31",
     "initialQuantity": 39,
@@ -11969,7 +11969,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-312",
     "productId": "prod-real-312",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-312",
     "expirationDate": "2028-12-31",
     "initialQuantity": 40,
@@ -11980,7 +11980,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-313",
     "productId": "prod-real-313",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-313",
     "expirationDate": "2029-09-01",
     "initialQuantity": 60,
@@ -11991,7 +11991,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-314",
     "productId": "prod-real-314",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-314",
     "expirationDate": "2027-06-01",
     "initialQuantity": 3,
@@ -12002,7 +12002,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-315",
     "productId": "prod-real-315",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-315",
     "expirationDate": "2029-10-01",
     "initialQuantity": 1,
@@ -12013,7 +12013,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-316",
     "productId": "prod-real-316",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-316",
     "expirationDate": "2028-11-01",
     "initialQuantity": 6,
@@ -12024,7 +12024,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-317",
     "productId": "prod-real-317",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-317",
     "expirationDate": "2029-11-01",
     "initialQuantity": 2,
@@ -12035,7 +12035,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-318",
     "productId": "prod-real-318",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-318",
     "expirationDate": "2027-03-01",
     "initialQuantity": 2,
@@ -12046,7 +12046,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-319",
     "productId": "prod-real-319",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-319",
     "expirationDate": "2027-01-01",
     "initialQuantity": 3,
@@ -12057,7 +12057,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-320",
     "productId": "prod-real-320",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-320",
     "expirationDate": "2027-09-01",
     "initialQuantity": 2,
@@ -12068,7 +12068,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-321",
     "productId": "prod-real-321",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-321",
     "expirationDate": "2027-02-01",
     "initialQuantity": 2,
@@ -12079,7 +12079,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-322",
     "productId": "prod-real-322",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-322",
     "expirationDate": "2026-12-01",
     "initialQuantity": 3,
@@ -12090,7 +12090,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-323",
     "productId": "prod-real-323",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-323",
     "expirationDate": "2027-02-01",
     "initialQuantity": 3,
@@ -12101,7 +12101,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-324",
     "productId": "prod-real-324",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-324",
     "expirationDate": "2027-03-01",
     "initialQuantity": 7,
@@ -12112,7 +12112,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-325",
     "productId": "prod-real-325",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-325",
     "expirationDate": "2027-06-01",
     "initialQuantity": 3,
@@ -12123,7 +12123,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-326",
     "productId": "prod-real-326",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-326",
     "expirationDate": "2027-02-01",
     "initialQuantity": 1,
@@ -12134,7 +12134,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-327",
     "productId": "prod-real-327",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-327",
     "expirationDate": "2027-10-01",
     "initialQuantity": 13,
@@ -12145,7 +12145,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-328",
     "productId": "prod-real-328",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-328",
     "expirationDate": "2027-12-01",
     "initialQuantity": 1,
@@ -12156,7 +12156,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-329",
     "productId": "prod-real-329",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-329",
     "expirationDate": "2027-03-01",
     "initialQuantity": 5,
@@ -12167,7 +12167,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-330",
     "productId": "prod-real-330",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-330",
     "expirationDate": "2028-07-01",
     "initialQuantity": 10,
@@ -12178,7 +12178,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-331",
     "productId": "prod-real-331",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-331",
     "expirationDate": "2027-07-01",
     "initialQuantity": 4,
@@ -12189,7 +12189,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-332",
     "productId": "prod-real-332",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-332",
     "expirationDate": "2027-12-01",
     "initialQuantity": 1,
@@ -12200,7 +12200,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-333",
     "productId": "prod-real-333",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-333",
     "expirationDate": "2027-08-01",
     "initialQuantity": 15,
@@ -12211,7 +12211,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-334",
     "productId": "prod-real-334",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-334",
     "expirationDate": "2027-05-01",
     "initialQuantity": 3,
@@ -12222,7 +12222,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-335",
     "productId": "prod-real-335",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-335",
     "expirationDate": "2027-05-01",
     "initialQuantity": 4,
@@ -12233,7 +12233,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-336",
     "productId": "prod-real-336",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-336",
     "expirationDate": "2027-07-01",
     "initialQuantity": 1,
@@ -12244,7 +12244,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-337",
     "productId": "prod-real-337",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-337",
     "expirationDate": "2029-08-01",
     "initialQuantity": 1,
@@ -12255,7 +12255,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-338",
     "productId": "prod-real-338",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-338",
     "expirationDate": "2029-12-01",
     "initialQuantity": 2,
@@ -12266,7 +12266,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-339",
     "productId": "prod-real-339",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-339",
     "expirationDate": "2028-01-01",
     "initialQuantity": 1,
@@ -12277,7 +12277,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-340",
     "productId": "prod-real-340",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-340",
     "expirationDate": "2028-08-01",
     "initialQuantity": 5,
@@ -12288,7 +12288,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-341",
     "productId": "prod-real-341",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-341",
     "expirationDate": "2029-03-01",
     "initialQuantity": 3,
@@ -12299,7 +12299,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-342",
     "productId": "prod-real-342",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-342",
     "expirationDate": "2027-10-01",
     "initialQuantity": 1,
@@ -12310,7 +12310,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-343",
     "productId": "prod-real-343",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-343",
     "expirationDate": "2028-04-01",
     "initialQuantity": 44,
@@ -12321,7 +12321,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-344",
     "productId": "prod-real-344",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-344",
     "expirationDate": "2028-01-01",
     "initialQuantity": 1,
@@ -12332,7 +12332,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-345",
     "productId": "prod-real-345",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-345",
     "expirationDate": "2028-12-01",
     "initialQuantity": 1,
@@ -12343,7 +12343,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-346",
     "productId": "prod-real-346",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-346",
     "expirationDate": "2027-08-01",
     "initialQuantity": 2,
@@ -12354,7 +12354,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-347",
     "productId": "prod-real-347",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-347",
     "expirationDate": "2028-12-01",
     "initialQuantity": 56,
@@ -12365,7 +12365,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-348",
     "productId": "prod-real-348",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-348",
     "expirationDate": "2027-02-01",
     "initialQuantity": 2,
@@ -12376,7 +12376,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-349",
     "productId": "prod-real-349",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-349",
     "expirationDate": "2028-01-01",
     "initialQuantity": 3,
@@ -12387,7 +12387,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-350",
     "productId": "prod-real-350",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-350",
     "expirationDate": "2029-05-01",
     "initialQuantity": 23,
@@ -12398,7 +12398,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-351",
     "productId": "prod-real-351",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-351",
     "expirationDate": "2028-12-31",
     "initialQuantity": 18,
@@ -12409,7 +12409,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-352",
     "productId": "prod-real-352",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-352",
     "expirationDate": "2028-12-31",
     "initialQuantity": 4,
@@ -12420,7 +12420,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-353",
     "productId": "prod-real-353",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-353",
     "expirationDate": "2027-06-01",
     "initialQuantity": 2,
@@ -12431,7 +12431,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-354",
     "productId": "prod-real-354",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-354",
     "expirationDate": "2028-03-01",
     "initialQuantity": 1,
@@ -12442,7 +12442,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-355",
     "productId": "prod-real-355",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-355",
     "expirationDate": "2028-04-01",
     "initialQuantity": 2,
@@ -12453,7 +12453,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-356",
     "productId": "prod-real-356",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-356",
     "expirationDate": "2027-06-01",
     "initialQuantity": 1,
@@ -12464,7 +12464,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-357",
     "productId": "prod-real-357",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-357",
     "expirationDate": "2028-02-01",
     "initialQuantity": 1,
@@ -12475,7 +12475,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-358",
     "productId": "prod-real-358",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-358",
     "expirationDate": "2026-09-01",
     "initialQuantity": 1,
@@ -12486,7 +12486,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-359",
     "productId": "prod-real-359",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-359",
     "expirationDate": "2028-03-01",
     "initialQuantity": 14,
@@ -12497,7 +12497,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-360",
     "productId": "prod-real-360",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-360",
     "expirationDate": "2028-10-01",
     "initialQuantity": 8,
@@ -12508,7 +12508,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-361",
     "productId": "prod-real-361",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-361",
     "expirationDate": "2028-07-01",
     "initialQuantity": 1,
@@ -12519,7 +12519,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-362",
     "productId": "prod-real-362",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-362",
     "expirationDate": "2028-12-31",
     "initialQuantity": 3,
@@ -12530,7 +12530,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-363",
     "productId": "prod-real-363",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-363",
     "expirationDate": "2028-12-31",
     "initialQuantity": 3,
@@ -12541,7 +12541,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-364",
     "productId": "prod-real-364",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-364",
     "expirationDate": "2028-12-31",
     "initialQuantity": 3,
@@ -12552,7 +12552,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-365",
     "productId": "prod-real-365",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-365",
     "expirationDate": "2028-12-31",
     "initialQuantity": 3,
@@ -12563,7 +12563,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-366",
     "productId": "prod-real-366",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-366",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12574,7 +12574,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-367",
     "productId": "prod-real-367",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-367",
     "expirationDate": "2029-12-01",
     "initialQuantity": 2,
@@ -12585,7 +12585,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-368",
     "productId": "prod-real-368",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-368",
     "expirationDate": "2029-10-01",
     "initialQuantity": 2,
@@ -12596,7 +12596,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-369",
     "productId": "prod-real-369",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-369",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12607,7 +12607,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-370",
     "productId": "prod-real-370",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-370",
     "expirationDate": "2028-12-31",
     "initialQuantity": 9,
@@ -12618,7 +12618,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-371",
     "productId": "prod-real-371",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-371",
     "expirationDate": "2028-12-31",
     "initialQuantity": 2,
@@ -12629,7 +12629,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-372",
     "productId": "prod-real-372",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-372",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12640,7 +12640,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-373",
     "productId": "prod-real-373",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-373",
     "expirationDate": "2028-12-31",
     "initialQuantity": 14,
@@ -12651,7 +12651,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-374",
     "productId": "prod-real-374",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-374",
     "expirationDate": "2028-12-31",
     "initialQuantity": 6,
@@ -12662,7 +12662,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-375",
     "productId": "prod-real-375",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-375",
     "expirationDate": "2028-12-31",
     "initialQuantity": 2,
@@ -12673,7 +12673,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-376",
     "productId": "prod-real-376",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-376",
     "expirationDate": "2028-12-31",
     "initialQuantity": 3,
@@ -12684,7 +12684,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-377",
     "productId": "prod-real-377",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-377",
     "expirationDate": "2028-12-31",
     "initialQuantity": 3,
@@ -12695,7 +12695,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-378",
     "productId": "prod-real-378",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-378",
     "expirationDate": "2027-07-01",
     "initialQuantity": 3,
@@ -12706,7 +12706,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-379",
     "productId": "prod-real-379",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-379",
     "expirationDate": "2027-01-01",
     "initialQuantity": 3,
@@ -12717,7 +12717,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-380",
     "productId": "prod-real-380",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-380",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12728,7 +12728,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-381",
     "productId": "prod-real-381",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-381",
     "expirationDate": "2029-01-01",
     "initialQuantity": 3,
@@ -12739,7 +12739,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-382",
     "productId": "prod-real-382",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-382",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12750,7 +12750,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-383",
     "productId": "prod-real-383",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-383",
     "expirationDate": "2026-12-01",
     "initialQuantity": 1,
@@ -12761,7 +12761,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-384",
     "productId": "prod-real-384",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-384",
     "expirationDate": "2028-12-31",
     "initialQuantity": 13,
@@ -12772,7 +12772,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-385",
     "productId": "prod-real-385",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-385",
     "expirationDate": "2028-12-31",
     "initialQuantity": 4,
@@ -12783,7 +12783,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-386",
     "productId": "prod-real-386",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-386",
     "expirationDate": "2028-12-31",
     "initialQuantity": 10,
@@ -12794,7 +12794,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-387",
     "productId": "prod-real-387",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-387",
     "expirationDate": "2028-12-31",
     "initialQuantity": 4,
@@ -12805,7 +12805,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-388",
     "productId": "prod-real-388",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-388",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12816,7 +12816,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-389",
     "productId": "prod-real-389",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-389",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12827,7 +12827,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-390",
     "productId": "prod-real-390",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-390",
     "expirationDate": "2028-12-31",
     "initialQuantity": 3,
@@ -12838,7 +12838,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-391",
     "productId": "prod-real-391",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-391",
     "expirationDate": "2028-12-31",
     "initialQuantity": 4,
@@ -12849,7 +12849,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-392",
     "productId": "prod-real-392",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-392",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12860,7 +12860,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-393",
     "productId": "prod-real-393",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-393",
     "expirationDate": "2027-01-01",
     "initialQuantity": 1,
@@ -12871,7 +12871,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-394",
     "productId": "prod-real-394",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-394",
     "expirationDate": "2028-12-31",
     "initialQuantity": 12,
@@ -12882,7 +12882,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-395",
     "productId": "prod-real-395",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-395",
     "expirationDate": "2028-12-31",
     "initialQuantity": 4,
@@ -12893,7 +12893,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-396",
     "productId": "prod-real-396",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-396",
     "expirationDate": "2028-12-31",
     "initialQuantity": 23,
@@ -12904,7 +12904,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-397",
     "productId": "prod-real-397",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-397",
     "expirationDate": "2028-12-31",
     "initialQuantity": 14,
@@ -12915,7 +12915,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-398",
     "productId": "prod-real-398",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-398",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12926,7 +12926,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-399",
     "productId": "prod-real-399",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-399",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12937,7 +12937,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-400",
     "productId": "prod-real-400",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-400",
     "expirationDate": "2028-12-31",
     "initialQuantity": 2,
@@ -12948,7 +12948,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-401",
     "productId": "prod-real-401",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-401",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -12959,7 +12959,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-402",
     "productId": "prod-real-402",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-402",
     "expirationDate": "2028-12-31",
     "initialQuantity": 9,
@@ -12970,7 +12970,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-403",
     "productId": "prod-real-403",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-403",
     "expirationDate": "2028-12-31",
     "initialQuantity": 4,
@@ -12981,7 +12981,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-404",
     "productId": "prod-real-404",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-404",
     "expirationDate": "2028-12-31",
     "initialQuantity": 10,
@@ -12992,7 +12992,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-405",
     "productId": "prod-real-405",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-405",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -13003,7 +13003,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-406",
     "productId": "prod-real-406",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-406",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -13014,7 +13014,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-407",
     "productId": "prod-real-407",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-407",
     "expirationDate": "2028-12-31",
     "initialQuantity": 2,
@@ -13025,7 +13025,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-408",
     "productId": "prod-real-408",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-408",
     "expirationDate": "2027-06-01",
     "initialQuantity": 1,
@@ -13036,7 +13036,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-409",
     "productId": "prod-real-409",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-409",
     "expirationDate": "2027-04-01",
     "initialQuantity": 1,
@@ -13047,7 +13047,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-410",
     "productId": "prod-real-410",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-410",
     "expirationDate": "2027-11-01",
     "initialQuantity": 2,
@@ -13058,7 +13058,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-411",
     "productId": "prod-real-411",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-411",
     "expirationDate": "2028-12-31",
     "initialQuantity": 63,
@@ -13069,7 +13069,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-412",
     "productId": "prod-real-412",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-412",
     "expirationDate": "2028-12-31",
     "initialQuantity": 25,
@@ -13080,7 +13080,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-413",
     "productId": "prod-real-413",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-413",
     "expirationDate": "2028-12-31",
     "initialQuantity": 11,
@@ -13091,7 +13091,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-414",
     "productId": "prod-real-414",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-414",
     "expirationDate": "2028-12-31",
     "initialQuantity": 5,
@@ -13102,7 +13102,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-415",
     "productId": "prod-real-415",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-415",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
@@ -13113,7 +13113,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-416",
     "productId": "prod-real-416",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-416",
     "expirationDate": "2028-12-31",
     "initialQuantity": 4,
@@ -13124,7 +13124,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-417",
     "productId": "prod-real-417",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-417",
     "expirationDate": "2028-12-31",
     "initialQuantity": 2,
@@ -13135,7 +13135,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-418",
     "productId": "prod-real-418",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-418",
     "expirationDate": "2028-12-31",
     "initialQuantity": 2,
@@ -13146,7 +13146,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-419",
     "productId": "prod-real-419",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-419",
     "expirationDate": "2028-12-31",
     "initialQuantity": 4,
@@ -13157,7 +13157,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-420",
     "productId": "prod-real-420",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-420",
     "expirationDate": "2028-12-31",
     "initialQuantity": 10,
@@ -13168,7 +13168,7 @@ export const initialBatches: ProductBatch[] = [
   {
     "id": "bat-real-421",
     "productId": "prod-real-421",
-    "branchId": "branch-01",
+    "branchId": "br-01",
     "batchNumber": "LT-2026-421",
     "expirationDate": "2028-12-31",
     "initialQuantity": 1,
